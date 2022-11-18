@@ -1,6 +1,7 @@
 import Home from "./pages/Home";
 import CustomerAccount from "./pages/CustomerAccount";
 import ProductDetail from "./pages/ProductDetail";
+import FilterProduct from "./pages/FilterProduct"
 import { Route, Routes } from "react-router-dom";
 
 
@@ -14,7 +15,10 @@ function ConfigRoute() {
         <Route path="my-account/*" element={<CustomerAccount />} />
       </Route> */}
       <Route path="my-account/*" element={<CustomerAccount />} />
-      <Route path="product-detail/*" element={<ProductDetail />} />
+      <Route path="product-detail/:id" element={<ProductDetail />} />
+      {/* <Route path="product-category/*" element={<Product />} /> */}
+      {/* <Route path="product-category/:id" element={<FilterProduct />} /> */}
+      <Route path="product-category/:id" element={<FilterProduct />} />
     </Routes>
   );
 }

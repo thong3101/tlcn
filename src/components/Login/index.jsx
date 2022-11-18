@@ -53,8 +53,8 @@ function Login(props) {
     }
     setLoading(true);
     let params = {
+      email:data.email,
       password: data.pass,
-      phone: data.email,
     };
 
     apiAuth
