@@ -165,7 +165,6 @@ function CustomerAccount() {
           </Tabs>
 
           <Box flex={1} mt="16px">
-            {/* <Outlet /> */}
             <Routes>
               <Route
                 path=""

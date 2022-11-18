@@ -14,6 +14,7 @@ import { logoutSuccess } from "../../slices/authSlice";
 import Login from "../Login";
 import SignUp from "../SignUp";
 import { VerticalAlignCenter } from "@mui/icons-material";
+import apiCategory from "../../apis/apiCategory";
 
 const privatePath = ["/customer/", "/admin/", "/payment"];
 
@@ -27,6 +28,8 @@ function Header() {
 
   const [isLoginForm, setIsLoginForm] = useState(true);
   const [isRegister, setIsRegister] = useState(false);
+
+  const [categories, setCategories] = useState([])
 
   const user = useSelector((state) => state.auth.user); //lấy user từ store
 
@@ -48,7 +51,6 @@ function Header() {
     // setIsForgetPwd(false);
   };
 
-
   const handleReturnLogin = useCallback(() => {
     setIsLoginForm(true);
     // setIsForgetPwd(false);
@@ -66,6 +68,22 @@ function Header() {
     setIsRegister(false);
     // setIsForgetPwd(false);
   }, []);
+
+
+  useEffect(() => {
+    const getData = async () => {
+      apiCategory.showAllCategoryHeader()
+        .then(res => {
+          console.log("a",res.data.category)
+          setCategories(res.data.category)
+        })
+        .catch(error => {
+          setCategories([])
+        })
+    }
+    getData()
+  }, [])
+
 
   return (
     <header id="header" className="header">
@@ -93,8 +111,8 @@ function Header() {
         <div className="element header__leftElement">
           <ul className="navbar">
             <li>
-              <Link to={"/"}>
-                <Typography sx={{ fontSize: "14px",paddingBottom:"6px" }}>
+              <Link to={"product-category/ee689783-4723-4840-9da3-4ad47b5fe207"}>
+                <Typography sx={{ fontSize: "14px", paddingBottom: "6px" }}>
                   Đàn Guitar
                   <ArrowDropDownOutlinedIcon />
                 </Typography>
@@ -107,21 +125,21 @@ function Header() {
               </ul>
             </li>
             <li>
-              <Link to={"/"}>
-                <Typography sx={{ fontSize: "14px",paddingBottom:"6px" }}>
+              <Link to={"product-category/758028e5-3cab-4b90-bfe8-5bd2e45ca6b7"}>
+                <Typography sx={{ fontSize: "14px", paddingBottom: "6px" }}>
                   Nhạc Cụ Khác
                   <ArrowDropDownOutlinedIcon />
                 </Typography>
               </Link>
               <ul className="subnav subnav__dropdown">
                 <li>
-                  <Link to={"/"}>Đàn Guitar Acoustic</Link>
+                  <Link to={"product-category/743b9a31-c50f-470e-882f-5cf1172e27af"}>Kèn harmonica</Link>
                 </li>
               </ul>
             </li>
             <li>
               <Link to={"/"}>
-                <Typography sx={{ fontSize: "14px",paddingBottom:"6px" }}>
+                <Typography sx={{ fontSize: "14px", paddingBottom: "6px" }}>
                   Phụ Kiện Guitar
                   <ArrowDropDownOutlinedIcon />
                 </Typography>
@@ -134,7 +152,7 @@ function Header() {
             </li>
             <li>
               <Link to={"/"}>
-                <Typography sx={{ fontSize: "14px",paddingBottom:"6px" }}>
+                <Typography sx={{ fontSize: "14px", paddingBottom: "6px" }}>
                   Tự Học Guitar
                   <ArrowDropDownOutlinedIcon />
                 </Typography>
@@ -147,7 +165,7 @@ function Header() {
             </li>
             <li>
               <Link to={"/"}>
-                <Typography sx={{ fontSize: "14px",paddingBottom:"6px" }}>
+                <Typography sx={{ fontSize: "14px", paddingBottom: "6px" }}>
                   Hỗ Trợ Khách Hàng
                   <ArrowDropDownOutlinedIcon />
                 </Typography>
@@ -164,37 +182,59 @@ function Header() {
         {/* Right Element */}
         <div className="element header_rightElement">
           <ul className="navbar">
-            <li>
+            <li className="header__account">
               {user ? (
                 <>
-                  <img alt="" src={user.img} />
-
                   <Stack>
-                    <Typography sx={{ fontSize: "11px" }}>Tài khoản</Typography>
-
                     <Button
                       sx={{ color: "white", padding: "6px 0" }}
                       endIcon={<ArrowDropDownOutlinedIcon />}
                     >
                       <Typography
                         className="text-overflow-1-lines"
-                        sx={{ fontSize: "13px", textAlign: "start" }}
+                        sx={{
+                          fontSize: "14px",
+                          textAlign: "start",
+                          color: "white",
+                        }}
                       >
-                        {user.fullName}
+                        {user.nickName}
                       </Typography>
                     </Button>
                   </Stack>
 
                   <Box className="header__dropdown">
-                    <Link to={"/customer/order/history"}>Đơn hàng của tôi</Link>
+                    <Link
+                      to={"/customer/order/history"}
+                      style={{ padding: "8px 20px" }}
+                    >
+                      Đơn hàng của tôi
+                    </Link>
 
-                    <Link to={"/customer/wishlist"}>Sản phẩm yêu thích</Link>
+                    <Link
+                      to={"/customer/wishlist"}
+                      style={{ padding: "8px 20px" }}
+                    >
+                      Sản phẩm yêu thích
+                    </Link>
 
-                    <Link to={"/customer/notification"}>Thông báo của tôi</Link>
+                    <Link
+                      to={"/customer/notification"}
+                      style={{ padding: "8px 20px" }}
+                    >
+                      Thông báo của tôi
+                    </Link>
 
-                    <Link to={"/customer/account/edit"}>Tài khoản của tôi</Link>
+                    <Link
+                      to={"/customer/account/edit"}
+                      style={{ padding: "8px 20px" }}
+                    >
+                      Tài khoản của tôi
+                    </Link>
 
-                    <Box onClick={handleLogout}>Thoát tài khoản</Box>
+                    <Box onClick={handleLogout} style={{ fontSize: "14px" }}>
+                      Thoát tài khoản
+                    </Box>
                   </Box>
                 </>
               ) : (
@@ -211,14 +251,11 @@ function Header() {
             <li className="divider"></li>
 
             <li>
-              <div className="buttonCart">
-                <Link to={"/"} title="Giỏ hàng" className="icon">
-                  {/* <FontAwesomeIcon icon={faShoppingBag }></FontAwesomeIcon> */}
-                  <ShoppingBagIcon
-                    sx={{ fontSize: "20px", color: "#ffffff", margin: "1px" }}
-                  />
-                </Link>
-              </div>
+              <Link to="/cart">
+                  <Badge color="warning" showZero>
+                    <ShoppingBagIcon sx={{ fontSize: "25px" }} />
+                  </Badge>
+              </Link>
             </li>
 
             <li className="divider"></li>
@@ -272,7 +309,6 @@ function Header() {
           )} */}
         </Box>
       </Modal>
-
     </header>
   );
 }
