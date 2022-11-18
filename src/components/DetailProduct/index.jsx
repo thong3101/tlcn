@@ -24,6 +24,11 @@ function DetailProduct({ data }) {
     { label: "Can Tho", year: 2008 },
     { label: "Hai Phong", year: 1957 },
   ];
+  const handleLoadImage=(img)=>{
+    if(img?.imageList){
+      return img.imageList[0].url;
+    }
+  }
 
   return (
     <Box className="detailProduct">
@@ -31,7 +36,7 @@ function DetailProduct({ data }) {
         <div className="detailProduct__primary-img">
           <img
             alt=""
-            src={data?.imageList[0]?.url}
+            src={handleLoadImage(data)}
             onError={(err) => (err.target.src = imgDefault)}
           ></img>
         </div>
