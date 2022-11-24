@@ -23,7 +23,7 @@ const apiCategory = {
     },
 
     showAllCategoryHeader: async (params) => {
-        const res = await axiosClient.get('/category/all', params)
+        const res = await axiosClient.get('/category', params)
         return res.data;
     }, 
 }

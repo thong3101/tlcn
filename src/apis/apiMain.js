@@ -18,7 +18,7 @@ const apiMain = {
 
     ///authentication
     getProducts: async (params) => {
-        const res = await axiosProducts.get('/products/all', {params})
+        const res = await axiosProducts.get('/product', {params})
         return res.data;
     },
 }

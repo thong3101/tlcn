@@ -39,15 +39,27 @@ function FilterProduct(props) {
   // const slugCategory = useParams().slug;
   // const [category, setCategory] = useState(null);
 
-  const [value, setValue] = useState(0);
   const [products, setProducts] = useState([]);
-  // const [categoryChild, setCategoryChild] = useState([]);
   const [categories, setCategories] = useState([]);
+
+  const [value, setValue] = useState(1);
+  const [filter, setFilter] = useState({});
+  const [filterPrice, setFilterPrice] = useState({
+    minPrice: "",
+    maxPrice: "",
+    apply: false,
+    value: "",
+  });
+
+  //Filter change price
+  const [valueFilterPrice, setValueFilterPrice] = React.useState([
+    295000, 7500000,
+  ]);
   // const [page, setPage] = useState(0);
   // const [test, setTest] = useState([1,2,3]);
   // const [filter, setFilter] = useState({});
 
-  // const [productFilter, setProductFilter] = useState([]);
+  const [productFilter, setProductFilter] = useState([]);
 
   // const navigate = useNavigate();
   // const size = 30;
@@ -56,23 +68,53 @@ function FilterProduct(props) {
   useEffect(() => {
     const getData = async () => {
       let param = {
-        id: idCategory,
-        page:0,
-        sort:"product_id",
-        min_price:0,
-        max_price:10000000,
+        page: 0,
+        size: 6,
+        min_price: 0,
+        max_price: 10000000,
+      };
+
+      if (filterPrice.apply) {
+        param = {
+          ...param,
+          min_price: filterPrice.minPrice,
+          max_price: filterPrice.maxPrice,
+        };
       }
+      switch (value) {
+        case 1: {
+          break;
+        }
+        case 3: {
+          param = { ...param, sort: "product_id" };
+          break;
+        }
+        case 4: {
+          param = { ...param, sort: "price_asc" };
+          break;
+        }
+        case 5: {
+          param = { ...param, sort: "price_desc" };
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+
       apiProduct
-        .getProductsByCateId(param)
+        .getProductsByCateId(param, idCategory)
         .then((res) => {
           setProducts(res.data.list);
         })
         .catch((error) => {
           setProducts(null);
         });
+
+      console.log("111", param);
     };
     getData();
-  }, [idCategory]);
+  }, [idCategory, filter, filterPrice, value]);
 
   useEffect(() => {
     const getData = async () => {
@@ -88,158 +130,13 @@ function FilterProduct(props) {
     getData();
   }, []);
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     let params = {
-  //       page: page,
-  //       size: size,
-  //       idCategory: idCategory,
-  //       sort: sort,
-  //     };
-  //     if (category) {
-  //       const response = await apiProduct.getProductByCategory(params);
-  //       if (response) {
-  //         setProducts(response.data.listProduct);
-  //       }
-  //     }
-  //   };
-  //   getData();
-  // }, [page, category]);
-
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     let params = {
-  //       parentId: idCategory,
-  //     };
-  //     if (category) {
-  //       const response = await apiProduct.getCategoryChild(params);
-  //       if (response) {
-  //         setCategoryChild(response.data);
-  //       }
-  //     }
-  //   };
-  //   getData();
-  // }, [page, category]);
-
-  // useEffect(() => {
-  //   const filterData = () => {
-  //     if (!category) return;
-  //     let data = [...products];
-  //     switch (value) {
-  //       case 1: {
-  //         const getData = async () => {
-  //           let param = {
-  //             idCategory: idCategory,
-  //             page: page,
-  //             size: size,
-  //             sort: "product_sell_amount",
-  //           };
-  //           apiProduct
-  //             .getProductByCategory(param)
-  //             .then((res) => {
-  //               data = res.data.listProduct;
-  //               setProductFilter(data);
-  //               console.log("res data: ", data);
-  //             })
-  //             .catch((err) => console.log(err));
-  //         };
-  //         getData();
-  //         break;
-  //       }
-  //       case 2: {
-  //         const getData = async () => {
-  //           let param = {
-  //             idCategory: idCategory,
-  //             page: page,
-  //             size: size,
-  //             sort: "create_at",
-  //           };
-  //           apiProduct
-  //             .getProductByCategory(param)
-  //             .then((res) => {
-  //               data = res.data.listProduct;
-  //               setProductFilter(data);
-  //               console.log("res data: ", data);
-  //             })
-  //             .catch((err) => console.log(err));
-  //         };
-  //         getData();
-  //         break;
-  //       }
-  //       case 3: {
-  //         const getData = async () => {
-  //           let param = {
-  //             idCategory: idCategory,
-  //             page: page,
-  //             size: size,
-  //             sort: "product_price_down",
-  //           };
-  //           apiProduct
-  //             .getProductByCategory(param)
-  //             .then((res) => {
-  //               data = res.data.listProduct;
-  //               setProductFilter(data);
-  //               console.log("res data: ", data);
-  //             })
-  //             .catch((err) => console.log(err));
-  //         };
-  //         getData();
-  //         break;
-  //       }
-  //       case 4: {
-  //         const getData = async () => {
-  //           let param = {
-  //             idCategory: idCategory,
-  //             page: page,
-  //             size: size,
-  //             sort: "product_price_up",
-  //           };
-  //           apiProduct
-  //             .getProductByCategory(param)
-  //             .then((res) => {
-  //               data = res.data.listProduct;
-  //               setProductFilter(data);
-  //               console.log("res data: ", data);
-  //             })
-  //             .catch((err) => console.log(err));
-  //         };
-  //         getData();
-  //         break;
-  //       }
-  //       default: {
-  //         const getData = async () => {
-  //           let param = {
-  //             idCategory: idCategory,
-  //             page: page,
-  //             size: size,
-  //             sort: "product_id",
-  //           };
-  //           apiProduct
-  //             .getProductByCategory(param)
-  //             .then((res) => {
-  //               data = res.data.listProduct;
-  //               setProductFilter(data);
-  //               console.log("res data: ", data);
-  //             })
-  //             .catch((err) => console.log(err));
-  //         };
-  //         getData();
-  //         break;
-  //       }
-  //     }
-  //     setProductFilter(data);
-  //   };
-
-  //   filterData();
-  // }, [products, filter, category, filterPrice, value]);
-
-  //Filter change price
-  const [valueFilterPrice, setValueFilterPrice] = React.useState([
-    295000, 7500000,
-  ]);
-
   const handleChangeFilterPrice = (event, newValue) => {
     setValueFilterPrice(newValue);
+    setFilterPrice({
+      ...filterPrice,
+      minPrice: newValue[0],
+      maxPrice: newValue[1],
+    });
   };
 
   // const onSetFilterPrice = (value, index) => {
@@ -252,39 +149,21 @@ function FilterProduct(props) {
   //   });
   // };
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  // const handleChange = (event, newValue) => {
+  //   setValue(newValue);
+  //   console.log(newValue)
+  // };
+  const handleChange = (event) => {
+    setValue(Number(event.target.value));
   };
 
-  // const onChangeFilter = useCallback(
-  //   (e, propertyName) => {
-  //     let property = filter[propertyName] || [];
-  //     if (e.target.checked) {
-  //       property = [...property, e.target.name];
-  //     } else property = property.filter((item) => item !== e.target.name);
+  const handleApplyFilterPrice = () => {
+    setFilterPrice((pre) => {
+      return { ...pre, apply: !pre.apply };
+    });
+  };
 
-  //     setFilter((filter) => {
-  //       return {
-  //         ...filter,
-  //         [propertyName]: [...property],
-  //       };
-  //     });
-
-  //     console.log({
-  //       ...filter,
-  //       [propertyName]: [...property],
-  //     });
-  //   },
-  //   [filter]
-  // );
-  // const onChangeCategory = (rate) => {
-  //   if (filter.rate === rate) {
-  //     const newFilter = delete filter.rate;
-  //     setFilter(newFilter);
-  //   } else {
-  //     setFilter({ ...filter, rate });
-  //   }
-  // };
+  console.log("33",products)
 
   return (
     <Stack className="filterProduct container" direction="row" spacing={1}>
@@ -343,6 +222,7 @@ function FilterProduct(props) {
                 min={295000}
                 max={7500000}
                 sx={{ color: "#666" }}
+                disabled={filterPrice.apply}
               />
             </Box>
             <Box>
@@ -354,11 +234,13 @@ function FilterProduct(props) {
                   backgroundColor: "#666",
                   color: "white",
                 }}
+                onClick={handleApplyFilterPrice}
               >
-                Lọc sản phẩm
+                {filterPrice.apply ? "Huỷ" : "Lọc sản phẩm"}
               </Button>
               <Typography sx={{ fontSize: "12px" }}>
-                Giá: {numWithCommas(valueFilterPrice[0])} đ - {numWithCommas(valueFilterPrice[1])} đ
+                Giá: {numWithCommas(valueFilterPrice[0])} đ -{" "}
+                {numWithCommas(valueFilterPrice[1])} đ
               </Typography>
             </Box>
           </Box>
@@ -457,7 +339,7 @@ function FilterProduct(props) {
             ))}
           </Grid> */}
           <Grid container spacing={2}>
-            {products?.map((item) => (
+            {(value===2 ? products?.sort((a,b) => b.sellAmount - a.sellAmount) : products)?.map((item) => (
               <Grid key={item.id} item xs={3}>
                 <CardProduct data={item} />
               </Grid>
@@ -475,7 +357,7 @@ const refreshPage = () => {
 const tabs = [
   {
     id: 1,
-    name: "Phổ biến",
+    name: "Mặc định",
   },
   {
     id: 2,

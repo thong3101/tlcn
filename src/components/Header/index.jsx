@@ -29,7 +29,7 @@ function Header() {
   const [isLoginForm, setIsLoginForm] = useState(true);
   const [isRegister, setIsRegister] = useState(false);
 
-  const [categories, setCategories] = useState([])
+  const [categories, setCategories] = useState([]);
 
   const user = useSelector((state) => state.auth.user); //lấy user từ store
 
@@ -69,21 +69,20 @@ function Header() {
     // setIsForgetPwd(false);
   }, []);
 
-
   useEffect(() => {
     const getData = async () => {
-      apiCategory.showAllCategoryHeader()
-        .then(res => {
-          console.log("a",res.data.category)
-          setCategories(res.data.category)
+      apiCategory
+        .showAllCategoryHeader()
+        .then((res) => {
+          console.log("a", res.data.category);
+          setCategories(res.data.category);
         })
-        .catch(error => {
-          setCategories([])
-        })
-    }
-    getData()
-  }, [])
-
+        .catch((error) => {
+          setCategories([]);
+        });
+    };
+    getData();
+  }, []);
 
   return (
     <header id="header" className="header">
@@ -111,7 +110,9 @@ function Header() {
         <div className="element header__leftElement">
           <ul className="navbar">
             <li>
-              <Link to={"product-category/ee689783-4723-4840-9da3-4ad47b5fe207"}>
+              <Link
+                to={"/"}
+              >
                 <Typography sx={{ fontSize: "14px", paddingBottom: "6px" }}>
                   Đàn Guitar
                   <ArrowDropDownOutlinedIcon />
@@ -125,7 +126,7 @@ function Header() {
               </ul>
             </li>
             <li>
-              <Link to={"product-category/758028e5-3cab-4b90-bfe8-5bd2e45ca6b7"}>
+              <Link to={"#"}>
                 <Typography sx={{ fontSize: "14px", paddingBottom: "6px" }}>
                   Nhạc Cụ Khác
                   <ArrowDropDownOutlinedIcon />
@@ -133,7 +134,25 @@ function Header() {
               </Link>
               <ul className="subnav subnav__dropdown">
                 <li>
-                  <Link to={"product-category/743b9a31-c50f-470e-882f-5cf1172e27af"}>Kèn harmonica</Link>
+                  <Link
+                    to={"product-category/0b4020de-ef99-4fca-83ee-92fc62e0b6d9"}
+                  >
+                    Đàn Ukulele
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to={"product-category/9b1e2a20-c19c-44e2-abab-9412343b4e1f"}
+                  >
+                    Kèn harmonica
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to={"product-category/ccefc41e-1e12-45f7-a8e5-98c8db8227f5"}
+                  >
+                    Rollup Piano
+                  </Link>
                 </li>
               </ul>
             </li>
@@ -205,28 +224,22 @@ function Header() {
 
                   <Box className="header__dropdown">
                     <Link
-                      to={"/customer/order/history"}
+                      to={"/my-account/orders"}
                       style={{ padding: "8px 20px" }}
                     >
                       Đơn hàng của tôi
                     </Link>
 
                     <Link
-                      to={"/customer/wishlist"}
+                      to={"/my-account/wishlist"}
                       style={{ padding: "8px 20px" }}
                     >
                       Sản phẩm yêu thích
                     </Link>
 
-                    <Link
-                      to={"/customer/notification"}
-                      style={{ padding: "8px 20px" }}
-                    >
-                      Thông báo của tôi
-                    </Link>
 
                     <Link
-                      to={"/customer/account/edit"}
+                      to={"/my-account"}
                       style={{ padding: "8px 20px" }}
                     >
                       Tài khoản của tôi
@@ -252,9 +265,9 @@ function Header() {
 
             <li>
               <Link to="/cart">
-                  <Badge color="warning" showZero>
-                    <ShoppingBagIcon sx={{ fontSize: "25px" }} />
-                  </Badge>
+                <Badge color="warning" showZero>
+                  <ShoppingBagIcon sx={{ fontSize: "25px" }} />
+                </Badge>
               </Link>
             </li>
 
