@@ -114,7 +114,7 @@ function FilterProduct(props) {
       console.log("111", param);
     };
     getData();
-  }, [idCategory, filter, filterPrice, value]);
+  }, [idCategory, filter, filterPrice.apply, value]);
 
   useEffect(() => {
     const getData = async () => {

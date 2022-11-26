@@ -31,7 +31,8 @@ function Header() {
 
   const [categories, setCategories] = useState([]);
 
-  const user = useSelector((state) => state.auth.user); //lấy user từ store
+  const cart = useSelector((state) => state.cart.items); // get cart from store
+  const user = useSelector((state) => state.auth.user); //get user from store
 
   const handleLogout = () => {
     dispatch(logoutSuccess());
@@ -265,7 +266,7 @@ function Header() {
 
             <li>
               <Link to="/cart">
-                <Badge color="warning" showZero>
+                <Badge color="warning" badgeContent={cart.length} invisible={cart.length===0} showZero>
                   <ShoppingBagIcon sx={{ fontSize: "25px" }} />
                 </Badge>
               </Link>

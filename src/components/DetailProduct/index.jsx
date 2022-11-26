@@ -1,7 +1,7 @@
 import React from "react";
 import "./DetailProduct.scss";
 import { Link } from "react-router-dom";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button, ButtonGroup } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -11,10 +11,17 @@ import InfoIcon from "@mui/icons-material/Info";
 import BookIcon from "@mui/icons-material/Book";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
+
+import { useDispatch, useSelector } from "react-redux";
+
+//import store additem
+import { addItem } from "../../slices/cartSlice";
+
 //import img
 import imgDefault from "../../assets/img/img_default.jpg";
+import { toast } from "react-toastify";
 import { useState } from "react";
-
+import { numWithCommas } from "../../constraints/Util";
 
 function DetailProduct({ data }) {
   const list_cities = () => [
@@ -24,11 +31,28 @@ function DetailProduct({ data }) {
     { label: "Can Tho", year: 2008 },
     { label: "Hai Phong", year: 1957 },
   ];
-  const handleLoadImage=(img)=>{
-    if(img?.imageList){
+
+  const dispatch = useDispatch();
+  const [quantity, setQuantity] = useState(1);
+
+  const handleLoadImage = (img) => {
+    if (img?.imageList) {
       return img.imageList[0].url;
     }
-  }
+  };
+
+  const handleClickAddItem = () => {
+    dispatch(
+      addItem({
+        id: data.id,
+        name: data.name,
+        imageList: data.imageList,
+        price: data.price,
+        quantity,
+      })
+    );
+    toast.success("Đã thêm vào giỏ hàng");
+  };
 
   return (
     <Box className="detailProduct">
@@ -45,7 +69,7 @@ function DetailProduct({ data }) {
             <img
               className="detailProduct__item-img"
               alt=""
-              src={item.url}
+              src={item?.url}
             ></img>
           ))}
         </div>
@@ -73,7 +97,7 @@ function DetailProduct({ data }) {
               ({data?.rate} đánh giá) | Đã bán {data?.sellAmount}
             </p>
           </div>
-          <Typography sx={{padding:"20px"}}>Mô tả</Typography>
+          <Typography sx={{ padding: "20px" }}>Mô tả</Typography>
           <Typography>{data?.description}</Typography>
           <div className="detailProduct__info-shipping">
             <p>
@@ -95,9 +119,31 @@ function DetailProduct({ data }) {
             />
           </div>
           <div className="detailProduct__quantity-info">
-            <QuantityButtons />
+            {/* <QuantityButtons /> */}
+            <ButtonGroup
+              size="small"
+              aria-label="small outlined button group"
+              className="quantity-buttons"
+            >
+              <Button
+                onClick={() => {
+                  quantity > 0 ? setQuantity(quantity - 1) : setQuantity(0);
+                }}
+              >
+                -
+              </Button>
+              <Button>{quantity}</Button>
+              <Button
+                onClick={() => {
+                  setQuantity(quantity + 1);
+                }}
+              >
+                +
+              </Button>
+            </ButtonGroup>
             <button
               className="detailProduct__add-to-cart"
+              onClick={handleClickAddItem}
               style={{ fontWeight: 600 }}
             >
               THÊM VÀO GIỎ HÀNG
