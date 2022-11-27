@@ -3,6 +3,7 @@ import CustomerAccount from "./pages/CustomerAccount";
 import ProductDetail from "./pages/ProductDetail";
 import FilterProduct from "./pages/FilterProduct";
 import Cart from "./pages/Cart";
+import Payment from "./pages/Payment";
 
 import PrivateRoute from "./components/PrivateRoute"
 
@@ -16,6 +17,7 @@ function ConfigRoute() {
 
       {/* Routing customer account */}
       <Route element={<PrivateRoute roles={["USER", "ADMIN"]} />}>
+        <Route path="payment" element={<Payment />} />
         <Route path="my-account/*" element={<CustomerAccount />} />
       </Route>
 
