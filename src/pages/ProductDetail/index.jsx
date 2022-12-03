@@ -50,7 +50,7 @@ import Comment from "../../components/Comment";
 
 function ProductDetail() {
   const user = useSelector((state) => state.auth.user);
-  const [product, setProduct] = useState({});
+  const [product, setProduct] = useState();
   const { id } = useParams();
 
   useEffect(() => {

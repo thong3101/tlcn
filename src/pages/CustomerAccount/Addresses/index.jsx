@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useMemo,memo } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import "./Addresses.scss";
 import { Typography, Button, Stack, Box, Dialog } from "@mui/material";
@@ -9,17 +10,19 @@ import apiAddress from "../../../apis/apiAddress";
 import { toast } from "react-toastify";
 
 function Addresses() {
-  const [addresses, setAddresses] = useState([]);
+  const user = useSelector(state => state.auth.user);
 
-  useEffect(() => {
-    const getData = async () => {
-      apiAddress.getProfileUser().then((res) => {
-        setAddresses(res.data.user.address);
-        console.log(res.data.user.address);
-      });
-    };
-    getData();
-  }, []);
+  const [addresses, setAddresses] = useState(user.address);
+
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     apiAddress.getProfileUser().then((res) => {
+  //       setAddresses(res.data.user.address);
+  //       console.log(res.data.user.address);
+  //     });
+  //   };
+  //   getData();
+  // }, []);
 
 
   return (
@@ -70,4 +73,4 @@ function Addresses() {
   );
 }
 
-export default Addresses;
+export default memo(Addresses);

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,memo } from "react";
 import { useTheme } from "@mui/material/styles";
 import { Box, Tabs, Tab, Typography, Pagination, Stack } from "@mui/material";
 import "./Orders.scss";
@@ -146,4 +146,4 @@ function TabPanel(props) {
 const getOrderByType = (orders, slug) =>
   orders.filter((item) => item.status === slug);
 
-export default Orders;
+export default memo(Orders);

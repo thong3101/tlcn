@@ -102,8 +102,8 @@ function Header() {
         <Link className="header__logo" to={"/"}>
           <img
             alt=""
-            style={{ width: "70px", height: "70px" }}
-            src="https://guitar.station.vn/wp-content/uploads/2018/11/Logo-White-500x500.png"
+            style={{ width: "100%", height: "100%",objectFit:"cover" }}
+            src="https://res.cloudinary.com/dddmdgm0w/image/upload/v1670075080/senki_avatar/senki_avatar/senki-high-resolution-logo-white-on-transparent-background_ouktxc.png"
           />
         </Link>
 

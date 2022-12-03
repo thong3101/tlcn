@@ -1,4 +1,4 @@
-import React from "react";
+import {React,memo } from "react";
 import "./DetailProduct.scss";
 import { Link } from "react-router-dom";
 import { Box, Typography, Button, ButtonGroup } from "@mui/material";
@@ -38,6 +38,11 @@ function DetailProduct({ data }) {
   const handleLoadImage = (img) => {
     if (img?.imageList) {
       return img.imageList[0].url;
+    }
+  };
+  const handlePrice = (data) => {
+    if (data) {
+      return numWithCommas(data?.price);
     }
   };
 
@@ -80,7 +85,7 @@ function DetailProduct({ data }) {
           <div className="detailProduct__info-underline-title"></div>
           <div className="detailProduct__info-price">
             <h4 className="detailProduct__info-price-original">
-              {data?.price}
+              {handlePrice(data)} đ
             </h4>
             <h4 className="detailProduct__info-price-sale">{data?.discount}</h4>
           </div>
@@ -232,4 +237,4 @@ function DetailProduct({ data }) {
   );
 }
 
-export default DetailProduct;
+export default memo(DetailProduct);

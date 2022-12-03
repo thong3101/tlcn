@@ -146,7 +146,7 @@ function CartItem(props) {
             <Button
               variant="outlined"
               onClick={handleRemoveItem}
-              sx={{ width: "94px", height: "36px" }}
+              sx={{ width: "auto", height: "36px" }}
             >
               Xác nhận
             </Button>
