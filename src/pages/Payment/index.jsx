@@ -21,7 +21,7 @@ import { clearCoupon } from "../../slices/paymentSlice";
 import { Link, useNavigate } from "react-router-dom";
 import apiCart from "../../apis/apiCart";
 import { toast } from "react-toastify";
-import { deleteItemsPayment } from "../../slices/cartSlice";
+import { deleteAll } from "../../slices/cartSlice";
 
 import apiAddress from "../../apis/apiAddress";
 // import apiNotify from '../../apis/apiNotify'
@@ -33,19 +33,20 @@ function Payment() {
   const handleOpen = useCallback(() => setOpen(true), []);
   const handleClose = useCallback(() => setOpen(false), []);
   const [openAddress, setOpenAddress] = useState(false);
-  const [ship, setShip] = useState("shipping1");
+
   const [payment, setPayment] = useState("1");
   const [expandDetail, setExpandDetail] = useState(false);
   const [couponValue, setCouponValue] = useState(0);
   const [loading, setLoading] = useState(false);
   const CartItems = useSelector((state) => state.cart.items);
   const coupon = useSelector((state) => state.payment.coupon);
-  const addressShip = useSelector((state) => state.payment.address);
+  // const addresses = useSelector((state) => state.payment.address);
+  const [addresses, setAddresses] = useState();
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const feeShip = ship === "shipping1" ? 40000 : 23000;
-  const discountFeeShip = 10000;
+
+  const feeShip = 15000;
 
   useEffect(() => {
     const calcPrice = () => {
@@ -60,12 +61,18 @@ function Payment() {
 
   useEffect(() => {
     const getAddresses = () => {
-      apiAddress.getUserAddress().catch(() => {
-        navigate("/customer/address/create");
-        toast.warning("Vui lòng thêm địa chỉ mới");
-      });
+      apiAddress
+        .getProfileUser()
+        .then((res) => {
+          setAddresses(res.data.user.address);
+          console.log(res.data.user.address);
+        })
+        .catch(() => {
+          navigate("/my-account/address/create");
+          toast.warning("Vui lòng thêm địa chỉ mới");
+        });
     };
-    // getAddresses();
+    getAddresses();
   }, []);
 
   useEffect(() => {
@@ -90,10 +97,6 @@ function Payment() {
     loadTitle();
   }, []);
 
-  const handleChangeTypeShip = (event) => {
-    setShip(event.target.value);
-  };
-
   const handleChangeTypePayment = (event) => {
     setPayment(event.target.value);
   };
@@ -106,90 +109,79 @@ function Payment() {
   const handleCloseAddress = useCallback(() => setOpenAddress(false), []);
 
   const finalPrice = () => {
-    return totalPrice + feeShip - (couponValue || 0) - discountFeeShip > 0
-      ? Math.round(totalPrice + feeShip - (couponValue || 0) - discountFeeShip)
+    return totalPrice + feeShip - (couponValue || 0) > 0
+      ? Math.round(totalPrice + feeShip - (couponValue || 0))
       : 0;
   };
 
-  const handleSubmitOrderFake = () => {
+  const handleSubmit = () => {
     if (loading) {
       toast.info(
         "Thanh toán đang được thực hiện. Vui lòng không thao tác quá nhanh"
       );
       return;
     }
-    if (!addressShip) {
-      toast.warning("Vui lòng chọn địa chỉ giao hàng");
-      return;
-    }
-    //const state = orderTabs[Math.floor(Math.random() * (orderTabs.length - 1)) + 1]
-    // let state = orderTabs[2]
-    // if (payment === '3')//thanh toán momo
-    //   state = orderTabs[1]
-    const payload = {
-      idUser: user?.id,
 
-      address: addressShip,
-      shipping: shippingMethods.find((item) => item.id === ship),
-      payment: paymentMethods.find((item) => item.id === payment),
-      feeShip,
-      totalPrice,
-      // discount: discountFeeShip + couponValue || 0,
-      products: CartItems.map((item) => {
-        return { ...item, discount: 0 };
-      }),
-    };
+    // if (!addressShip) {
+    //   toast.warning("Vui lòng chọn địa chỉ giao hàng");
+    //   return;
+    // }
+
+    // const payload = {
+    //   CartItems.map((item) => {
+    //     return {
+    //       productId: item.id,
+    //       productName: item.name,
+    //       productImage: item.imageList[0].url,
+    //       quantity: item.quantity,
+    //       price: item.price,
+    //     };
+    //   }),
+    // };
+
+    let payload = CartItems.map((item) => {
+      return {
+        productId: item.id,
+        productName: item.name,
+        productImage: item.imageList[0].url,
+        quantity: item.quantity,
+        price: item.price,
+      };
+    });
+
     setLoading(true);
-    apiCart
-      .saveOrder(payload)
-      .then((res) => {
-        if (payment === "3") {
-          let amount = Math.round(res.totalPrice + res.feeShip - res.discount);
-          amount = amount >= 0 ? amount : 0;
-          let orderId = res.id;
-          apiCart
-            .makePaymentMomo({
-              orderId,
-              amount,
-            })
-            .then((res) => {
-              setLoading(false);
-              if (res.payUrl) {
-                dispatch(deleteItemsPayment());
-                window.location.replace(res.payUrl);
-              } else {
-                // handleCancel(orderId)
-                toast.warning(
-                  "Có lỗi trong quá trình giao dịch. Vui lòng thực hiện lại"
-                );
-              }
-            })
-            .catch((err) => {
-              toast.error(err.response.data.error);
-            });
-        } else {
+    if (payment == 2) {
+      apiCart
+        .saveOrderPayPal(payload)
+        .then((res) => {
           toast.success("Đặt hàng thành công!");
-          let notify = {
-            userId: user?.id,
-            orderId: res?.id,
-            type: "order",
-            text: "Bạn đã đặt hàng thành công, đơn hàng của bạn đang được xử lý",
-            date: Date.now(),
-            seen: false,
-            link: "",
-          };
-          // apiNotify.postNotify(notify);
-          dispatch(deleteItemsPayment());
-          navigate("/customer/order/history");
-          return;
-        }
-      })
-      .catch((error) => {
-        toast.error("Đặt hàng không thành công. Vui lòng thử lại");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+          dispatch(deleteAll());
+          // navigate(res.data.link);
+          window.location.assign(res.data.link);
+        })
+        .catch((error) => {
+          toast.error("Đặt hàng không thành công. Vui lòng thử lại");
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+
+    } else {
+      apiCart
+        .saveOrderCOD(payload)
+        .then((res) => {
+          toast.success("Đặt hàng thành công!");
+          dispatch(deleteAll());
+          navigate("/my-account/orders");
+        })
+        .catch((error) => {
+          toast.error("Đặt hàng không thành công. Vui lòng thử lại");
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+
+    }
   };
 
   // const handleCancel = (id) => {
@@ -295,17 +287,23 @@ function Payment() {
                   Thay đổi
                 </Typography>
               </Stack>
-              {addressShip && (
+              {addresses && (
                 <>
                   <Typography mb={0.25} fontWeight={500}>
-                    {addressShip.name}&nbsp;&nbsp;&nbsp;{addressShip.phone}
+                    {addresses.name}&nbsp;&nbsp;&nbsp;{addresses.phone}
                   </Typography>
-                  <Typography color="#888">{`${addressShip.addressDetail}, ${addressShip.commune.name}, ${addressShip.district.name}, ${addressShip.province.name}`}</Typography>
+                  <Typography color="#888">{`${addresses.addressDetail}, ${addresses.commune.name}, ${addresses.district.name}, ${addresses.province.name}`}</Typography>
                 </>
               )}
             </Box>
 
-            <Box sx={{backgroundColor: "#fff", marginBottom:"20px",padding:"16px"}}>
+            <Box
+              sx={{
+                backgroundColor: "#fff",
+                marginBottom: "20px",
+                padding: "16px",
+              }}
+            >
               <Typography
                 className="payment__title"
                 gutterBottom
@@ -417,7 +415,7 @@ function Payment() {
                 {loading && <Loading />} Mua hàng
               </Button> */}
               <button
-                onClick={handleSubmitOrderFake}
+                onClick={handleSubmit}
                 style={{
                   width: "100%",
                   height: "42px",
@@ -448,17 +446,6 @@ function Payment() {
   );
 }
 
-const shippingMethods = [
-  {
-    id: "shipping1",
-    display: "Giao hàng nhanh",
-  },
-  {
-    id: "shipping2",
-    display: "Giao hàng tiêu chuẩn",
-  },
-];
-
 const paymentMethods = [
   {
     id: "1",
@@ -469,31 +456,10 @@ const paymentMethods = [
   },
   {
     id: "2",
-    display: "Thanh toán bằng Viettel Money",
+    display: "Thanh toán bằng PayPal",
     value: "2",
     image:
-      "https://frontend.tikicdn.com/_desktop-next/static/img/icons/checkout/icon-payment-method-viettelmoney.png",
-  },
-  {
-    id: "3",
-    display: "Thanh toán bằng Momo",
-    value: "3",
-    image:
-      "https://frontend.tikicdn.com/_desktop-next/static/img/icons/checkout/icon-payment-method-momo.svg",
-  },
-  {
-    id: "4",
-    display: "Thanh toán bằng ZaloPay",
-    value: "4",
-    image:
-      "https://frontend.tikicdn.com/_desktop-next/static/img/icons/checkout/icon-payment-method-zalo-pay.svg",
-  },
-  {
-    id: "5",
-    display: "Thanh toán bằng VNPay",
-    value: "5",
-    image:
-      "https://frontend.tikicdn.com/_desktop-next/static/img/icons/checkout/icon-payment-method-vnpay.png",
+      "https://cdn.pixabay.com/photo/2018/05/08/21/29/paypal-3384015__480.png",
   },
 ];
 

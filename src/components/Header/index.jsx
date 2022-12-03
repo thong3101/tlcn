@@ -16,7 +16,7 @@ import SignUp from "../SignUp";
 import { VerticalAlignCenter } from "@mui/icons-material";
 import apiCategory from "../../apis/apiCategory";
 
-const privatePath = ["/customer/", "/admin/", "/payment"];
+const privatePath = ["/my-account/", "/admin/", "/payment"];
 
 function Header() {
   const navigate = useNavigate();

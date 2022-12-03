@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import jwt_decode from 'jwt-decode'
 
 const privatePath = [
-    '/customer/', '/admin/', '/payment',
+    '/my-account/', '/admin/', '/payment',
 ]
 
 function CheckAuthentication() {

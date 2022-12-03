@@ -102,6 +102,9 @@ function ShoppingCart() {
   //     ? Math.round(totalPrice - (coupon?.value || 0))
   //     : 0;
   // };
+
+
+  console.log("ci",CartItems)
   return (
     <>
       <Box className="container">
