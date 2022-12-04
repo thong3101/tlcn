@@ -1,7 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import imgDefault from "../../assets/img/img_default.jpg";
 
 import {
   Rating,
@@ -51,7 +50,7 @@ import Comment from "../../components/Comment";
 
 function ProductDetail() {
   const user = useSelector((state) => state.auth.user);
-  const [product, setProduct] = useState({});
+  const [product, setProduct] = useState();
   const { id } = useParams();
 
   useEffect(() => {

@@ -6,6 +6,12 @@ import { numWithCommas, roundPrice } from "../../constraints/Util";
 
 
 function CardProduct({ data }) {
+  function checkPrice(data){
+    if(data){
+      return numWithCommas(data?.price)
+    }
+
+  }
   return (
     <Box>
       <Link
@@ -50,8 +56,8 @@ function CardProduct({ data }) {
                     } 
                     </Typography> */}
             <Typography>{data?.name}</Typography>
-            {/* <Typography>{numWithCommas(data?.price)} đ</Typography> */}
-            <Typography>{data?.price} đ</Typography>
+            <Typography className="card__price">{checkPrice(data)} đ</Typography>
+            {/* <Typography>{data?.price} đ</Typography> */}
           </CardContent>
         </Card>
       </Link>

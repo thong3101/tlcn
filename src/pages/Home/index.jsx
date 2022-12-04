@@ -34,7 +34,7 @@ function Home() {
       <Box id="section1">
         <SlideBackGround />
       </Box>
-      <Box id="section2" style={{ backgroundColor: "red" }}>
+      <Box id="section2">
         <SlideHome />
       </Box>
     </Stack>
@@ -153,17 +153,23 @@ function SlideBackGround() {
 }
 
 function SlideHome() {
-  const [sales, setSales] = useState([]);
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
+    let params = {
+      page: 0,
+      size: 20,
+    };
     const getData = async () => {
-      const response = await apiMain.getProducts({ _page: 2, _limit: 20 });
+      const response = await apiMain.getProducts(params);
       if (response) {
-        setSales(response.data);
+        setProducts(response.data.list);
       }
     };
     getData();
   }, []);
+
+  console.log("p",products);
 
   return (
     <>
@@ -371,6 +377,7 @@ function SlideHome() {
               slidesPerView={4}
               spaceBetween={0}
               slidesPerGroup={4}
+              initialSlide={0}
               loop={true}
               loopFillGroupWithBlank={true}
               pagination={{
@@ -380,8 +387,12 @@ function SlideHome() {
               modules={[Pagination, Navigation]}
               className="mySwiper"
             >
-              <SwiperSlide>
-                {/* <CardProduct data={item} /> */}
+              {products.sort((a,b) => b.sellAmount - a.sellAmount).map((item) => (
+                <SwiperSlide>
+                  <CardProduct key={item.id} data={item} />
+                </SwiperSlide>
+              ))}
+              {/* <SwiperSlide>
                 <CardProduct />
               </SwiperSlide>
               <SwiperSlide>
@@ -404,10 +415,7 @@ function SlideHome() {
               </SwiperSlide>
               <SwiperSlide>
                 <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
+              </SwiperSlide> */}
             </Swiper>
           </Box>
 
@@ -455,34 +463,11 @@ function SlideHome() {
               modules={[Pagination, Navigation]}
               className="mySwiper"
             >
-              <SwiperSlide>
-                {/* <CardProduct data={item} /> */}
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
+              {products.map((item) => (
+                <SwiperSlide>
+                  <CardProduct key={item.id} data={item} />
+                </SwiperSlide>
+              ))}
             </Swiper>
           </Box>
 
@@ -597,7 +582,8 @@ function SlideHome() {
               className="mySwiper"
             >
               <SwiperSlide>
-                <a href="https://guitar.station.vn/3-cach-chinh-day-dan-guitar/"
+                <a
+                  href="https://guitar.station.vn/3-cach-chinh-day-dan-guitar/"
                   className="card__wrap"
                   style={{
                     width: "260px",
@@ -622,7 +608,8 @@ function SlideHome() {
                 </a>
               </SwiperSlide>
               <SwiperSlide>
-                <a href="https://guitar.station.vn/3-meo-don-gian-nhat-de-hoc-hop-am-guitar/"
+                <a
+                  href="https://guitar.station.vn/3-meo-don-gian-nhat-de-hoc-hop-am-guitar/"
                   className="card__wrap"
                   to={`/`}
                   style={{
@@ -648,7 +635,8 @@ function SlideHome() {
                 </a>
               </SwiperSlide>
               <SwiperSlide>
-                <a href="https://guitar.station.vn/huong-dan-cach-chon-mot-cay-dan-guitar-acoustic-tot/"
+                <a
+                  href="https://guitar.station.vn/huong-dan-cach-chon-mot-cay-dan-guitar-acoustic-tot/"
                   className="card__wrap"
                   to={`/`}
                   style={{
@@ -674,7 +662,8 @@ function SlideHome() {
                 </a>
               </SwiperSlide>
               <SwiperSlide>
-                <a href="https://guitar.station.vn/nen-chon-mua-dan-guitar-go-nguyen-mieng-hay-go-ep/"
+                <a
+                  href="https://guitar.station.vn/nen-chon-mua-dan-guitar-go-nguyen-mieng-hay-go-ep/"
                   className="card__wrap"
                   to={`/`}
                   style={{
@@ -700,7 +689,8 @@ function SlideHome() {
                 </a>
               </SwiperSlide>
               <SwiperSlide>
-                <a href="https://guitar.station.vn/5-cach-tu-hoc-guitar-tai-nha-nhanh-tien-bo-nhat/"
+                <a
+                  href="https://guitar.station.vn/5-cach-tu-hoc-guitar-tai-nha-nhanh-tien-bo-nhat/"
                   className="card__wrap"
                   to={`/`}
                   style={{
