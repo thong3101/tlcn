@@ -28,6 +28,11 @@ const apiProduct = {
     getProductsByCateId: async (params,id) => {
         const res = await axiosClient.get(`/product/${id}/category/`, {params})
         return res.data
+    },
+
+    getProductsSearch: async (params,key) => {
+        const res = await axiosClient.get(`/product/search/${key}`, {params})
+        return res.data
     }
 
 }

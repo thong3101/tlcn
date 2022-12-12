@@ -189,7 +189,7 @@ function Login(props) {
               }} />
           </a>
 
-          <a href={`https://nhom3-tiki.herokuapp.com/oauth2/authorization/google?redirect_uri=${client_url}oauth2/redirect`} className="hre">
+          <a href={`https://senki.me/oauth2/authorize/google?redirect_uri=${client_url}oauth2/redirect`} className="hre">
             <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
               width="48" height="48"
               viewBox="0 0 48 48"

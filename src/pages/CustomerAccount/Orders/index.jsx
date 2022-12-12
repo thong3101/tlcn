@@ -19,10 +19,14 @@ function Orders() {
 
 
   useEffect(() => {
+
+    // let params = {
+    //   _sort:'createAt',
+    // }
     const getData = async () => {
       apiCart.getOrders()
         .then(response=>{
-           setOrders(response.data.orders);
+           setOrders(response.data.orders.sort((a,b)=>b.createAt - a.createAt));
         })
         .catch(setOrders([]))
     };

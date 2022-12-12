@@ -20,7 +20,7 @@ import {
   Input,
   IconButton,
 } from "@mui/material";
-import "./FilterProduct.scss";
+import "./FilterProductSearch.scss";
 import StarIcon from "@mui/icons-material/Star";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -30,18 +30,18 @@ import apiProduct from "../../apis/apiProduct";
 import apiCategory from "../../apis/apiCategory";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 import SearchIcon from "@mui/icons-material/Search";
+
 import { fontSize } from "@mui/system";
 
 function FilterProduct(props) {
-  const idCategory = useParams().id;
+  const search = useParams().key;
 
   const navigate = useNavigate();
 
   const [searchText, setSearchText] = useState("");
+  
 
   const [products, setProducts] = useState();
   const [categories, setCategories] = useState([]);
@@ -60,13 +60,19 @@ function FilterProduct(props) {
     295000, 7500000,
   ]);
 
+  const onChangeSearch = (event) => {
+    setSearchText(event.target.value);
+  };
 
-  let min_val = products?.reduce(function(pre, current){
-    return (pre.price < current.price) ? pre.price : current.price
-  });
-  
-  console.log("max",typeof(min_val));
-  
+
+  const handleSubmitSearch = () => {
+    // let obj = {
+    //   text: searchText,
+    //   slug: searchText.replace(/\s/g, "-"),
+    // };
+    // handleSaveSearch(obj);
+    navigate(`/search/${searchText}`);
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -106,7 +112,7 @@ function FilterProduct(props) {
       }
 
       apiProduct
-        .getProductsByCateId(param, idCategory)
+        .getProductsSearch(param, search)
         .then((res) => {
           setProducts(res.data.list);
         })
@@ -117,7 +123,7 @@ function FilterProduct(props) {
       console.log("111", param);
     };
     getData();
-  }, [idCategory, filter, filterPrice.apply, value]);
+  }, [search, filter, filterPrice.apply, value]);
 
   useEffect(() => {
     const getData = async () => {
@@ -142,21 +148,20 @@ function FilterProduct(props) {
     });
   };
 
-  const onChangeSearch = (event) => {
-    setSearchText(event.target.value);
-  };
+  // const onSetFilterPrice = (value, index) => {
+  //   setFilterPrice((pre) => {
+  //     return {
+  //       ...pre,
+  //       option: index,
+  //       value: value,
+  //     };
+  //   });
+  // };
 
-
-  const handleSubmitSearch = () => {
-    // let obj = {
-    //   text: searchText,
-    //   slug: searchText.replace(/\s/g, "-"),
-    // };
-    // handleSaveSearch(obj);
-    navigate(`/search/${searchText}`);
-    // console.log(searchText)
-  };
-
+  // const handleChange = (event, newValue) => {
+  //   setValue(newValue);
+  //   console.log(newValue)
+  // };
   const handleChange = (event) => {
     setValue(Number(event.target.value));
   };
