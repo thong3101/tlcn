@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 import apiAuth from "../../apis/apiAuth";
@@ -29,10 +29,11 @@ function SignUp(props) {
   const [showPass, setShowPass] = React.useState(false);
   const [showPassConf, setShowPassConf] = React.useState(false);
 
-  const [invalidPhone, setInvalidPhone] = React.useState(false);
+
   const [isDiffPass, setIsDiffPass] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
+  const [message,setMessage] = React.useState();
 
   // const client_url = "https://tiki-web.vercel.app/"
 
@@ -42,6 +43,16 @@ function SignUp(props) {
     watch,
     formState: { errors },
   } = useForm();
+
+  // useEffect(()=>{
+  //   setMessage();
+  //   setIsDiffPass(false);
+  // },[message,isDiffPass])
+
+  const handleReset = () => {
+    setMessage();
+    setIsDiffPass(false)
+  }
 
   const handleCheckPass = () => {
     if (watch("pass") !== watch("passConf")) {
@@ -78,7 +89,16 @@ function SignUp(props) {
           password: watch("pass"),
           email: watch("email"),
         };
-        apiAuth.postRegister(param).then(setIsSuccess(true))
+        // apiAuth.postRegister(param).then(setIsSuccess(true))
+        // .finally(()=>setLoading(false));
+
+        apiAuth.postRegister(param)
+        .then((res) => {
+          setIsSuccess(true)
+        })
+        .catch((res) => {
+          setMessage(res.response.data.message)
+        })
         .finally(()=>setLoading(false));
       }
     }
@@ -103,6 +123,7 @@ function SignUp(props) {
                 label="Email"
                 variant="standard"
                 sx={{ flex: 1 }}
+                onClick={handleReset}
               />
 
               {errors.email && (
@@ -134,6 +155,7 @@ function SignUp(props) {
                     </IconButton>
                   </InputAdornment>
                 }
+                onClick={handleReset}
               />
 
               {errors.pass && <ErrorInput message={errors.pass.message} />}
@@ -163,6 +185,7 @@ function SignUp(props) {
                     </IconButton>
                   </InputAdornment>
                 }
+                onClick={handleReset}
               />
 
               {errors.passConf && (
@@ -171,8 +194,8 @@ function SignUp(props) {
             </FormControl>
 
             <Stack sx={{ marginTop: "5rem" }}>
-              {invalidPhone && (
-                <ErrorAfterSubmit message="Email đã được đăng ký" />
+              {message && (
+                <ErrorAfterSubmit message={message} />
               )}
               {isDiffPass ? (
                 <ErrorAfterSubmit message="Nhập mật khẩu trùng nhau" />

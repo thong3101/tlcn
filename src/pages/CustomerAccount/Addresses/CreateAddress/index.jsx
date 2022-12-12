@@ -16,8 +16,13 @@ import "./CreateAddress.scss";
 import { styled } from "@mui/material/styles";
 import { useState } from "react";
 import apiAddress from "../../../../apis/apiAddress";
+import apiProfile from "../../../../apis/apiProfile"
 import { useEffect } from "react";
+
 import { useParams, useNavigate } from "react-router-dom";
+import { useSelector,useDispatch } from "react-redux";
+import { loginSuccess } from '../../../../slices/authSlice';
+
 import { toast } from "react-toastify";
 
 function CreateAddress(props) {
@@ -25,8 +30,8 @@ function CreateAddress(props) {
   const [companyName, setCompanyName] = useState("");
   const [phone, setPhone] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
-  // const [addressType, setAddressType] = useState("");
-  const [addressid, setAddressid] = useState("");
+
+
   const [edit, setEdit] = useState(props.edit);
   const [province, setProvince] = React.useState("");
   const [district, setDistrict] = React.useState("");
@@ -34,26 +39,26 @@ function CreateAddress(props) {
   const navigate = useNavigate();
   const params = useParams();
 
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+  const [address,setAddress] = useState(user.address)
+
   useEffect(() => {
     const loaddata = () => {
       if (edit === true) {
-        apiAddress.getProfileUser().then((res) => {
-          const address = res.data.user.address;
-          if (address) {
-            setFullName(address.fullName);
-            setCompanyName(address.companyName);
-            setPhone(address.phoneNumber);
-            setAddressDetail(address.addressDetail);
-            setCommune(address.commune.id);
-            setDistrict(address.district.id);
-            setProvince(address.province.id);
-          } else {
-            navigate("/my-account/address/create");
-            toast.error("Địa chỉ này không tồn tại!");
-          }
-        });
+        if (address) {
+          setFullName(address.fullName);
+          setCompanyName(address.companyName);
+          setPhone(address.phoneNumber);
+          setAddressDetail(address.addressDetail);
+          setCommune(address.commune.id);
+          setDistrict(address.district.id);
+          setProvince(address.province.id);
+        } else {
+          navigate("/my-account/address/create");
+          toast.error("Địa chỉ này không tồn tại!");
+        }
       }
-      setAddressid(params.id);
     };
     loaddata();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -100,6 +105,8 @@ function CreateAddress(props) {
         .saveAddress(params)
         .then((res) => {
           toast.success("Thêm địa chỉ thành công");
+          getUserProfile();
+
           setFullName("");
           setCompanyName("");
           setPhone("");
@@ -108,6 +115,8 @@ function CreateAddress(props) {
           setCommune("");
           setDistrict("");
           setProvince("");
+
+          
         })
         .catch((error) => {
           toast.error("Thêm địa chỉ thất bại!");
@@ -147,11 +156,20 @@ function CreateAddress(props) {
       .saveAddress(params)
       .then((res) => {
         toast.success("Cập nhật thành công");
+        getUserProfile();
       })
       .catch((error) => {
         toast.error("Cập nhật thất bại!");
       });
   };
+  const getUserProfile = () => {
+    apiProfile.getUserProfile()
+      .then((res) => {
+        let newUser = res.data.user
+        dispatch(loginSuccess({ ...user, ...newUser }))
+      })
+      console.log("1",newUser)
+  }
 
   return (
     <Box className="create-address" p={2} m={2}>

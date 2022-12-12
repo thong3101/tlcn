@@ -169,7 +169,7 @@ function SlideHome() {
     getData();
   }, []);
 
-  console.log("p",products);
+  console.log("p", products);
 
   return (
     <>
@@ -377,9 +377,6 @@ function SlideHome() {
               slidesPerView={4}
               spaceBetween={0}
               slidesPerGroup={4}
-              initialSlide={0}
-              loop={true}
-              loopFillGroupWithBlank={true}
               pagination={{
                 clickable: true,
               }}
@@ -387,35 +384,13 @@ function SlideHome() {
               modules={[Pagination, Navigation]}
               className="mySwiper"
             >
-              {products.sort((a,b) => b.sellAmount - a.sellAmount).map((item) => (
-                <SwiperSlide>
-                  <CardProduct key={item.id} data={item} />
-                </SwiperSlide>
-              ))}
-              {/* <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide> */}
+              {products
+                .sort((a, b) => b.sellAmount - a.sellAmount)
+                .map((item) => (
+                  <SwiperSlide key={`${item.id}`}>
+                    <CardProduct key={item.id} data={item} />
+                  </SwiperSlide>
+                ))}
             </Swiper>
           </Box>
 
@@ -454,8 +429,6 @@ function SlideHome() {
               slidesPerView={4}
               spaceBetween={0}
               slidesPerGroup={4}
-              loop={true}
-              loopFillGroupWithBlank={true}
               pagination={{
                 clickable: true,
               }}
@@ -464,7 +437,7 @@ function SlideHome() {
               className="mySwiper"
             >
               {products.map((item) => (
-                <SwiperSlide>
+                <SwiperSlide key={`${item.id}`}>
                   <CardProduct key={item.id} data={item} />
                 </SwiperSlide>
               ))}

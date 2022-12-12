@@ -10,7 +10,7 @@ import apiAddress from "../../../apis/apiAddress";
 import { toast } from "react-toastify";
 
 function Addresses() {
-  const user = useSelector(state => state.auth.user);
+  const user = useSelector((state) => state.auth.user);
 
   const [addresses, setAddresses] = useState(user.address);
 
@@ -24,11 +24,14 @@ function Addresses() {
   //   getData();
   // }, []);
 
+  console.log(user)
+  
+
 
   return (
     <Stack spacing={2} className="addresses">
       <Typography className="heading">Địa chỉ nhận hàng</Typography>
-      {addresses.length === 0 ? (
+      {addresses === null ? (
         <Link to="/my-account/address/create">
           <Button className="new" variant="outlined" startIcon={<AddIcon />}>
             Thêm địa chỉ mới
@@ -45,7 +48,7 @@ function Addresses() {
       )}
 
       <Stack spacing={5}>
-        {addresses.length === 0 ? (
+        {addresses === null ? (
           // <EmptyNotify title="Bạn chưa có địa chỉ" />
           <Typography>Bạn chưa có địa chỉ</Typography>
         ) : (

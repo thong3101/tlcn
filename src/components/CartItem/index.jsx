@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from "react";
 import "./CartItem.scss";
-import { Checkbox, Typography, Dialog, Button, Box, Stack } from "@mui/material";
+import {
+  Checkbox,
+  Typography,
+  Dialog,
+  Button,
+  Box,
+  Stack,
+} from "@mui/material";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { numWithCommas } from "../../constraints/Util";
 import { useDispatch } from "react-redux";
 import { removeItem, updateItem } from "../../slices/cartSlice";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function CartItem(props) {
   const [data, setData] = useState(props.data);
   const [quantity, setQuantity] = useState(props.data.quantity);
-
 
   const dispatch = useDispatch();
 
@@ -28,6 +34,7 @@ function CartItem(props) {
     dispatch(removeItem(data));
     setOpen(false);
   };
+
 
   useEffect(() => {
     setData(props.data);
@@ -55,7 +62,11 @@ function CartItem(props) {
     }
   };
   const onChangeQuantity = (e) => {
+    if(e.target.value >= "99"){
+      setQuantity(99);
+    }
     setQuantity(e.target.value);
+    console.log(typeof(e.target.value));
     if (e.target.value === "") {
       return;
     }
@@ -64,6 +75,13 @@ function CartItem(props) {
       let num = Number(e.target.value);
       if (num <= 0) {
         handleClickRemove();
+      } else if(num >= 99) {
+        dispatch(
+          updateItem({
+            ...data,
+            quantity: 99,
+          })
+        );
       } else {
         dispatch(
           updateItem({
@@ -75,9 +93,7 @@ function CartItem(props) {
     }
   };
 
-  console.log("d",data);
-  
-  console.log("p",props);
+  console.log("d", quantity);
 
   // const handleChangeChoose = () => {
   //   dispatch(
@@ -91,12 +107,20 @@ function CartItem(props) {
   return (
     <>
       <Box className="cart-item cart">
-        <Stack direction="row" alignItems="center" className="cart-item__cell cart-item__description">
+        <Stack
+          direction="row"
+          alignItems="center"
+          className="cart-item__cell cart-item__description"
+        >
           {/* <Checkbox checked={data?.choose} onChange={handleChangeChoose} className="cart__checkbox" /> */}
           <img src={data?.imageList[0]?.url} alt="" />
           <Stack className="cart-item__content">
-            <Link to={data?.id?`/product-detail/${data.id}`:''}>
-              <Typography fontSize="13px" className="text-overflow-2-lines" variant="h5">
+            <Link to={data?.id ? `/product-detail/${data.id}` : ""}>
+              <Typography
+                fontSize="13px"
+                className="text-overflow-2-lines"
+                variant="h5"
+              >
                 {data?.name}
               </Typography>
             </Link>
@@ -119,6 +143,7 @@ function CartItem(props) {
               onClick={() => {
                 updateQuantity("+");
               }}
+              disabled={quantity>=99}
             >
               +
             </button>

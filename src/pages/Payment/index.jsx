@@ -157,7 +157,7 @@ function Payment() {
           toast.success("Đặt hàng thành công!");
           dispatch(deleteAll());
           // navigate(res.data.link);
-          window.location.assign(res.data.link);
+          window.location.replace(res.data.link);
         })
         .catch((error) => {
           toast.error("Đặt hàng không thành công. Vui lòng thử lại");
