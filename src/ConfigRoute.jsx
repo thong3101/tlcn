@@ -9,6 +9,9 @@ import Payment from "./pages/Payment";
 import Admin from "./pages/Admin";
 
 
+import LoadingPage from "./components/LoadingPage"
+
+
 import PrivateRoute from "./components/PrivateRoute";
 
 
@@ -35,6 +38,8 @@ function ConfigRoute() {
       <Route path="product-detail/:id" element={<ProductDetail />} />
       <Route path="product-category/:id" element={<FilterProduct />} />
       <Route path="search/:key" element={<FilterProductSearch />} />
+
+      <Route path="loading" element={<LoadingPage />} />
     </Routes>
   );
 }

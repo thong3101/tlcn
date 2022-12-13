@@ -31,6 +31,8 @@ import apiCategory from "../../apis/apiCategory";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 
+import LoadingPage from "../../components/LoadingPage";
+
 import SearchIcon from "@mui/icons-material/Search";
 
 import { fontSize } from "@mui/system";
@@ -41,7 +43,6 @@ function FilterProduct(props) {
   const navigate = useNavigate();
 
   const [searchText, setSearchText] = useState("");
-  
 
   const [products, setProducts] = useState();
   const [categories, setCategories] = useState([]);
@@ -60,10 +61,11 @@ function FilterProduct(props) {
     295000, 7500000,
   ]);
 
+  const [loadingData, setLoadingData] = useState(false);
+
   const onChangeSearch = (event) => {
     setSearchText(event.target.value);
   };
-
 
   const handleSubmitSearch = () => {
     // let obj = {
@@ -76,6 +78,7 @@ function FilterProduct(props) {
 
   useEffect(() => {
     const getData = async () => {
+      setLoadingData(true);
       let param = {
         page: 0,
         size: 6,
@@ -118,6 +121,9 @@ function FilterProduct(props) {
         })
         .catch((error) => {
           setProducts(null);
+        })
+        .finally(() => {
+          setLoadingData(false);
         });
 
       console.log("111", param);
@@ -213,7 +219,7 @@ function FilterProduct(props) {
                   height: "100%",
                   width: "2rem",
                   backgroundColor: "#f4ba36",
-                  borderRadius:"0",
+                  borderRadius: "0",
                 }}
                 variant="contained"
                 onClick={() => handleSubmitSearch(searchText)}
@@ -370,23 +376,20 @@ function FilterProduct(props) {
           </Box>
         </Stack>
         <Box>
-          {/* <Grid container spacing={2}>
-            {productFilter.map((item) => (
-              <Grid key={item.id} item xs={3}>
-                <CardProduct data={item} />
-              </Grid>
-            ))}
-          </Grid> */}
-          <Grid container spacing={2}>
-            {(value === 2
-              ? products?.sort((a, b) => b.sellAmount - a.sellAmount)
-              : products
-            )?.map((item) => (
-              <Grid key={item.id} item xs={3}>
-                <CardProduct data={item} />
-              </Grid>
-            ))}
-          </Grid>
+          {loadingData ? (
+            <LoadingPage />
+          ) : (
+            <Grid container spacing={2}>
+              {(value === 2
+                ? products?.sort((a, b) => b.sellAmount - a.sellAmount)
+                : products
+              )?.map((item) => (
+                <Grid key={item.id} item xs={3}>
+                  <CardProduct data={item} />
+                </Grid>
+              ))}
+            </Grid>
+          )}
         </Box>
       </Box>
     </Stack>
