@@ -7,7 +7,8 @@ import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined
 
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Stack, Button, Typography, Badge, Box, Modal } from "@mui/material";
+import { Stack, Button, Typography, Badge, Box, Modal,Divider } from "@mui/material";
+
 
 import { logoutSuccess } from "../../slices/authSlice";
 
@@ -114,7 +115,7 @@ function Header() {
               <Link
                 to={"/"}
               >
-                <Typography sx={{ fontSize: "14px", paddingBottom: "6px" }}>
+                <Typography sx={{ fontSize: "14px", paddingBottom: "6px" }} >
                   Đàn Guitar
                   <ArrowDropDownOutlinedIcon />
                 </Typography>
@@ -245,7 +246,7 @@ function Header() {
                     >
                       Tài khoản của tôi
                     </Link>
-
+                        <Divider variant="inset" component="li" />
                     <Box onClick={handleLogout} style={{ fontSize: "14px" }}>
                       Thoát tài khoản
                     </Box>

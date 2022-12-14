@@ -16,10 +16,12 @@ import PrivateRoute from "./components/PrivateRoute";
 
 
 import { Route, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 function ConfigRoute() {
   return (
     <Routes>
+
       <Route path="/" element={<Home />} />
       <Route path="cart" element={<Cart />} />
 

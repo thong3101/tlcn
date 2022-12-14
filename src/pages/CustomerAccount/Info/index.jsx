@@ -1,13 +1,13 @@
-import {useState} from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import ImageUploading from "react-images-uploading";
-import { toast } from 'react-toastify';
-import { loginSuccess } from '../../../slices/authSlice'
-import { useDispatch } from 'react-redux';
+import { toast } from "react-toastify";
+import { loginSuccess } from "../../../slices/authSlice";
+import { useDispatch } from "react-redux";
 
 import "./Info.scss";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import avatar from "../../../assets/img/logo.png"
+import avatar from "../../../assets/img/logo.png";
 
 import {
   Avatar,
@@ -39,7 +39,8 @@ import LockIcon from "@mui/icons-material/Lock";
 import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 import GoogleIcon from "@mui/icons-material/Google";
 import CloseIcon from "@mui/icons-material/Close";
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import Add from "@mui/icons-material/Add";
+import Edit from "@mui/icons-material/Edit";
 import WallpaperIcon from "@mui/icons-material/Wallpaper";
 import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
@@ -47,22 +48,16 @@ import { useSelector } from "react-redux";
 
 import apiProfile from "../../../apis/apiProfile";
 import Loading from "../../../components/Loading";
-
-
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function Info() {
-
-
-
-  const user = useSelector(state => state.auth.user);
+  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
-
-
   const [image, setImage] = useState([]);
-  const [gender, setGender] = useState(user.gender)
-  const [fullname, setFullName] = useState(user.fullName)
-  const [nickname, setNickName] = useState(user.nickName)
+  const [gender, setGender] = useState(user.gender);
+  const [fullname, setFullName] = useState(user.fullName);
+  const [nickname, setNickName] = useState(user.nickName);
   const [modalDeleteAvatar, setModalDeleteAvatar] = useState(false);
   const [modalViewAvatar, setModalViewAvatar] = useState(false);
   const [modalNational, setModalNational] = useState(false);
@@ -91,85 +86,90 @@ function Info() {
   };
   const onChange = (imageList, addUpdateIndex) => {
     setImage(imageList);
+    imageList=null;
   };
 
-
-  const handleUploadAvatar = ()=>{
+  const handleUploadAvatar = () => {
     if (image.length === 0) {
-      toast.warning("Vui lòng chọn ảnh")
-      return
+      toast.warning("Vui lòng chọn ảnh");
+      return;
     }
-    if(uploading){
-      toast.warning("Hình ảnh đang được cập nhật, vui lòng không thao tác quá nhiều lần")
-      return
+    if (uploading) {
+      toast.warning(
+        "Hình ảnh đang được cập nhật, vui lòng không thao tác quá nhiều lần"
+      );
+      return;
     }
-    setUploading(true)
-    let param = { file: image[0].file }
-    apiProfile.putUploadAvatar(param)
-      .then(res => {
-        toast.success("Cập nhật ảnh đại diện thành công")
-        getUserProfile()
+    setUploading(true);
+    let param = { file: image[0].file };
+    apiProfile
+      .putUploadAvatar(param)
+      .then((res) => {
+        toast.success("Cập nhật ảnh đại diện thành công");
+        getUserProfile();
       })
-      .catch(error => {
-        toast.error("Cập nhật ảnh đại diện thất bại")
+      .catch((error) => {
+        toast.error("Cập nhật ảnh đại diện thất bại");
       })
-      .finally(() => {
+      .finally((res) => {
         setModalUploadAvatar(false);
-        setUploading(false)
-      })
-  }
+        setUploading(false);
+      });
+  };
 
-  const handleDeleteAvatar = ()=>{
-    let imgDefault = {data_url:avatar,
-      file:new File([avatar], "avatar", {
-      type: 'image/png'})}
+  const handleDeleteAvatar = () => {
+    let imgDefault = {
+      data_url: avatar,
+      file: new File([avatar], "avatar", {
+        type: "image/png",
+      }),
+    };
 
-      let param = { file: imgDefault.file }
-    apiProfile.putUploadAvatar(param)
-      .then(res => {
-        toast.success("Xoá ảnh đại diện thành công")
-        getUserProfile()
+    let param = { file: imgDefault.file };
+    apiProfile
+      .putUploadAvatar(param)
+      .then((res) => {
+        toast.success("Xoá ảnh đại diện thành công");
+        getUserProfile();
       })
-      .catch(error => {
-        toast.error("Xoá ảnh đại diện thất bại")
-      })
-      setModalDeleteAvatar(false);
-  }
-
-  
+      .catch((error) => {
+        toast.error("Xoá ảnh đại diện thất bại");
+      });
+    setModalDeleteAvatar(false);
+  };
 
   const maxDayofmonth = (month, year) => {
     if (month === 2) {
-      if ((year % 4 === 0 && year % 100 !== 0 && year % 400 !== 0) || (year % 100 === 0 && year % 400 === 0)) {
+      if (
+        (year % 4 === 0 && year % 100 !== 0 && year % 400 !== 0) ||
+        (year % 100 === 0 && year % 400 === 0)
+      ) {
         return 29;
-      }
-      else return 28;
-    }
-    else if ([4, 6, 9, 11].includes(month))
-      return 30;
+      } else return 28;
+    } else if ([4, 6, 9, 11].includes(month)) return 30;
     else return 31;
-  }
+  };
   const onChangeFullName = (event) => {
     setFullName(event.target.value);
-  }
+  };
   const onChangeNickName = (event) => {
     setNickName(event.target.value);
-  }
+  };
   const onChangeGender = (event) => {
     setGender(event.target.value);
-  }
-  
+  };
+
   const onSaveChange = () => {
     if (!(fullname && gender && nickname)) {
       toast.warning("Vui lòng nhập đầy đủ thông tin !!");
-      return
+      return;
     }
     const params = {
       fullName: fullname,
       gender: gender,
-      nickName: nickname
+      nickName: nickname,
     };
-    setUpdating(true)
+    setUpdating(true);
     apiProfile
       .putChangeInfo(params)
       .then((response) => {
@@ -178,37 +178,41 @@ function Info() {
       })
       .catch((error) => {
         toast.error("Thay đổi không thành công");
-        console.log(error)
+        console.log(error);
       })
-      .finally(()=>setUpdating(false))
+      .finally(() => setUpdating(false));
   };
   const getUserProfile = () => {
-    apiProfile.getUserProfile()
-      .then((res) => {
-        let newUser = res.data.user
-        dispatch(loginSuccess({ ...user, ...newUser }))
-      })
-  }
+    apiProfile.getUserProfile().then((res) => {
+      let newUser = res.data.user;
+      dispatch(loginSuccess({ ...user, ...newUser }));
+    });
+  };
   return (
     <Stack className="customer-info" spacing={3}>
-      <Typography variant="h6">Thông tin tài khoản</Typography>
       <Stack direction="row" spacing={8}>
         <Stack spacing={3}>
+          <Typography variant="h6">Thông tin tài khoản</Typography>
+
           <Stack direction="row" spacing={4}>
             <ClickAwayListener onClickAway={handleClickAwayAvatar}>
               <Box sx={{ position: "relative" }} onClick={handleClickAvatar}>
                 <Badge
-                  badgeContent={<EditRoundedIcon fontSize="30" color="white" />}
+                  badgeContent={<Edit fontSize="20" color="white" />}
                   overlap="circular"
                   anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                   color="primary"
                 >
-                  <Avatar
-                    sx={{
-                      width: 110,
-                      height: 110,
-                      border: "3px solid aquamarine",
-                    }}
+                  <LazyLoadImage
+                    // sx={{
+                    //   width: 110,
+                    //   height: 110,
+                    //   border: "3px solid aquamarine",
+                    // }}
+                    width={110}
+                    height={110}
+                    alt="avatar"
+                    style={{border:"3px solid aquamarine",borderRadius:"50%"}}
                     src={image.length === 0 ? user.img : image[0].data_url}
                   />
                 </Badge>
@@ -246,7 +250,10 @@ function Info() {
                 justifyContent="space-between"
               >
                 <label>Họ & tên</label>
-                <input id="input-name" placeholder="Thêm họ tên" type="text"
+                <input
+                  id="input-name"
+                  placeholder="Thêm họ tên"
+                  type="text"
                   value={fullname}
                   onChange={onChangeFullName}
                 />
@@ -284,19 +291,19 @@ function Info() {
             </RadioGroup>
           </Stack>
 
-
-
-          <Button variant="contained" sx={{ width: 200, alignSelf: "center" }}
+          <Button
+            variant="contained"
+            sx={{ width: 200, alignSelf: "center" }}
             onClick={onSaveChange}
           >
-            {updating&&<Loading color="#fff"/>}Lưu thay đổi
+            {updating && <Loading color="#fff" />}Lưu thay đổi
           </Button>
         </Stack>
 
         <Divider orientation="vertical" flexItem />
 
         <Stack spacing={4}>
-          <Typography>Số điện thoại và Email</Typography>
+          <Typography variant="h6">Số điện thoại và Email</Typography>
 
           <Stack
             direction="row"
@@ -323,14 +330,11 @@ function Info() {
             <Stack direction="row" spacing={1}>
               <EmailOutlinedIcon color="disabled" />
 
-              <ListItemText
-                primary="Địa chỉ email"
-                secondary={user.email}
-              />
+              <ListItemText primary="Địa chỉ email" secondary={user.email} />
             </Stack>
 
             <Link to="/my-account/edit-account/email">
-              <Button size="small" variant="outlined">
+              <Button size="small" sx={{minWidth:'auto',whiteSpace:'nowrap'}} variant="outlined" >
                 Cập nhật
               </Button>
             </Link>
@@ -346,15 +350,14 @@ function Info() {
               <LockIcon color="disabled" />
               <ListItemText primary="Đổi mật khẩu" />
             </Stack>
-            <Link to="/my-account/edit-account/pass">
-              <Button size="small" variant="outlined">
+            <Link to="/my-account/edit-account/pass" >
+              <Button size="small"  variant="outlined">
                 Đổi mật khẩu
               </Button>
             </Link>
           </Stack>
         </Stack>
       </Stack>
-
 
       {/* Modal view avatar */}
       <Modal
@@ -404,7 +407,7 @@ function Info() {
               value={image}
               onChange={onChange}
               dataURLKey="data_url"
-              acceptType={["jpg"]}
+              acceptType={["jpg","png","jpeg"]}
             >
               {({
                 imageList,
@@ -415,13 +418,37 @@ function Info() {
                 dragProps,
               }) => (
                 // write your building UI
-                <Box className="upload__image-wrapper">
+                <Box
+                  className="upload__image-wrapper "
+                  sx={{ display: "flex" }}
+                  justifyContent="center"
+                  alignItems="center"
+                  flexDirection="column"
+                >
+                  {/* <Button className="!mb-2" startIcon={<CloseIcon className="!bg-white !rounded-full"/>}
+                  onClick={closeModalUploadAvatar}
+                  size="large"
+                  >
+
+                  </Button> */}
+                  {imageList.length === 0 ? (
+                    <IconButton
+                      size="medium"
+                      className="!bg-rose-400 !-translate-y-5"
+                      onClick={closeModalUploadAvatar}
+                    >
+                      <CloseIcon fontSize="inherit" />
+                    </IconButton>
+                  ) : null}
+
                   {imageList.length === 0 ? (
                     <Stack
+                      className="!bg-white"
                       sx={{
-                        width: "100%",
-                        height: "30rem",
-                        border: "2px dashed grey",
+                        width: "50%",
+                        height: "25rem",
+                        border: "2px dashed black",
+                        zIndex: 999,
                         borderRadius: "5px",
                       }}
                       style={isDragging ? { color: "red" } : null}
@@ -431,14 +458,15 @@ function Info() {
                       {...dragProps}
                     >
                       <Typography
-                        sx={{ ml: "auto", mr: "auto", color: "blue" }}
+                        flexWrap={{ xs: "wrap", sm: "nowrap" }}
+                        sx={{ ml: "auto", mr: "auto", color: "black",textAlign:'center' }}
                       >
                         Nhấn để chọn hoặc kéo thả hình ảnh vào khung này.
                       </Typography>
                     </Stack>
                   ) : null}
 
-                  {imageList.map((image,i) => (
+                  {imageList.map((image, i) => (
                     <Stack
                       key={i}
                       sx={{
@@ -465,18 +493,20 @@ function Info() {
                         spacing={5}
                       >
                         <Button
-                          sx={{ width: "50%" }}
-                          variant="outlined"
-                          onClick={() => onImageRemove(0)}
+                          variant="contained"
+                          onClick={() => {
+                            onImageRemove(0);
+                            closeModalUploadAvatar();
+                          }}
+                          className="!bg-rose-500"
                         >
-                          Hủy bỏ
+                          Hủy
                         </Button>
                         <Button
-                          sx={{ width: "50%" }}
                           variant="contained"
                           onClick={handleUploadAvatar}
                         >
-                         {uploading&&<Loading color="#fff"/>} Lưu thay đổi
+                          {uploading && <Loading color="#fff" />} Lưu thay đổi
                         </Button>
                       </Stack>
                     </Stack>
@@ -519,7 +549,9 @@ function Info() {
               <Button onClick={closeModalDeleteAvatar} variant="outlined">
                 Hủy
               </Button>
-              <Button onClick={handleDeleteAvatar} variant="contained">Xóa bỏ</Button>
+              <Button onClick={handleDeleteAvatar} variant="contained">
+                Xóa bỏ
+              </Button>
             </Stack>
           </Stack>
         </Stack>
