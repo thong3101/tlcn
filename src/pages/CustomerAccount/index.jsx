@@ -117,6 +117,7 @@ function CustomerAccount() {
             indicatorColor="primary"
             aria-label="Vertical tabs example"
             sx={{
+             
               borderRight: 1,
               borderColor: "divider",
               width: "25%",
@@ -137,6 +138,9 @@ function CustomerAccount() {
                     label={item.name}
                     value={value}
                     sx={{
+                      '.MuiTabs-indicator': {
+                        left: 0,
+                      },
                       width: "100%",
                       fontSize: "12px",
                       textTransform: "none",

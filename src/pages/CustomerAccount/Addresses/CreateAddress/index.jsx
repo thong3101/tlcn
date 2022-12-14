@@ -10,6 +10,7 @@ import {
   Radio,
   Button,
   InputBase,
+  TextField,
 } from "@mui/material";
 import SelectBoxAddress from "../../../../components/SelectBoxAddress";
 import "./CreateAddress.scss";
@@ -159,8 +160,10 @@ function CreateAddress(props) {
         getUserProfile();
       })
       .catch((error) => {
+        console.log(error);
         toast.error("Cập nhật thất bại!");
       });
+     
   };
   const getUserProfile = () => {
     apiProfile.getUserProfile()
@@ -168,7 +171,6 @@ function CreateAddress(props) {
         let newUser = res.data.user
         dispatch(loginSuccess({ ...user, ...newUser }))
       })
-      console.log("1",newUser)
   }
 
   return (
@@ -202,11 +204,11 @@ function CreateAddress(props) {
         </Stack>
 
         <Stack direction="row">
-          <Typography className="create-address__label">
+          <Typography className="create-address__label " >
             Số nhà, tên đường
           </Typography>
           <Stack className="create-address__input">
-            <InputCustom
+            <TextField
               value={addressDetail}
               onChange={(event) => {
                 setAddressDetail(event.target.value);
@@ -214,7 +216,7 @@ function CreateAddress(props) {
               multiline
               rows={4}
               placeholder="Nhập địa chỉ"
-            ></InputCustom>
+            ></TextField>
           </Stack>
         </Stack>
 
@@ -234,7 +236,7 @@ function CreateAddress(props) {
           </Stack>
         </Stack>
 
-        <Stack direction="row" justifyContent="flex-start">
+        <Stack direction="row" justifyContent="flex-start" className="!flex !justify-center">
           {/* <Typography className="create-address__label"></Typography> */}
           <Button
             onClick={edit ? handleUpdate : handleSave}

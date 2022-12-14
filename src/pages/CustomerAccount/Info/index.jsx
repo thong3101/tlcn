@@ -198,7 +198,7 @@ function Info() {
             <ClickAwayListener onClickAway={handleClickAwayAvatar}>
               <Box sx={{ position: "relative" }} onClick={handleClickAvatar}>
                 <Badge
-                  badgeContent={<Edit fontSize="20" color="white" />}
+                  badgeContent={<Edit color="white" className="!h-[10px] !w-[10px] !rounded-full"/>}
                   overlap="circular"
                   anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                   color="primary"
