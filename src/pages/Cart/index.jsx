@@ -103,8 +103,7 @@ function ShoppingCart() {
   //     : 0;
   // };
 
-
-  console.log("ci",CartItems)
+  console.log("ci", CartItems);
   return (
     <>
       <Box className="container">
@@ -119,7 +118,7 @@ function ShoppingCart() {
         <Grid container spacing={2} style={{ marginTop: "24px" }}>
           <Grid item lg={9} md={12} sm={12} xs={12}>
             <Box>
-              <Box className="cart__heading cart">
+              <Box className="cart__heading cart ">
                 <Stack direction="row">
                   {`Sản phẩm (${CartItems.length} sản phẩm)`}
                 </Stack>
@@ -132,9 +131,9 @@ function ShoppingCart() {
                   </span>
                 </Stack>
               </Box>
-              <Stack className="cart__list">
+              <Stack className="cart__list ">
                 {CartItems.map((item) => (
-                  <CartItem key={item.id} data={item} />
+                  <CartItem key={item.id} data={item} className="" />
                 ))}
               </Stack>
             </Box>
