@@ -73,21 +73,6 @@ function Orders() {
 
 
         <Box>
-          {/* <TabPanel value={value} index={0} dir={theme.direction}>
-            {orders.length!==0 ? (
-              orders.map((item) => <OrderItem key={item.id} order={item} />)
-            ) : (
-              <Box  className="myorder__none">
-                <img
-                 height="200px"
-                 width="200px"
-                  src="https://frontend.tikicdn.com/_desktop-next/static/img/account/empty-order.png"
-                  alt=""
-                />
-                <Typography>Chưa có đơn hàng</Typography>
-              </Box>
-            )}
-          </TabPanel> */}
           {orderTabs.map((item) => {
             const tmp = getOrderByType(orders, item.slug);
             if (tmp.length === 0)

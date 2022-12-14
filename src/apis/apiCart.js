@@ -13,6 +13,12 @@ export const axiosClientWithPayment = axios.create({
 });
 
 const apiCart = {
+
+    getOrdersById: async (id,params) => {
+        const res = await axiosClientWithToken.get(`/order/${id}`,params)
+        return res.data;
+    },
+
     getOrders: async (params) => {
         const res = await axiosClientWithToken.get('/user/profile/orderList', {params})
         return res.data;
