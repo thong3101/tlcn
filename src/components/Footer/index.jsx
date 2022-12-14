@@ -8,7 +8,7 @@ const { Stack } = require("@mui/system");
 function Header() {
   return (
     <header id="footer" className="footer">
-      <Stack
+      <Stack className="footer__container"
         justifyContent="space-between"
         direction="row"
         alignItems="flex-start"
@@ -20,7 +20,7 @@ function Header() {
           paddingTop: "30px",
         }}
       >
-        <div style={{ padding: "0px 15px" }}>
+        <div style={{ padding: "0px 15px" }} className="footer__item">
           <span className="footer_title">Hỗ trợ khách hàng</span>
           <div className="footer_divier"></div>
           <div>
@@ -44,7 +44,7 @@ function Header() {
           </div>
         </div>
 
-        <div style={{ padding: "0px 15px" }}>
+        <div style={{ padding: "0px 15px" }} className="footer__item">
           <span className="footer_title">Danh mục sản phẩm</span>
           <div className="footer_divier"></div>
           <div>
@@ -73,7 +73,7 @@ function Header() {
           </div>
         </div>
 
-        <div style={{ padding: "0px 15px" }}>
+        <div style={{ padding: "0px 15px" }}  className="footer__item">
           <span className="footer_title">Kết Nối Với Guitar Station</span>
           <div className="footer_divier"></div>
           <div>
@@ -87,7 +87,7 @@ function Header() {
           </div>
         </div>
 
-        <div style={{ padding: "0px 15px" }}>
+        <div style={{ padding: "0px 15px" }}  className="footer__item">
           <span className="footer_title">Địa Chỉ Liên Hệ</span>
           <div className="footer_divier"></div>
           <div>

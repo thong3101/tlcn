@@ -86,7 +86,7 @@ function Info() {
   };
   const onChange = (imageList, addUpdateIndex) => {
     setImage(imageList);
-    imageList=null;
+    imageList = null;
   };
 
   const handleUploadAvatar = () => {
@@ -198,7 +198,12 @@ function Info() {
             <ClickAwayListener onClickAway={handleClickAwayAvatar}>
               <Box sx={{ position: "relative" }} onClick={handleClickAvatar}>
                 <Badge
-                  badgeContent={<Edit color="white" className="!h-[10px] !w-[10px] !rounded-full"/>}
+                  badgeContent={
+                    <Edit
+                      color="white"
+                      className="!h-[10px] !w-[10px] !rounded-full"
+                    />
+                  }
                   overlap="circular"
                   anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                   color="primary"
@@ -212,7 +217,10 @@ function Info() {
                     width={110}
                     height={110}
                     alt="avatar"
-                    style={{border:"3px solid aquamarine",borderRadius:"50%"}}
+                    style={{
+                      border: "3px solid aquamarine",
+                      borderRadius: "50%",
+                    }}
                     src={image.length === 0 ? user.img : image[0].data_url}
                   />
                 </Badge>
@@ -334,7 +342,11 @@ function Info() {
             </Stack>
 
             <Link to="/my-account/edit-account/email">
-              <Button size="small" sx={{minWidth:'auto',whiteSpace:'nowrap'}} variant="outlined" >
+              <Button
+                size="small"
+                sx={{ minWidth: "auto", whiteSpace: "nowrap" }}
+                variant="outlined"
+              >
                 Cập nhật
               </Button>
             </Link>
@@ -350,8 +362,8 @@ function Info() {
               <LockIcon color="disabled" />
               <ListItemText primary="Đổi mật khẩu" />
             </Stack>
-            <Link to="/my-account/edit-account/pass" >
-              <Button size="small"  variant="outlined">
+            <Link to="/my-account/edit-account/pass">
+              <Button size="small" variant="outlined">
                 Đổi mật khẩu
               </Button>
             </Link>
@@ -407,7 +419,7 @@ function Info() {
               value={image}
               onChange={onChange}
               dataURLKey="data_url"
-              acceptType={["jpg","png","jpeg"]}
+              acceptType={["jpg", "png", "jpeg"]}
             >
               {({
                 imageList,
@@ -434,7 +446,7 @@ function Info() {
                   {imageList.length === 0 ? (
                     <IconButton
                       size="medium"
-                      className="!bg-rose-400 !-translate-y-5"
+                      className="!bg-rose-400 !-translate-y-5 !text-white"
                       onClick={closeModalUploadAvatar}
                     >
                       <CloseIcon fontSize="inherit" />
@@ -459,7 +471,12 @@ function Info() {
                     >
                       <Typography
                         flexWrap={{ xs: "wrap", sm: "nowrap" }}
-                        sx={{ ml: "auto", mr: "auto", color: "black",textAlign:'center' }}
+                        sx={{
+                          ml: "auto",
+                          mr: "auto",
+                          color: "black",
+                          textAlign: "center",
+                        }}
                       >
                         Nhấn để chọn hoặc kéo thả hình ảnh vào khung này.
                       </Typography>
@@ -520,29 +537,26 @@ function Info() {
 
       {/* Modal delete avatar */}
       <Modal
+        className="!flex !justify-center !items-center  "
         sx={{ overflowY: "scroll" }}
         open={modalDeleteAvatar}
         onClose={closeModalDeleteAvatar}
       >
         <Stack
-          className="modal-info"
+          className="modal-info !bg-white !h-36 !rounded-md "
           direction="row"
           spacing={2}
           justifyContent="center"
-          width="26rem"
+          alignItems="center"
+          width="20rem"
         >
-          <Stack>
-            <InfoOutlinedIcon color="primary" />
-          </Stack>
-
+         
           <Stack spacing={3}>
             <Stack>
               <Typography sx={{ fontWeight: "bold" }}>
                 Bạn có chắc muốn xoá ảnh đại diện ?
               </Typography>
-              <Typography>
-                Hình ảnh đại diện sẽ quay về mặc định của Tiki
-              </Typography>
+             
             </Stack>
 
             <Stack direction="row" justifyContent="flex-end" spacing={1}>

@@ -14,7 +14,7 @@ import { logoutSuccess } from "../../slices/authSlice";
 
 import Login from "../Login";
 import SignUp from "../SignUp";
-import { VerticalAlignCenter } from "@mui/icons-material";
+import { Add, Info, PermContactCalendar, VerticalAlignCenter } from "@mui/icons-material";
 import apiCategory from "../../apis/apiCategory";
 
 const privatePath = ["/my-account/", "/admin/", "/payment"];
@@ -224,10 +224,11 @@ function Header() {
                     </Button>
                   </Stack>
 
-                  <Box className="header__dropdown">
+                  <Box className="header__dropdown" >
                     <Link
                       to={"/my-account/orders"}
                       style={{ padding: "8px 20px" }}
+                      
                     >
                       Đơn hàng của tôi
                     </Link>

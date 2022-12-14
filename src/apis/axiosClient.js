@@ -16,7 +16,7 @@ export const axiosClient = axios.create({
 
 
 const refreshToken = async (user) => {
-    const res = await axiosClient.post('/auth/refreshtoken', { refreshToken: user.refreshToken  }, { headers: { Authorization: `Bearer ${user.accessToken}` }, })
+    const res = await axiosClient.post('/auth/refreshToken', { refreshToken: user.refreshToken  }, { headers: { Authorization: `Bearer ${user.accessToken}` }, })
     return res.data
 }
 

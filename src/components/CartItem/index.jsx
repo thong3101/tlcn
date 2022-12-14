@@ -106,7 +106,7 @@ function CartItem(props) {
 
   return (
     <>
-      <Box className="cart-item cart">
+      <Box className="cart-item cart !mt-2">
         <Stack
           direction="row"
           alignItems="center"
@@ -114,7 +114,7 @@ function CartItem(props) {
         >
           {/* <Checkbox checked={data?.choose} onChange={handleChangeChoose} className="cart__checkbox" /> */}
           <img src={data?.imageList[0]?.url} alt="" />
-          <Stack className="cart-item__content">
+          <Stack className="cart-item__content ">
             <Link to={data?.id ? `/product-detail/${data.id}` : ""}>
               <Typography
                 fontSize="13px"
