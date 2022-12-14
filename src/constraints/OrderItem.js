@@ -9,7 +9,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 export const orderTabs = [
     {
         id: 0,
-        type: "Chờ xác nhận",
+        type: "Chưa thanh toán",
         slug: "pending",
         icon: AutoModeIcon
     },

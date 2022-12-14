@@ -40,6 +40,7 @@ function ConfigRoute() {
       <Route path="product-detail/:id" element={<ProductDetail />} />
       <Route path="product-category/:id" element={<FilterProduct />} />
       <Route path="search/:key" element={<FilterProductSearch />} />
+      <Route path="/paypal/success" element={<LoadingPage />} />
 
       <Route path="loading" element={<LoadingPage />} />
     </Routes>

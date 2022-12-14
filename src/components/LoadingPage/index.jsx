@@ -1,8 +1,22 @@
 import { Stack, Typography } from "@mui/material";
 import React from "react";
+import { useEffect } from "react";
+import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { SyncLoader } from "react-spinners";
 
 function LoadingPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (searchParams.get("orderId")) {
+      navigate(`/my-account/orders/detail/${searchParams.get("orderId")}`)
+
+
+    }
+   
+  }, 
+  [searchParams]);
   return (
     <Stack
       sx={{ position: "relative" }}

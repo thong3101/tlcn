@@ -12,6 +12,22 @@ function DetailOrder() {
   const [order, setOrder] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0);
   const [loadingData, setLoadingData] = useState(false);
+  const handleStatus = (status) => {
+    switch (status) {
+      case "pending":
+        return "Chưa thanh toán";
+      case "processing":
+        return "Đã thanh toán";
+      case "shipping":
+        return "Đang giao hàng";
+      case "completed":
+        return "Đã giao hàng";
+      case "cancel":
+        return "Đã hủy";
+      default:
+        return "Đang xử lý";
+    }
+  }
   useEffect(() => {
     const getData = () => {
       setLoadingData(true);
@@ -48,7 +64,7 @@ function DetailOrder() {
       ) : (
         <Box>
           <Typography mt={2.5} fontSize="19px" fontWeight={300}>
-            Chi tiết đơn hàng #{order?.id}
+            Chi tiết đơn hàng #{order?.id} | <span className="!text-orange-400">{handleStatus(order?.status)}</span>
           </Typography>
           <Typography fontSize="13px" textAlign="end">
             Ngày đặt hàng: {order?.createdAt[2]}/{order?.createdAt[1]}/
