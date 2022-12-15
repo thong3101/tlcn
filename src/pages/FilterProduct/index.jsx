@@ -208,8 +208,9 @@ function FilterProduct(props) {
                 position: "relative",
               }}
             >
-              <TextField
-                style={{ height: "100%", flex: 1 }}
+              <InputBase
+                style={{ height: "100%", flex: 1,border:"1px solid #f4ba36",paddingLeft:"10px",
+               }}
                 size="small"
                 id="input-search"
                 placeholder="Tìm kiếm ..."

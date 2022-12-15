@@ -8,6 +8,7 @@ import { orderTabs} from "../../../constraints/OrderItem";
 import { useEffect } from "react";
 import apiCart from "../../../apis/apiCart";
 import { useSelector } from "react-redux";
+import { formatJavaLocalDateTime,convertDate } from "../../../constraints/Util";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
@@ -17,6 +18,8 @@ function Orders() {
   // const [totalPage, setTotalPage] = useState(1);
   const user = useSelector(state => state.auth.user)
 
+
+
   useEffect(() => {
 
     // let params = {
@@ -25,7 +28,10 @@ function Orders() {
     const getData = async () => {
       apiCart.getOrders()
         .then(response=>{
-           setOrders(response.data.orders.sort((a,b)=>b.createAt - a.createAt));
+           setOrders(response.data.orders.sort((a,b)=>{
+            return Number(new Date(convertDate(b.createdAt))) - Number(new Date(convertDate(a.createdAt)))
+            // return a.total-b.total
+           }));
         })
         .catch(setOrders([]))
     };

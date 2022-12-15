@@ -41,6 +41,10 @@ const apiCart = {
         const res = await axiosClientWithPayment.post('/create-payment',params)
         return res.data;
     },
+    makePaymentPaypal:async(id)=>{
+        const res = await axiosClientWithToken.post(`/order/paypal/${id}`)
+        return res.data;
+    }
 
     
 

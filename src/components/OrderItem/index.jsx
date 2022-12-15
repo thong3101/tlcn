@@ -1,13 +1,29 @@
 import { Box, Typography, Stack, Button } from "@mui/material";
 import React from "react";
+import { useState } from "react";
 import "./OrderItem.scss";
 import { orderTabs } from "../../constraints/OrderItem";
-import { numWithCommas } from "../../constraints/Util";
+import { formatJavaLocalDateTime, numWithCommas } from "../../constraints/Util";
 import { Link } from "react-router-dom";
+import Loading from "../Loading";
+import apiCart from "../../apis/apiCart";
+
 function OrderItem(props) {
   const { order } = props;
   const state = getState(order);
-  const addZeroBeforeString = (str) => str.toString().length === 1 ? "0" + str.toString() : str.toString();
+  const [paying, setPaying] = useState(false);
+
+  const handlePaying = () => {
+    setPaying(true);
+    setTimeout(() => {
+      setPaying(false);
+    }, 2000);
+    apiCart
+    .makePaymentPaypal(order?.id)
+    .then((res) => {
+      window.open(res.data.link);
+    });
+  };
 
   return (
     <Box className="orderItem">
@@ -16,7 +32,7 @@ function OrderItem(props) {
           <>
             <state.icon />{" "}
             <Typography>
-              Ngày đặt hàng: {order?.createdAt[2]}/{order?.createdAt[1]}/{order?.createdAt[0]} {addZeroBeforeString(order?.createdAt[3])}:{addZeroBeforeString(order?.createdAt[4])}:{addZeroBeforeString(order?.createdAt[5])}
+              Ngày đặt hàng: {formatJavaLocalDateTime(order?.createdAt)}
             </Typography>
           </>
         )}
@@ -40,7 +56,7 @@ function OrderItem(props) {
             <img alt="" src={item.productImage} />
             <span className="orderItem__quantity">x{item.quantity}</span>
           </Stack>
-          <Stack flex={1} mx="12px" >
+          <Stack flex={1} mx="12px">
             <Link
               to={item.productId ? `/product-detail/${item?.productId}` : ""}
             >
@@ -76,7 +92,14 @@ function OrderItem(props) {
           </Typography>
         </Box>
         <Box className="orderItem__groupbtn">
-          <Button variant="outlined">Mua lại</Button>
+          {order?.status === "pending" ? (
+            <Button variant="outlined" onClick={handlePaying}>
+              {paying && <Loading color="#1976D2" />}
+              Thanh toán
+            </Button>
+          ) : (
+            <Button variant="outlined">Mua lại</Button>
+          )}
           <Link to={`detail/${order.id}`}>
             <Button variant="contained">Xem chi tiết</Button>
           </Link>
