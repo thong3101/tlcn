@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./DetailOrder.scss";
-import { Box, Stack, Typography, Button } from "@mui/material";
+import { Box, Stack, Typography, Button,Breadcrumbs } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
 import apiCart from "../../../../apis/apiCart";
 import { toast } from "react-toastify";
@@ -63,8 +63,11 @@ function DetailOrder() {
         <LoadingPage />
       ) : (
         <Box>
+          <Breadcrumbs >
+            <Link to={"/my-account/orders"} className="!text-sm">{` < Trở lại`}</Link>
+          </Breadcrumbs>
           <Typography mt={2.5} fontSize="19px" fontWeight={300}>
-            Chi tiết đơn hàng #{order?.id} | <span className="!text-orange-400">{handleStatus(order?.status)}</span>
+            Chi tiết đơn hàng #{order?.id} | <span className="!text-rose-400">{handleStatus(order?.status)}</span>
           </Typography>
           <Typography fontSize="13px" textAlign="end">
             Ngày đặt hàng: {order?.createdAt[2]}/{order?.createdAt[1]}/
@@ -101,10 +104,11 @@ function DetailOrder() {
             <Box className="detailOrder__boxInfo">
               <Typography>HÌNH THỨC THANH TOÁN</Typography>
               <Box p={1.25} className="detailOrder__content">
-                <Typography>{order?.method}</Typography>
+                <Typography >{order?.method}</Typography>
               </Box>
             </Box>
           </Stack>
+         <Stack className="divide__line"></Stack>
 
           <Stack className="detailOrder-Table">
             <Stack direction="row" className="detailOrder-Table__heading">
@@ -161,7 +165,7 @@ function DetailOrder() {
                   </Stack>
                 </Stack>
                 <Box>{numWithCommas(item.price || 0)}₫</Box>
-                <Box>{numWithCommas(item.quantity || 0)}</Box>
+                <Box className="!text-center">Qty: {numWithCommas(item.quantity || 0)}</Box>
                 <Box>{numWithCommas(item.price * item.quantity || 0)} ₫</Box>
               </Stack>
             ))}

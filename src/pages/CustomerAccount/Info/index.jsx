@@ -212,15 +212,16 @@ function Info() {
                     // sx={{
                     //   width: 110,
                     //   height: 110,
-                    //   border: "3px solid aquamarine",
+                    //   // border: "3px solid aquamarine",
                     // }}
                     width={110}
                     height={110}
                     alt="avatar"
                     style={{
-                      border: "3px solid aquamarine",
+                      border: "4px solid",
                       borderRadius: "50%",
                     }}
+                    className="!border-cyan-200"
                     src={image.length === 0 ? user.img : image[0].data_url}
                   />
                 </Badge>
@@ -240,10 +241,10 @@ function Info() {
                         Cập nhật ảnh đại diện
                       </MenuItem>
 
-                      <MenuItem onClick={openModalDeleteAvatar}>
+                      {/* <MenuItem onClick={openModalDeleteAvatar}>
                         <DeleteIcon sx={{ mr: 2 }} color="disabled" />
                         Xóa ảnh đại diện hiện tại
-                      </MenuItem>
+                      </MenuItem> */}
                     </Stack>
                   </Stack>
                 ) : null}
@@ -376,6 +377,7 @@ function Info() {
         sx={{ overflowY: "scroll" }}
         open={modalViewAvatar}
         onClose={closeModalViewAvatar}
+        onClick={closeModalViewAvatar}
       >
         <Stack className="modal-info" spacing={2}>
           <Stack direction="row" justifyContent="space-between">
@@ -388,7 +390,7 @@ function Info() {
           </Stack>
           <Divider />
           <img
-            style={{ width: "24rem", height: "24rem", alignSelf: "center" }}
+            style={{ width: "24rem", height: "24rem", alignSelf: "center",transform: "translateY(4rem)" }}
             src={user.img}
             alt="ảnh đại diện"
           />

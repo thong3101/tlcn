@@ -19,6 +19,8 @@ import {
   NativeSelect,
   Input,
   IconButton,
+  TextField,
+  InputBase
 } from "@mui/material";
 import "./FilterProduct.scss";
 import StarIcon from "@mui/icons-material/Star";
@@ -26,6 +28,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { numWithCommas } from "../../constraints/Util";
 import CardProduct from "../../components/CardProduct";
+
 import apiProduct from "../../apis/apiProduct";
 import apiCategory from "../../apis/apiCategory";
 import { toast } from "react-toastify";
@@ -126,6 +129,7 @@ function FilterProduct(props) {
   }, [idCategory, filter, filterPrice.apply, value]);
 
   useEffect(() => {
+    console.log(categories)
     const getData = async () => {
       apiCategory
         .showAllCategoryHeader()
@@ -147,6 +151,9 @@ function FilterProduct(props) {
       maxPrice: newValue[1],
     });
   };
+  const onKeyDown=(e)=>{
+    toast.warning(e.target.value)
+  }
 
   const onChangeSearch = (event) => {
     setSearchText(event.target.value);
@@ -189,10 +196,11 @@ function FilterProduct(props) {
               width: "100%",
             }}
           />
-          <Box sx={{ flex: 1 }} className="header__search">
+          <Box sx={{ flex: 1 }} className="header__search" >
             <Stack
               direction="row"
               alignItems="center"
+              
               sx={{
                 padding: "0",
                 height: "40px",
@@ -200,13 +208,16 @@ function FilterProduct(props) {
                 position: "relative",
               }}
             >
-              <Input
+              <TextField
                 style={{ height: "100%", flex: 1 }}
+                size="small"
                 id="input-search"
                 placeholder="Tìm kiếm ..."
                 value={searchText}
                 onChange={onChangeSearch}
+              
                 debounceTimeout={500}
+             
               />
               <IconButton
                 sx={{
@@ -241,7 +252,7 @@ function FilterProduct(props) {
             {categories.map((item) => (
               <Box
                 key={item.id}
-                onClick={() => refreshPage()}
+                // onClick={() => refreshPage()}
                 sx={{ padding: "6px" }}
               >
                 <Link to={`/product-category/${item.id}`}>
@@ -277,7 +288,7 @@ function FilterProduct(props) {
               >
                 {filterPrice.apply ? "Huỷ" : "Lọc sản phẩm"}
               </Button>
-              <Typography sx={{ fontSize: "12px" }}>
+              <Typography sx={{ fontSize: "14px",marginTop:'10px' }}>
                 Giá: {numWithCommas(valueFilterPrice[0])} đ -{" "}
                 {numWithCommas(valueFilterPrice[1])} đ
               </Typography>

@@ -3,7 +3,7 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { SyncLoader } from "react-spinners";
+import { SquareLoader } from "react-spinners";
 
 function LoadingPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -28,7 +28,7 @@ function LoadingPage() {
       alignItems="center"
     >
       <div className="sweet-loading">
-        <SyncLoader color="#252121" margin={10} size={50} />
+        <SquareLoader className="!bg-teal-400" margin={10} size={50} />
       </div>
       <Typography align="center">Đang tải dữ liệu...</Typography>
     </Stack>

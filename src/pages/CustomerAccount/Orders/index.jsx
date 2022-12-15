@@ -17,7 +17,6 @@ function Orders() {
   // const [totalPage, setTotalPage] = useState(1);
   const user = useSelector(state => state.auth.user)
 
-
   useEffect(() => {
 
     // let params = {

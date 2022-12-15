@@ -40,7 +40,7 @@ function OrderItem(props) {
             <img alt="" src={item.productImage} />
             <span className="orderItem__quantity">x{item.quantity}</span>
           </Stack>
-          <Stack flex={1} mx="12px">
+          <Stack flex={1} mx="12px" >
             <Link
               to={item.productId ? `/product-detail/${item?.productId}` : ""}
             >
@@ -49,8 +49,8 @@ function OrderItem(props) {
               </Typography>
             </Link>
           </Stack>
-          <Stack>
-            <Typography className="orderItem__price">
+          <Stack justifyContent="center">
+            <Typography className="orderItem__price ">
               {numWithCommas(item.price * item.quantity)} ₫
             </Typography>
           </Stack>
