@@ -51,8 +51,13 @@ function FilterProduct(props) {
   const [open, setOpen] = useState(false);
   const [openId, setOpenId] = useState();
   const handleOpen = (id) => {
-    setOpen(!open);
-    setOpenId(id);
+    if(openId!==id){
+      setOpenId(id);
+      setOpen(true);
+    }else{
+      setOpen(!open);
+    }
+   
   };
   const navigate = useNavigate();
   const handleClickCategory = (id) => {
