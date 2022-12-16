@@ -24,14 +24,21 @@ export const orderTabs = [
         slug: "processing",
         icon: AutoModeIcon
     },
+   
     {
         id: 2,
-        type: "Đã giao",
+        type: "Đang giao",
+        slug: "shipping",
+        icon: HourglassBottomIcon
+    },
+    {
+        id: 3,
+        type: "Hoàn thành",
         slug: "delivered",
         icon: LocalShippingIcon
     },
     {
-        id: 3,
+        id: 4,
         type: "Đã huỷ",
         icon: CancelIcon
     },

@@ -4,7 +4,7 @@ import { Box, Stack, Typography, Button,Breadcrumbs } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
 import apiCart from "../../../../apis/apiCart";
 import { toast } from "react-toastify";
-import { numWithCommas } from "../../../../constraints/Util";
+import { formatJavaLocalDateTime, numWithCommas } from "../../../../constraints/Util";
 import LoadingPage from "../../../../components/LoadingPage";
 
 function DetailOrder() {
@@ -69,9 +69,8 @@ function DetailOrder() {
           <Typography mt={2.5} fontSize="19px" fontWeight={300}>
             Chi tiết đơn hàng #{order?.id} | <span className="!text-rose-400">{handleStatus(order?.status)}</span>
           </Typography>
-          <Typography fontSize="13px" textAlign="end">
-            Ngày đặt hàng: {order?.createdAt[2]}/{order?.createdAt[1]}/
-            {order?.createdAt[0]}
+          <Typography fontSize="13px" textAlign="end" className="!italic !mt-5">
+            Ngày đặt hàng: {formatJavaLocalDateTime(order?.createdAt)}
           </Typography>
           <Stack
             direction="row"
@@ -176,28 +175,29 @@ function DetailOrder() {
               justifyContent="center"
               alignItems="flex-end"
               mt={3.5}
+              className=""
             >
               <Stack py={0.625} direction="row">
-                <Typography className="detailOrder__summary-label">
+                <Typography className="detailOrder__summary-label  ">
                   Tạm tính
                 </Typography>
-                <Typography className="detailOrder__summary-value">
+                <Typography className="detailOrder__summary-value  ">
                   {numWithCommas(totalPrice || 0)} ₫
                 </Typography>
               </Stack>
               <Stack py={0.625} direction="row">
-                <Typography className="detailOrder__summary-label">
+                <Typography className="detailOrder__summary-label  ">
                   Phí vận chuyển
                 </Typography>
-                <Typography className="detailOrder__summary-value">
+                <Typography className="detailOrder__summary-value  ">
                   {numWithCommas(order?.shipFee || 0)} ₫
                 </Typography>
               </Stack>
               <Stack py={0.625} direction="row">
-                <Typography className="detailOrder__summary-label">
+                <Typography className="detailOrder__summary-label  ">
                   Tổng cộng
                 </Typography>
-                <Typography className="detailOrder__summary-value detailOrder__summary-value--final">
+                <Typography className="detailOrder__summary-value detailOrder__summary-value--final  !text-xl">
                   {numWithCommas(totalPrice + order.shipFee || 0)} ₫
                 </Typography>
               </Stack>
