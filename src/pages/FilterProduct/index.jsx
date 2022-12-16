@@ -14,13 +14,18 @@ import {
   RadioGroup,
   Tabs,
   Radio,
+  List,
   Slider,
   FormControl,
   NativeSelect,
   Input,
   IconButton,
   TextField,
-  InputBase
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Collapse,
+  InputBase,
 } from "@mui/material";
 import "./FilterProduct.scss";
 import StarIcon from "@mui/icons-material/Star";
@@ -35,7 +40,7 @@ import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import LoadingPage from "../../components/LoadingPage";
 
 import SearchIcon from "@mui/icons-material/Search";
@@ -43,8 +48,16 @@ import { fontSize } from "@mui/system";
 
 function FilterProduct(props) {
   const idCategory = useParams().id;
-
+  const [open, setOpen] = useState(false);
+  const [openId, setOpenId] = useState();
+  const handleOpen = (id) => {
+    setOpen(!open);
+    setOpenId(id);
+  };
   const navigate = useNavigate();
+  const handleClickCategory = (id) => {
+    navigate(`/product-category/${id}`);
+  };
 
   const [searchText, setSearchText] = useState("");
 
@@ -129,7 +142,7 @@ function FilterProduct(props) {
   }, [idCategory, filter, filterPrice.apply, value]);
 
   useEffect(() => {
-    console.log(categories)
+    console.log(categories);
     const getData = async () => {
       apiCategory
         .showAllCategoryHeader()
@@ -151,9 +164,9 @@ function FilterProduct(props) {
       maxPrice: newValue[1],
     });
   };
-  const onKeyDown=(e)=>{
-    toast.warning(e.target.value)
-  }
+  const onKeyDown = (e) => {
+    toast.warning(e.target.value);
+  };
 
   const onChangeSearch = (event) => {
     setSearchText(event.target.value);
@@ -196,11 +209,10 @@ function FilterProduct(props) {
               width: "100%",
             }}
           />
-          <Box sx={{ flex: 1 }} className="header__search" >
+          <Box sx={{ flex: 1 }} className="header__search">
             <Stack
               direction="row"
               alignItems="center"
-              
               sx={{
                 padding: "0",
                 height: "40px",
@@ -209,16 +221,18 @@ function FilterProduct(props) {
               }}
             >
               <InputBase
-                style={{ height: "100%", flex: 1,border:"1px solid #f4ba36",paddingLeft:"10px",
-               }}
+                style={{
+                  height: "100%",
+                  flex: 1,
+                  border: "1px solid #f4ba36",
+                  paddingLeft: "10px",
+                }}
                 size="small"
                 id="input-search"
                 placeholder="Tìm kiếm ..."
                 value={searchText}
                 onChange={onChangeSearch}
-              
                 debounceTimeout={500}
-             
               />
               <IconButton
                 sx={{
@@ -249,19 +263,44 @@ function FilterProduct(props) {
               width: "100%",
             }}
           />
-          <FormGroup>
+          <List
+            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+            component="nav"
+          >
             {categories.map((item) => (
-              <Box
-                key={item.id}
-                // onClick={() => refreshPage()}
-                sx={{ padding: "6px" }}
-              >
-                <Link to={`/product-category/${item.id}`}>
-                  <Box fontSize="14px">{item.name}</Box>
-                </Link>
-              </Box>
+              <React.Fragment>
+                <ListItemButton
+                  onClick={()=>{
+                    handleOpen(item?.id)
+                  }}
+                  key={item.id}
+                  // onClick={()=>{handleClickCategory(item?.id)}}
+                  // onClick={() => refreshPage()}
+                  sx={{ padding: "6px" }} 
+                >
+                  <ListItemText primary={item?.name} onClick={()=>{
+                    handleClickCategory(item?.id)
+                  }} />
+                  {openId===item?.id&&open ? <ExpandLess /> : <ExpandMore />}
+                </ListItemButton>
+                <Collapse in={openId===item?.id&&open} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    {item?.subCategories.map((item) => (
+                      <ListItemButton sx={{ pl: 4 }} key={item?.id} 
+                      onClick={()=>{
+                        handleClickCategory(item?.id)
+                      }}>
+                        <ListItemText primary={item?.name} 
+                        
+                        />
+                      </ListItemButton>
+                    ))}
+                  </List>
+                </Collapse>
+              </React.Fragment>
             ))}
-          </FormGroup>
+            
+          </List>
         </Box>
         <Box className="filterProduct__form">
           <Box sx={{ width: "100%" }}>
@@ -289,7 +328,7 @@ function FilterProduct(props) {
               >
                 {filterPrice.apply ? "Huỷ" : "Lọc sản phẩm"}
               </Button>
-              <Typography sx={{ fontSize: "14px",marginTop:'10px' }}>
+              <Typography sx={{ fontSize: "14px", marginTop: "10px" }}>
                 Giá: {numWithCommas(valueFilterPrice[0])} đ -{" "}
                 {numWithCommas(valueFilterPrice[1])} đ
               </Typography>
