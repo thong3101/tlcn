@@ -40,6 +40,7 @@ export const orderTabs = [
     {
         id: 4,
         type: "Đã huỷ",
+        slug: "cancelled",
         icon: CancelIcon
     },
 ]

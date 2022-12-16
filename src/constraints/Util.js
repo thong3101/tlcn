@@ -40,6 +40,6 @@ export const convertDate = (date) => {
       date[5].toString().length === 1
         ? `0${date[5].toString()}`
         : date[5].toString();
-    return `${month}-${day}-${year} ${hour}:${minute}:${second}`;
+    return Number(new Date(`${month}-${day}-${year} ${hour}:${minute}:${second}`));
   }
 };

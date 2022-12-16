@@ -29,7 +29,7 @@ function Orders() {
       apiCart.getOrders()
         .then(response=>{
            setOrders(response.data.orders.sort((a,b)=>{
-            return Number(new Date(convertDate(b.createdAt))) - Number(new Date(convertDate(a.createdAt)))
+            return convertDate(b?.createdAt)-convertDate(a?.createdAt)
             // return a.total-b.total
            }));
         })
