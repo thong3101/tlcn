@@ -301,7 +301,7 @@ function Header() {
         open={modalLogin}
         onClose={closeModalLogin}
       >
-        <Box className="modal-login" sx={{ width: "800px" }}>
+        <Box className="modal-login" sx={{ width: "600px" }}>
           {isLoginForm && (
             <Login
               handleOpenSignup={handleOpenSignup}
