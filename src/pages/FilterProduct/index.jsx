@@ -1,50 +1,22 @@
-import { useState, useEffect, useCallback } from "react";
-import React, { useRef } from "react";
-import { Link } from "react-router-dom";
 import {
-  Stack,
   Box,
-  Button,
-  Typography,
-  Checkbox,
-  FormGroup,
-  Grid,
-  Rating,
-  Tab,
-  RadioGroup,
-  Tabs,
-  Radio,
-  List,
-  Slider,
-  FormControl,
-  NativeSelect,
-  Input,
-  IconButton,
-  TextField,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Collapse,
-  InputBase,
+  Button, Collapse, FormControl, FormGroup,
+  Grid, IconButton, InputBase, List, ListItemButton,
+  ListItemText, NativeSelect, Slider, Stack, Typography
 } from "@mui/material";
-import "./FilterProduct.scss";
-import StarIcon from "@mui/icons-material/Star";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { numWithCommas } from "../../constraints/Util";
+import React, { useEffect, useState } from "react";
 import CardProduct from "../../components/CardProduct";
+import { numWithCommas } from "../../constraints/Util";
+import "./FilterProduct.scss";
 
-import apiProduct from "../../apis/apiProduct";
-import apiCategory from "../../apis/apiCategory";
-import { toast } from "react-toastify";
-import { useNavigate, useParams } from "react-router-dom";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import apiCategory from "../../apis/apiCategory";
+import apiProduct from "../../apis/apiProduct";
 import LoadingPage from "../../components/LoadingPage";
 
 import SearchIcon from "@mui/icons-material/Search";
-import { fontSize } from "@mui/system";
 
 function FilterProduct(props) {
   const idCategory = useParams().id;

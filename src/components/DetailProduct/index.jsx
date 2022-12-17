@@ -1,26 +1,24 @@
-import {React,memo } from "react";
-import "./DetailProduct.scss";
-import { Link } from "react-router-dom";
-import { Box, Typography, Button, ButtonGroup } from "@mui/material";
-import StarIcon from "@mui/icons-material/Star";
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import QuantityButtons from "../../components/QuantityButtons";
-import InfoIcon from "@mui/icons-material/Info";
 import BookIcon from "@mui/icons-material/Book";
 import FacebookIcon from "@mui/icons-material/Facebook";
+import InfoIcon from "@mui/icons-material/Info";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import StarIcon from "@mui/icons-material/Star";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
+import { Box, Button, ButtonGroup, Typography } from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import { memo, React } from "react";
+import "./DetailProduct.scss";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 //import store additem
 import { addItem } from "../../slices/cartSlice";
 
 //import img
-import imgDefault from "../../assets/img/img_default.jpg";
-import { toast } from "react-toastify";
 import { useState } from "react";
+import { toast } from "react-toastify";
+import imgDefault from "../../assets/img/img_default.jpg";
 import { numWithCommas } from "../../constraints/Util";
 
 function DetailProduct({ data }) {
@@ -46,6 +44,7 @@ function DetailProduct({ data }) {
     }
   };
 
+
   const handleClickAddItem = () => {
     dispatch(
       addItem({
@@ -69,7 +68,7 @@ function DetailProduct({ data }) {
             onError={(err) => (err.target.src = imgDefault)}
           ></img>
         </div>
-        <div className="detailProduct__list-img">
+        <div className="detailProduct__list-img !flex !justify-around">
           {data?.imageList?.slice(0, 6).map((item) => (
             <img
               className="detailProduct__item-img"
@@ -127,7 +126,7 @@ function DetailProduct({ data }) {
             {/* <QuantityButtons /> */}
             <ButtonGroup
               size="small"
-              aria-label="small outlined button group"
+              aria-label="small outline button group"
               className="quantity-buttons"
             >
               <Button
@@ -181,6 +180,7 @@ function DetailProduct({ data }) {
             <div className="detailProduct__support-box-item">
               <LocalShippingIcon
                 sx={{
+                  
                   width: "50px",
                   height: "100%",
                   marginRight: "15px",

@@ -208,14 +208,14 @@ function Info() {
                   anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                   color="primary"
                 >
-                  <LazyLoadImage
-                    // sx={{
-                    //   width: 110,
-                    //   height: 110,
-                    //   // border: "3px solid aquamarine",
-                    // }}
-                    width={110}
-                    height={110}
+                  <Avatar
+                    sx={{
+                      width: 110,
+                      height: 110,
+                      // border: "3px solid aquamarine",
+                    }}
+                    // width={110}
+                    // height={110}
                     alt="avatar"
                     style={{
                       border: "4px solid",

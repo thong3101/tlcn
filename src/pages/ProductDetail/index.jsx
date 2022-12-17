@@ -1,54 +1,26 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 
-import {
-  Rating,
-  Button,
-  Grid,
-  Box,
-  Stack,
-  Typography,
-  Modal,
-  FormControlLabel,
-  IconButton,
-  Tooltip,
-  Skeleton,
-} from "@mui/material";
-import "./ProductDetail.scss";
-import CheckIcon from "@mui/icons-material/Check";
-import RemoveIcon from "@mui/icons-material/Remove";
-import AddIcon from "@mui/icons-material/Add";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
 import StarIcon from "@mui/icons-material/Star";
+import {
+  Box, Button, Rating
+} from "@mui/material";
 import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import ButtonGroup from "@mui/material/ButtonGroup";
 import { toast } from "react-toastify";
-import QuantityButtons from "../../components/QuantityButtons";
-import InfoIcon from "@mui/icons-material/Info";
-import BookIcon from "@mui/icons-material/Book";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import { Swiper, SwiperSlide } from "swiper/react";
 import CardProduct from "../../components/CardProduct";
+import "./ProductDetail.scss";
 // styles swiper
 import "swiper/css";
-import "swiper/css/pagination";
 import "swiper/css/navigation";
-import apiMain from "../../apis/apiMain";
+import "swiper/css/pagination";
 import apiProduct from "../../apis/apiProduct";
 // import required modules
-import { Pagination, Navigation, Autoplay } from "swiper";
-import DetailProduct from "../../components/DetailProduct";
-import Comment from "../../components/Comment";
+import { Navigation, Pagination } from "swiper";
 import apiComment from "../../apis/apiComment";
-import { render } from "react-dom";
+import Comment from "../../components/Comment";
+import DetailProduct from "../../components/DetailProduct";
 
 function ProductDetail() {
   const user = useSelector((state) => state.auth.user);
@@ -60,6 +32,7 @@ function ProductDetail() {
 
   const [valueRating, setValueRating] = React.useState(0);
   const [hover, setHover] = React.useState(-1);
+  const [isSave, setIsSave] = useState(false);
 
   const [comment, setComment] = useState();
 
@@ -89,7 +62,7 @@ function ProductDetail() {
         });
     };
     getComment();
-  },[id,listComment.length]);
+  },[id,listComment.length,isSave]);
 
 
   const getLabelText = (value) => {
@@ -97,11 +70,15 @@ function ProductDetail() {
   };
 
   const handleSaveComment = () => {
-    
+    if(!user) {
+      toast.warning("Vui lòng đăng nhập để đánh giá sản phẩm !!");
+      return;
+    } 
     const params = {
       rating: valueRating,
       comment: comment,
     };
+    
     if (!valueRating) {
       toast.warning("Vui lòng đánh giá sản phẩm !!");
       return;
@@ -110,7 +87,7 @@ function ProductDetail() {
         .getSaveComment(id, params)
         .then((res) => {
           toast.success("Thêm đánh giá thành công");
-
+          setIsSave(!isSave);
           setValueRating(0);
           setComment("");
         })
@@ -240,52 +217,7 @@ function ProductDetail() {
           borderTop: "1px solid #ECECEC",
         }}
       >
-        <Box className="detailProduct__title">
-          <h2>{"Top sản phẩm bán chạy"}</h2>
-        </Box>
-        <Swiper
-          slidesPerView={4}
-          spaceBetween={0}
-          slidesPerGroup={4}
-          loop={true}
-          loopFillGroupWithBlank={true}
-          pagination={{
-            clickable: true,
-          }}
-          navigation={true}
-          modules={[Pagination, Navigation]}
-          className="mySwiper"
-          style={{ borderTop: "1px solid #ECECEC" }}
-        >
-          <SwiperSlide>
-            {/* <CardProduct data={item} /> */}
-            <CardProduct />
-          </SwiperSlide>
-          <SwiperSlide>
-            <CardProduct />
-          </SwiperSlide>
-          <SwiperSlide>
-            <CardProduct />
-          </SwiperSlide>
-          <SwiperSlide>
-            <CardProduct />
-          </SwiperSlide>
-          <SwiperSlide>
-            <CardProduct />
-          </SwiperSlide>
-          <SwiperSlide>
-            <CardProduct />
-          </SwiperSlide>
-          <SwiperSlide>
-            <CardProduct />
-          </SwiperSlide>
-          <SwiperSlide>
-            <CardProduct />
-          </SwiperSlide>
-          <SwiperSlide>
-            <CardProduct />
-          </SwiperSlide>
-        </Swiper>
+       
       </Box>
     </Box>
   );

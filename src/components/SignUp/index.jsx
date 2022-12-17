@@ -1,28 +1,20 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 
 import apiAuth from "../../apis/apiAuth";
 
-import { ErrorInput, ErrorAfterSubmit } from "../ErrorHelper";
+import { ErrorAfterSubmit, ErrorInput } from "../ErrorHelper";
 
 import {
-  Stack,
-  IconButton,
-  Button,
-  TextField,
-  OutlinedInput,
-  Input,
-  Typography,
+  Button, IconButton, OutlinedInput, Stack, Typography
 } from "@mui/material";
 
-import CloseIcon from "@mui/icons-material/Close";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import FormControl from "@mui/material/FormControl";
 import InputAdornment from "@mui/material/InputAdornment";
 import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
-import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
 import { toast } from "react-toastify";
 

@@ -1,5 +1,5 @@
 
-import { axiosClient, axiosInstance } from "./axiosClient";
+import { axiosClient } from "./axiosClient";
 
 const apiProduct = {
 

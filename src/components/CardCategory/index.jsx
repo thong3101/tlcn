@@ -1,7 +1,7 @@
+import { Card, CardMedia } from "@mui/material";
 import React from "react";
-import "./CardCategory.scss";
-import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
 import { Link } from "react-router-dom";
+import "./CardCategory.scss";
 
 //import img
 import img from "../../assets/img/dan_guitar_cc300_6-360x360.jpg";

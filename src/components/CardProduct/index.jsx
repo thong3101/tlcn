@@ -1,8 +1,8 @@
+import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import React from "react";
-import "./CardProduct.scss";
-import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
 import { Link } from "react-router-dom";
-import { numWithCommas, roundPrice } from "../../constraints/Util";
+import { numWithCommas } from "../../constraints/Util";
+import "./CardProduct.scss";
 
 
 function CardProduct({ data }) {

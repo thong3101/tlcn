@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
-import {Box,Rating} from "@mui/material";
-import {Pagination} from "@mui/material";
+import { Box, Pagination, Rating } from "@mui/material";
 
 
 function Comment ({data}) {
