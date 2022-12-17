@@ -33,7 +33,13 @@ const apiProduct = {
     getProductsSearch: async (params,key) => {
         const res = await axiosClient.get(`/product/search/${key}`, {params})
         return res.data
-    }
+    },
+
+    getAllComment: async (id,params) => {
+        const res = await axiosClient.get(`/rating/${id}/product`,params)
+        return res.data;
+    },
+    
 
 }
 export default apiProduct;

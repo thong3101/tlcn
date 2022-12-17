@@ -368,27 +368,6 @@ function FilterProduct(props) {
         </Box>
       </Stack>
       <Box sx={{ flex: 1 }}>
-        {/* <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            textColor="primary"
-            indicatorColor="primary"
-            aria-label="basic tabs example"
-          >
-            {tabs.map((item) => (
-              <Tab
-                key={item.id}
-                label={item.name}
-                sx={{
-                  fontSize: "12px",
-                  textTransform: "none",
-                  fontWeight: "500",
-                }}
-              />
-            ))}
-          </Tabs>
-        </Box> */}
         <Stack
           direction="row"
           justifyContent="space-between"

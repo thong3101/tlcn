@@ -47,45 +47,78 @@ import apiProduct from "../../apis/apiProduct";
 import { Pagination, Navigation, Autoplay } from "swiper";
 import DetailProduct from "../../components/DetailProduct";
 import Comment from "../../components/Comment";
+import apiComment from "../../apis/apiComment";
+import { render } from "react-dom";
 
 function ProductDetail() {
   const user = useSelector((state) => state.auth.user);
   const [product, setProduct] = useState();
   const { id } = useParams();
 
+  const [listComment, setListComment] = useState([]);
+
+
+  const [valueRating, setValueRating] = React.useState(0);
+  const [hover, setHover] = React.useState(-1);
+
+  const [comment, setComment] = useState();
+
   useEffect(() => {
-    const getProduct = async () => {
-      apiProduct.getProductsById(id)
-      .then((res) => {
-        setProduct(res.data.product);
-      })
-      .catch(error => {
-        setProduct([])
-      })
+    const getProduct = () => {
+      apiProduct
+        .getProductsById(id)
+        .then((res) => {
+          setProduct(res.data.product);
+        })
+        .catch((error) => {
+          setProduct([]);
+        });
     };
     getProduct();
-  },[]);
+  }, [id]);
 
-  console.log("2", product);
+  useEffect(()=> {
+    const getComment = () => {
+      apiComment
+        .getAllComment(id)
+        .then((res) => {
+          setListComment(res.data.rating);
+        })
+        .catch((error) => {
+          setListComment([]);
+        });
+    };
+    getComment();
+  },[id,listComment.length]);
 
-  let list_comment = [
-    {
-      id: 1,
-      userName: "lethuyen",
-      content:
-        "Capo thiết kế cho cần đàn nhỏ của acoustic nên kẹp sướng lắm luôn, nhìn vừa sang vừa chất. Do hồi xưa mình mua nhầm 1 cái hàng fake nên giờ cầm vào cái của shop là thấy khác hẳn, đảm bảo xịn luôn. Shop hỗ trợ nhiệt tình, 10đ 😀",
-      rating: 5,
-      post_date: "05/11/2022",
-    },
-    {
-      id: 2,
-      userName: "lethuyen",
-      content:
-        "Capo thiết kế cho cần đàn nhỏ của acoustic nên kẹp sướng lắm luôn, nhìn vừa sang vừa chất. Do hồi xưa mình mua nhầm 1 cái hàng fake nên giờ cầm vào cái của shop là thấy khác hẳn, đảm bảo xịn luôn. Shop hỗ trợ nhiệt tình, 10đ 😀",
-      rating: 5,
-      post_date: "05/11/2022",
-    },
-  ];
+
+  const getLabelText = (value) => {
+    return `${value} Star${value !== 1 ? "s" : ""}, ${labels[value]}`;
+  };
+
+  const handleSaveComment = () => {
+    
+    const params = {
+      rating: valueRating,
+      comment: comment,
+    };
+    if (!valueRating) {
+      toast.warning("Vui lòng đánh giá sản phẩm !!");
+      return;
+    } else {
+      apiComment
+        .getSaveComment(id, params)
+        .then((res) => {
+          toast.success("Thêm đánh giá thành công");
+
+          setValueRating(0);
+          setComment("");
+        })
+        .catch((error) => {
+          toast.error("Thêm đánh giá thất bại!");
+        });
+    }
+  };
 
   return (
     <Box className="container" style={{ backgroundColor: "#fff" }}>
@@ -145,37 +178,48 @@ function ProductDetail() {
           </SwiperSlide>
         </Swiper>
       </Box>
-      <Comment data={list_comment} />
+      <Comment data={listComment} />
       <Box className="textComment">
         <p>Đánh giá của bạn về sản phẩm </p>
-        <Box className="textComment__stars">
-          <Box className="textComment__stars-one">
-            <StarIcon sx={{ fontSize: 18 }} />
-          </Box>
-          <Box className="textComment__stars-two">
-            <StarIcon sx={{ fontSize: 18 }} />
-            <StarIcon sx={{ fontSize: 18 }} />
-          </Box>
-          <Box className="textComment__stars-three">
-            <StarIcon sx={{ fontSize: 18 }} />
-            <StarIcon sx={{ fontSize: 18 }} />
-            <StarIcon sx={{ fontSize: 18 }} />
-          </Box>
-          <Box className="textComment__stars-four">
-            <StarIcon sx={{ fontSize: 18 }} />
-            <StarIcon sx={{ fontSize: 18 }} />
-            <StarIcon sx={{ fontSize: 18 }} />
-            <StarIcon sx={{ fontSize: 18 }} />
-          </Box>
-          <Box className="textComment__stars-five">
-            <StarIcon sx={{ fontSize: 18 }} />
-            <StarIcon sx={{ fontSize: 18 }} />
-            <StarIcon sx={{ fontSize: 18 }} />
-            <StarIcon sx={{ fontSize: 18 }} />
-            <StarIcon sx={{ fontSize: 18 }} />
-          </Box>
+        <Box
+          sx={{
+            width: 200,
+            display: "flex",
+            alignItems: "center",
+            margin: "10px 0px",
+          }}
+        >
+          <Rating
+            name="hover-feedback"
+            value={valueRating}
+            getLabelText={getLabelText}
+            onChange={(event, newValue) => {
+              setValueRating(newValue);
+            }}
+            onChangeActive={(event, newHover) => {
+              setHover(newHover);
+            }}
+            emptyIcon={
+              <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
+            }
+          />
+          {valueRating !== null && (
+            <Box sx={{ ml: 2 }}>
+              {labels[hover !== -1 ? hover : valueRating]}
+            </Box>
+          )}
         </Box>
-        <textarea className="textComment__textarea" />
+        <TextField
+          className="textComment__textarea"
+          value={comment}
+          onChange={(event) => {
+            setComment(event.target.value);
+          }}
+          multiline
+          rows={4}
+          placeholder="Nhập bình luận"
+          sx={{ margin: "10px 0px" }}
+        ></TextField>
         <Button
           variant="contained"
           sx={{
@@ -183,6 +227,7 @@ function ProductDetail() {
             textTransform: "uppercase",
             fontWeight: "400",
           }}
+          onClick={handleSaveComment}
         >
           GỬI
         </Button>
@@ -246,3 +291,11 @@ function ProductDetail() {
   );
 }
 export default ProductDetail;
+
+const labels = {
+  1: "Rất tệ",
+  2: "Tệ",
+  3: "Tốt",
+  4: "Rất tốt",
+  5: "Xuất sắc",
+};

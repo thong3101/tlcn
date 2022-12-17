@@ -1,44 +1,49 @@
-import { useState,memo } from "react";
+import { useState, memo } from "react";
 import { useTheme } from "@mui/material/styles";
 import { Box, Tabs, Tab, Typography, Pagination, Stack } from "@mui/material";
 import "./Orders.scss";
 import SearchIcon from "@mui/icons-material/Search";
 import OrderItem from "../../../components/OrderItem/index.jsx";
-import { orderTabs} from "../../../constraints/OrderItem";
+import { orderTabs } from "../../../constraints/OrderItem";
 import { useEffect } from "react";
 import apiCart from "../../../apis/apiCart";
 import { useSelector } from "react-redux";
-import { formatJavaLocalDateTime,convertDate } from "../../../constraints/Util";
+import {
+  formatJavaLocalDateTime,
+  convertDate,
+} from "../../../constraints/Util";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
   const theme = useTheme();
   const [value, setValue] = useState(0);
-  // const [page, setPage] = useState(1);
+  const [page, setPage] = useState(1);
   // const [totalPage, setTotalPage] = useState(1);
-  const user = useSelector(state => state.auth.user)
+  const user = useSelector((state) => state.auth.user);
 
-
-
+  const size = 1;
   useEffect(() => {
-
-    // let params = {
-    //   _sort:'createAt',
-    // }
+    let params = {
+      _page: page,
+      _limit: size,
+    };
     const getData = async () => {
-      apiCart.getOrders()
-        .then(response=>{
-           setOrders(response.data.orders.sort((a,b)=>{
-            return convertDate(b?.createdAt)-convertDate(a?.createdAt)
-            // return a.total-b.total
-           }));
+      apiCart
+        .getOrders(params)
+        .then((response) => {
+          setOrders(
+            response.data.orders.sort((a, b) => {
+              return convertDate(b?.createdAt) - convertDate(a?.createdAt);
+              // return a.total-b.total
+            })
+          );
         })
-        .catch(setOrders([]))
+        .catch(setOrders([]));
     };
     getData();
   }, [user]);
 
-  console.log("222",orders)
+  console.log("222", orders);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -76,13 +81,17 @@ function Orders() {
           </Tabs>
         </Box>
 
-
         <Box>
           {orderTabs.map((item) => {
             const tmp = getOrderByType(orders, item.slug);
             if (tmp.length === 0)
               return (
-                <TabPanel key={item.id} value={value} index={item.id} dir={theme.direction}>
+                <TabPanel
+                  key={item.id}
+                  value={value}
+                  index={item.id}
+                  dir={theme.direction}
+                >
                   <Box className="myorder__none">
                     <img
                       height="200px"
@@ -96,7 +105,12 @@ function Orders() {
               );
             else
               return (
-                <TabPanel key={item.id} value={value} index={item.id} dir={theme.direction}>
+                <TabPanel
+                  key={item.id}
+                  value={value}
+                  index={item.id}
+                  dir={theme.direction}
+                >
                   {tmp.map((item) => (
                     <OrderItem key={item.id} order={item} />
                   ))}
