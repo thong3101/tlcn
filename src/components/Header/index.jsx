@@ -14,6 +14,7 @@ import { logoutSuccess } from "../../slices/authSlice";
 
 import Login from "../Login";
 import SignUp from "../SignUp";
+import ForgetPassword from "../ForgetPassword";
 import { Add, Info, PermContactCalendar, VerticalAlignCenter } from "@mui/icons-material";
 import apiCategory from "../../apis/apiCategory";
 
@@ -29,6 +30,7 @@ function Header() {
 
   const [isLoginForm, setIsLoginForm] = useState(true);
   const [isRegister, setIsRegister] = useState(false);
+  const [isForgetPwd, setIsForgetPwd] = useState(false);
 
   const [categories, setCategories] = useState([]);
 
@@ -50,25 +52,38 @@ function Header() {
     setModalLogin(false);
     setIsLoginForm(true);
     setIsRegister(false);
-    // setIsForgetPwd(false);
+    setIsForgetPwd(false);
   };
 
   const handleReturnLogin = useCallback(() => {
     setIsLoginForm(true);
-    // setIsForgetPwd(false);
+    setIsForgetPwd(false);
     setIsRegister(false);
   }, []);
 
   const handleOpenSignup = useCallback(() => {
     setIsRegister(true);
-    // setIsForgetPwd(false);
+    setIsForgetPwd(false);
     setIsLoginForm(false);
   }, []);
 
   const handleOpenLogin = useCallback(() => {
     setIsLoginForm(true);
     setIsRegister(false);
-    // setIsForgetPwd(false);
+    setIsForgetPwd(false);
+  }, []);
+
+  const closeModalForgetPWD = () => {
+    setIsForgetPwd(false);
+    setModalLogin(false);
+    setIsLoginForm(true);
+    setIsRegister(false);
+  };
+
+  const handleOpenForgetPwd = useCallback(() => {
+    setIsForgetPwd(true);
+    setIsRegister(false);
+    setIsLoginForm(false);
   }, []);
 
   useEffect(() => {
@@ -306,7 +321,7 @@ function Header() {
             <Login
               handleOpenSignup={handleOpenSignup}
               closeModalLogin={closeModalLogin}
-              // handleOpenForgetPwd={handleOpenForgetPwd}
+              handleOpenForgetPwd={handleOpenForgetPwd}
             />
           )}
 
@@ -317,12 +332,12 @@ function Header() {
             />
           )}
 
-          {/* {isForgetPwd && (
+          {isForgetPwd && (
             <ForgetPassword
               closeModalForgetPWD={closeModalForgetPWD}
               handleReturnLogin={handleReturnLogin}
             />
-          )} */}
+          )}
         </Box>
       </Modal>
     </header>

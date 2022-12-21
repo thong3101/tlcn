@@ -8,6 +8,8 @@ import { orderTabs } from "../../../constraints/OrderItem";
 import { useEffect } from "react";
 import apiCart from "../../../apis/apiCart";
 import { useSelector } from "react-redux";
+import LoadingPage from "../../../components/LoadingPage";
+
 import {
   formatJavaLocalDateTime,
   convertDate,
@@ -17,41 +19,51 @@ function Orders() {
   const [orders, setOrders] = useState([]);
   const theme = useTheme();
   const [value, setValue] = useState(0);
-  const [page, setPage] = useState(1);
-  // const [totalPage, setTotalPage] = useState(1);
+  const [page, setPage] = useState(0);
+  const [totalPage, setTotalPage] = useState(5);
   const user = useSelector((state) => state.auth.user);
+
+  const [loadingData, setLoadingData] = useState(false);
 
   const size = 1;
   useEffect(() => {
-    let params = {
-      _page: page,
-      _limit: size,
-    };
+    // let params = {
+    //   page: page,
+    //   size: size,
+    // };
+    setLoadingData(true);
     const getData = async () => {
       apiCart
-        .getOrders(params)
+        .getOrders()
         .then((response) => {
           setOrders(
             response.data.orders.sort((a, b) => {
               return convertDate(b?.createdAt) - convertDate(a?.createdAt);
-              // return a.total-b.total
             })
           );
+          setTotalPage(Math.round(response.data.orders.length / size));
         })
-        .catch(setOrders([]));
+        .catch(setOrders([]))
+        .finally(() => {
+          setLoadingData(false);
+        });
     };
     getData();
-  }, [user]);
+  }, [page, user]);
 
-  console.log("222", orders);
+  console.log("222", totalPage);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  // const handleChangePage = (event, newValue) => {
-  //   setPage(newValue);
-  // };
+  const handleChangePage = (event, newValue) => {
+    console.log(newValue);
+    setPage(newValue);
+  };
+
+  const lastPostIndex = page * size;
+  const firstPostIndex = lastPostIndex - size;
 
   return (
     <>
@@ -81,48 +93,60 @@ function Orders() {
           </Tabs>
         </Box>
 
-        <Box>
-          {orderTabs.map((item) => {
-            const tmp = getOrderByType(orders, item.slug);
-            if (tmp.length === 0)
-              return (
-                <TabPanel
-                  key={item.id}
-                  value={value}
-                  index={item.id}
-                  dir={theme.direction}
-                >
-                  <Box className="myorder__none">
-                    <img
-                      height="200px"
-                      width="200px"
-                      src="https://frontend.tikicdn.com/_desktop-next/static/img/account/empty-order.png"
-                      alt=""
-                    />
-                    <Typography>Chưa có đơn hàng</Typography>
-                  </Box>
-                </TabPanel>
-              );
-            else
-              return (
-                <TabPanel
-                  key={item.id}
-                  value={value}
-                  index={item.id}
-                  dir={theme.direction}
-                >
-                  {tmp.map((item) => (
-                    <OrderItem key={item.id} order={item} />
-                  ))}
-                </TabPanel>
-              );
-          })}
+        {loadingData ? (
+          <LoadingPage />
+        ) : (
+          <Box>
+            {orderTabs.map((item) => {
+              const tmp = getOrderByType(orders, item.slug);
+              if (tmp.length === 0)
+                return (
+                  <TabPanel
+                    key={item.id}
+                    value={value}
+                    index={item.id}
+                    dir={theme.direction}
+                  >
+                    <Box className="myorder__none">
+                      <img
+                        height="200px"
+                        width="200px"
+                        src="https://frontend.tikicdn.com/_desktop-next/static/img/account/empty-order.png"
+                        alt=""
+                      />
+                      <Typography>Chưa có đơn hàng</Typography>
+                    </Box>
+                  </TabPanel>
+                );
+              else
+                return (
+                  <TabPanel
+                    key={item.id}
+                    value={value}
+                    index={item.id}
+                    dir={theme.direction}
+                  >
+                    {tmp.slice(firstPostIndex, lastPostIndex).map((item) => (
+                      <OrderItem key={item.id} order={item} />
+                    ))}
+                  </TabPanel>
+                );
+            })}
+          </Box>
+        )}
 
-          {/* {totalPage > 1 ? <Stack spacing={2}>
-            <Typography>Page: {page}</Typography>
-            <Pagination count={totalPage} page={page} onChange={handleChangePage} />
-          </Stack> : <></>} */}
-        </Box>
+        {totalPage > 1 ? (
+          <Stack spacing={2}>
+            <Pagination
+              sx={{ justifyContent: "center" }}
+              count={totalPage}
+              page={page}
+              onChange={handleChangePage}
+            />
+          </Stack>
+        ) : (
+          <></>
+        )}
       </Box>
     </>
   );

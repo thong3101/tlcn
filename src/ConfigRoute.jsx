@@ -4,6 +4,7 @@ import ProductDetail from "./pages/ProductDetail";
 import FilterProduct from "./pages/FilterProduct";
 import FilterProductSearch from "./pages/FilterProductSearch";
 import OAuth2RedirectHandler from "./components/OAuth2RedirectHandler";
+import ChangePassword from "./components/ChangePassword";
 import Cart from "./pages/Cart";
 import Payment from "./pages/Payment";
 import Admin from "./pages/Admin";
@@ -41,6 +42,7 @@ function ConfigRoute() {
       <Route path="product-category/:id" element={<FilterProduct />} />
       <Route path="search/:key" element={<FilterProductSearch />} />
       <Route path="/paypal/success" element={<LoadingPage />} />
+      <Route path="reset" element={<ChangePassword />} />
 
       <Route path="loading" element={<LoadingPage />} />
     </Routes>

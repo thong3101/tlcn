@@ -2,7 +2,7 @@ import {  axiosClient ,axiosClientWithToken } from "./axiosClient";
 
 const apiCategory = {
     showAllCategory: async (params) => {
-        const res = await axiosClientWithToken.get('/admin/category/all', params)
+        const res = await axiosClientWithToken.get('/admin/category', params)
         return res.data;
     },
     deleteCategory: async (params) => {

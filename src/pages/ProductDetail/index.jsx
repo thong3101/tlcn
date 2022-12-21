@@ -3,9 +3,7 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import StarIcon from "@mui/icons-material/Star";
-import {
-  Box, Button, Rating
-} from "@mui/material";
+import { Box, Button, Rating } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { toast } from "react-toastify";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -19,6 +17,7 @@ import apiProduct from "../../apis/apiProduct";
 // import required modules
 import { Navigation, Pagination } from "swiper";
 import apiComment from "../../apis/apiComment";
+import apiMain from "../../apis/apiMain";
 import Comment from "../../components/Comment";
 import DetailProduct from "../../components/DetailProduct";
 
@@ -29,12 +28,28 @@ function ProductDetail() {
 
   const [listComment, setListComment] = useState([]);
 
-
   const [valueRating, setValueRating] = React.useState(0);
   const [hover, setHover] = React.useState(-1);
   const [isSave, setIsSave] = useState(false);
 
   const [comment, setComment] = useState();
+
+
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    let params = {
+      page: 0,
+      size: 8,
+    };
+    const getData = async () => {
+      const response = await apiMain.getProducts(params);
+      if (response) {
+        setProducts(response.data.list);
+      }
+    };
+    getData();
+  }, []);
 
   useEffect(() => {
     const getProduct = () => {
@@ -50,7 +65,7 @@ function ProductDetail() {
     getProduct();
   }, [id]);
 
-  useEffect(()=> {
+  useEffect(() => {
     const getComment = () => {
       apiComment
         .getAllComment(id)
@@ -61,24 +76,24 @@ function ProductDetail() {
           setListComment([]);
         });
     };
-    getComment();
-  },[id,listComment.length,isSave]);
 
+    getComment();
+  }, [id, isSave]);
 
   const getLabelText = (value) => {
     return `${value} Star${value !== 1 ? "s" : ""}, ${labels[value]}`;
   };
 
   const handleSaveComment = () => {
-    if(!user) {
+    if (!user) {
       toast.warning("Vui lòng đăng nhập để đánh giá sản phẩm !!");
       return;
-    } 
+    }
     const params = {
       rating: valueRating,
       comment: comment,
     };
-    
+
     if (!valueRating) {
       toast.warning("Vui lòng đánh giá sản phẩm !!");
       return;
@@ -99,7 +114,7 @@ function ProductDetail() {
 
   return (
     <Box className="container" style={{ backgroundColor: "#fff" }}>
-      <DetailProduct data={product} />
+      <DetailProduct data={product} rating={listComment} />
 
       <Box
         sx={{
@@ -125,34 +140,13 @@ function ProductDetail() {
           className="mySwiper"
           style={{ borderTop: "1px solid #ECECEC" }}
         >
-          <SwiperSlide>
-            {/* <CardProduct data={item} /> */}
-            <CardProduct />
-          </SwiperSlide>
-          <SwiperSlide>
-            <CardProduct />
-          </SwiperSlide>
-          <SwiperSlide>
-            <CardProduct />
-          </SwiperSlide>
-          <SwiperSlide>
-            <CardProduct />
-          </SwiperSlide>
-          <SwiperSlide>
-            <CardProduct />
-          </SwiperSlide>
-          <SwiperSlide>
-            <CardProduct />
-          </SwiperSlide>
-          <SwiperSlide>
-            <CardProduct />
-          </SwiperSlide>
-          <SwiperSlide>
-            <CardProduct />
-          </SwiperSlide>
-          <SwiperSlide>
-            <CardProduct />
-          </SwiperSlide>
+          {products
+            .sort((a, b) => b.sellAmount - a.sellAmount)
+            .map((item) => (
+              <SwiperSlide key={`${item.id}`}>
+                <CardProduct key={item.id} data={item} />
+              </SwiperSlide>
+            ))}
         </Swiper>
       </Box>
       <Comment data={listComment} />
@@ -216,9 +210,7 @@ function ProductDetail() {
           padding: "0px 15px 30px",
           borderTop: "1px solid #ECECEC",
         }}
-      >
-       
-      </Box>
+      ></Box>
     </Box>
   );
 }

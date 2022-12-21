@@ -4,10 +4,10 @@ import InfoIcon from "@mui/icons-material/Info";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import StarIcon from "@mui/icons-material/Star";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
-import { Box, Button, ButtonGroup, Typography } from "@mui/material";
+import { Box, Button, ButtonGroup, Typography, Rating } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
-import { memo, React } from "react";
+import { memo, React, useEffect } from "react";
 import "./DetailProduct.scss";
 
 import { useDispatch } from "react-redux";
@@ -21,7 +21,7 @@ import { toast } from "react-toastify";
 import imgDefault from "../../assets/img/img_default.jpg";
 import { numWithCommas } from "../../constraints/Util";
 
-function DetailProduct({ data }) {
+function DetailProduct({ data, rating }) {
   const list_cities = () => [
     { label: "Ho Chi Minh", year: 1994 },
     { label: "Ha Noi", year: 1972 },
@@ -33,6 +33,22 @@ function DetailProduct({ data }) {
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
 
+  const [ratingProduct, setRatingProduct] = useState(0);
+
+  console.log("r", rating);
+
+  const handleRating = (rating) => {
+    if (rating) {
+      let sum = 0;
+      for (const a of rating) {
+        sum += a.rating;
+      }
+      return Math.round(sum / rating.length);
+    }
+  };
+
+  console.log("rr", ratingProduct);
+
   const handleLoadImage = (img) => {
     if (img?.imageList) {
       return img.imageList[0].url;
@@ -43,7 +59,6 @@ function DetailProduct({ data }) {
       return numWithCommas(data?.price);
     }
   };
-
 
   const handleClickAddItem = () => {
     dispatch(
@@ -89,17 +104,11 @@ function DetailProduct({ data }) {
             <h4 className="detailProduct__info-price-sale">{data?.discount}</h4>
           </div>
           <div className="detailProduct__info-rate">
+            <p> Đánh giá:</p>
             <div className="detailProduct__info-rate-star">
-              <StarIcon sx={{ fontSize: 18 }} />
-              <StarIcon sx={{ fontSize: 18 }} />
-              <StarIcon sx={{ fontSize: 18 }} />
-              <StarIcon sx={{ fontSize: 18 }} />
-              <StarIcon sx={{ fontSize: 18 }} />
+              <Rating readOnly value={handleRating(rating)} />
             </div>
-            <p>
-              {" "}
-              ({data?.rate} đánh giá) | Đã bán {data?.sellAmount}
-            </p>
+            <p> | Đã bán {data?.sellAmount}</p>
           </div>
           <Typography sx={{ padding: "20px" }}>Mô tả</Typography>
           <Typography>{data?.description}</Typography>
@@ -180,7 +189,6 @@ function DetailProduct({ data }) {
             <div className="detailProduct__support-box-item">
               <LocalShippingIcon
                 sx={{
-                  
                   width: "50px",
                   height: "100%",
                   marginRight: "15px",

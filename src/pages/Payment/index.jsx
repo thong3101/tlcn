@@ -165,7 +165,6 @@ function Payment() {
         .finally(() => {
           setLoading(false);
         });
-
     } else {
       apiCart
         .saveOrderCOD(payload)
@@ -180,7 +179,6 @@ function Payment() {
         .finally(() => {
           setLoading(false);
         });
-
     }
   };
 
@@ -279,13 +277,24 @@ function Payment() {
                 >
                   Giao tới
                 </Typography>
-                <Typography
-                  onClick={handleOpenAddress}
-                  color="#1890ff"
-                  sx={{ cursor: "pointer" }}
-                >
-                  Thay đổi
-                </Typography>
+                {addresses === null ? (
+                  <Link to="/my-account/address/create">
+                    <Button
+                      className="new"
+                      variant="outlined"
+                    >
+                      Thêm địa chỉ mới
+                    </Button>
+                  </Link>
+                ) : (
+                  <Stack direction="row" className="action">
+                    <Link to={`/my-account/address/edit`}>
+                      <Button className="Modify" variant="text">
+                        Chỉnh sửa
+                      </Button>
+                    </Link>
+                  </Stack>
+                )}
               </Stack>
               {addresses && (
                 <>

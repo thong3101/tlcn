@@ -39,6 +39,11 @@ const apiProduct = {
         const res = await axiosClient.get(`/rating/${id}/product`,params)
         return res.data;
     },
+
+    getAllProduct: async (params) => {
+        const res = await axiosClient.get(`/product`, {params})
+        return res.data
+    },
     
 
 }

@@ -25,8 +25,8 @@ const apiAuth = {
         const register = await axiosClient.post('/auth/register', params)
         return register.data
     },
-    resetPassword:async (params,token) => {
-        const register = await axiosClient.post(`/auth/resetPassword/?token=${token}`, params)
+    resetPassword:async (params) => {
+        const register = await axiosClient.post(`/auth/resetPassword/`, params)
         return register.data
     },
     forgetPassword:async (params) => {

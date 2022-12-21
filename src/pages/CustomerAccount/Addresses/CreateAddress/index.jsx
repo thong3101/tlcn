@@ -17,12 +17,17 @@ import "./CreateAddress.scss";
 import { styled } from "@mui/material/styles";
 import { useState } from "react";
 import apiAddress from "../../../../apis/apiAddress";
-import apiProfile from "../../../../apis/apiProfile"
+import apiProfile from "../../../../apis/apiProfile";
 import { useEffect } from "react";
 
 import { useParams, useNavigate } from "react-router-dom";
-import { useSelector,useDispatch } from "react-redux";
-import { loginSuccess } from '../../../../slices/authSlice';
+import { useSelector, useDispatch } from "react-redux";
+import { loginSuccess } from "../../../../slices/authSlice";
+import { ErrorInput } from "../../../../components/ErrorHelper";
+
+
+
+import { useForm } from "react-hook-form";
 
 import { toast } from "react-toastify";
 
@@ -31,7 +36,6 @@ function CreateAddress(props) {
   const [companyName, setCompanyName] = useState("");
   const [phone, setPhone] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
-
 
   const [edit, setEdit] = useState(props.edit);
   const [province, setProvince] = React.useState("");
@@ -42,7 +46,12 @@ function CreateAddress(props) {
 
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
-  const [address,setAddress] = useState(user.address)
+  const [address, setAddress] = useState(user.address);
+
+  const [validationMsg, setValidationMsg] = useState("");
+
+  const { register,handleSubmit, formState: { errors }, } = useForm();
+
 
   useEffect(() => {
     const loaddata = () => {
@@ -116,8 +125,6 @@ function CreateAddress(props) {
           setCommune("");
           setDistrict("");
           setProvince("");
-
-          
         })
         .catch((error) => {
           toast.error("Thêm địa chỉ thất bại!");
@@ -137,7 +144,7 @@ function CreateAddress(props) {
       province: province,
     };
 
-    console.log(params)
+    console.log(params);
     if (
       !(
         addressDetail &&
@@ -163,15 +170,13 @@ function CreateAddress(props) {
         console.log(error);
         toast.error("Cập nhật thất bại!");
       });
-     
   };
   const getUserProfile = () => {
-    apiProfile.getUserProfile()
-      .then((res) => {
-        let newUser = res.data.user
-        dispatch(loginSuccess({ ...user, ...newUser }))
-      })
-  }
+    apiProfile.getUserProfile().then((res) => {
+      let newUser = res.data.user;
+      dispatch(loginSuccess({ ...user, ...newUser }));
+    });
+  };
 
   return (
     <Box className="create-address" p={2} m={2}>
@@ -204,7 +209,7 @@ function CreateAddress(props) {
         </Stack>
 
         <Stack direction="row">
-          <Typography className="create-address__label " >
+          <Typography className="create-address__label ">
             Số nhà, tên đường
           </Typography>
           <Stack className="create-address__input">
@@ -226,18 +231,35 @@ function CreateAddress(props) {
           </Typography>
           <Stack className="create-address__input">
             <InputCustom
-              
+              // {...register("phone", {
+              //   pattern: {
+              //     value: /\d+/,
+              //     message: "Số điện thoại không hợp lệ",
+              //   },
+              //   minLength: {
+              //     value: 10,
+              //     message: "Số điện thoại phải có ít nhất 10 chữ số",
+              //   },
+              // })}
               value={phone}
               onChange={(event) => {
                 setPhone(event.target.value);
               }}
               size="small"
               placeholder="Nhập số điện thoại"
-            ></InputCustom>
+            >
+              {/* {errors.phone && (
+                <ErrorInput message={errors.phone.message} />
+              )} */}
+            </InputCustom>
           </Stack>
         </Stack>
 
-        <Stack direction="row" justifyContent="flex-start" className="!flex !justify-center">
+        <Stack
+          direction="row"
+          justifyContent="flex-start"
+          className="!flex !justify-center"
+        >
           {/* <Typography className="create-address__label"></Typography> */}
           <Button
             onClick={edit ? handleUpdate : handleSave}
