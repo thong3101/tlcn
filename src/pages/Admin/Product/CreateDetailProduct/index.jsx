@@ -27,7 +27,7 @@ import apiProduct from "../../../../apis/apiProduct";
 import LoadingPage from "../../../../components/LoadingPage";
 
 function CreateDetailProduct(props) {
-  const [review, setReview] = React.useState(rev);
+  const [review, setReview] = React.useState();
   const [img, setImg] = React.useState();
   const [edit, setEdit] = useState(props.edit);
   const [product, setProduct] = useState();
@@ -96,15 +96,14 @@ function CreateDetailProduct(props) {
         for (let i = 0; i < img.length; i++) {
           formData.append(`files`, img[i]);
         }
-        await apiProduct.uploadImg(formData, idProductInsert).finally(() => {
-          setLoadingData(false);
-        });
+        await apiProduct.uploadImg(formData, idProductInsert);
         setName("");
         setCategory("");
         setQuantity("");
         setPrice("");
         setBrand("");
         setDescription("");
+        setLoadingData(false);
         toast.success("Thêm sản phẩm thành công");
       }
     } catch (error) {
@@ -133,9 +132,10 @@ function CreateDetailProduct(props) {
         for (let i = 0; i < img.length; i++) {
           formData.append(`files`, img[i]);
         }
-        await apiProduct.uploadImg(formData, idProduct).finally(() => {
-          setLoadingData(false);
-        });
+        if (img) {
+          await apiProduct.uploadImg(formData, idProduct);
+        }
+        setLoadingData(false);
         toast.success("Sửa sản phẩm thành công");
       }
     } catch (error) {
