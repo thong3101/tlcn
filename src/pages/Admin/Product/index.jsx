@@ -23,23 +23,25 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import apiProduct from "../../../apis/apiProduct";
 
+import { toast } from "react-toastify";
+
 function Product() {
-  const [modalDelete, setModalDelete] = React.useState(false);
+  
   const [price, setPrice] = React.useState("");
   const [products, setProducts] = React.useState();
   const [page, setPage] = React.useState(1);
-  const [totalPage, setTotalPage] = React.useState(1);
+  const [totalPage, setTotalPage] = React.useState(10);
 
   const [searchText, setSearchText] = React.useState("");
+
+  
 
   const onChangeSearch = (event) => {
     setSearchText(event.target.value);
   };
 
-  const openModalDelete = () => setModalDelete(true);
-  const closeModalDelete = () => setModalDelete(false);
 
-  const size = 6;
+  const size = 4;
   const handleChangePrice = (event) => {
     setPrice(event.target.value);
   };
@@ -99,6 +101,35 @@ function Product() {
   const handleChangePage = (event, newValue) => {
     setPage(newValue);
   };
+
+
+
+  const [itemdelete, setItemdelete] = React.useState(null);
+  const [modalDelete, setModalDelete] = React.useState(false);
+  const openModalDelete = (itemdelete) => {
+    setItemdelete(itemdelete)
+    console.log(itemdelete)
+    setModalDelete(true)
+  }
+  const closeModalDelete = () => {
+    setModalDelete(false)
+  }
+
+  const handleDeleteProduct = () => {
+    const product = products.filter(item => {
+      return itemdelete.id !== item.id
+    }
+    )
+    setProducts(product);
+    closeModalDelete();
+    apiProduct.deleteProduct(itemdelete.id)
+      .then(res => {
+        toast.success("Xóa thành công")
+      })
+      .catch(error => {
+        toast.error("Xóa không thành công!")
+      })
+  }
 
   return (
     <>
@@ -223,7 +254,7 @@ function Product() {
                         </Link>
 
                         <Button
-                          onClick={openModalDelete}
+                          onClick={() => openModalDelete(item)}
                           variant="outlined"
                           color="error"
                         >
@@ -251,7 +282,7 @@ function Product() {
             <></>
           )}
           <Modal
-            sx={{ overflowY: "scroll" }}
+            sx={{ overflowY: "scroll",justifyContent:"center" }}
             open={modalDelete}
             onClose={closeModalDelete}
           >
@@ -277,7 +308,7 @@ function Product() {
                   <Button onClick={closeModalDelete} variant="outlined">
                     Hủy
                   </Button>
-                  <Button variant="contained">Xóa bỏ</Button>
+                  <Button variant="contained" onClick={handleDeleteProduct}>Xóa bỏ</Button>
                 </Stack>
               </Stack>
             </Stack>

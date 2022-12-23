@@ -47,7 +47,7 @@ import Product from "./Product";
 import CreateDetailProduct from "./Product/CreateDetailProduct";
 // import DetailProduct from "./Product/DetailProduct";
 // import Review from "./Review";
-// import User from "./User";
+import User from "./User";
 // import DetailUser from "./User/DetailUser";
 
 import { useSelector } from "react-redux";
@@ -269,19 +269,6 @@ function Admin() {
             </IconButton>
 
             <Stack direction="row" spacing={3} alignItems="center">
-              <IconButton sx={{ border: "1px solid silver" }}>
-                <TextsmsOutlinedIcon sx={{ borderRadius: "50%" }} />
-              </IconButton>
-
-              <IconButton
-                onClick={() => setOpenNotify(true)}
-                sx={{ border: "1px solid silver" }}
-              >
-                <Badge color="info" badgeContent={3}>
-                  <NotificationsNoneOutlinedIcon />
-                </Badge>
-              </IconButton>
-
               <SwipeableDrawer
                 anchor="right"
                 open={openNotify}
@@ -323,8 +310,8 @@ function Admin() {
                       fontWeight: "Light",
                     }}
                   >
-                    {/* {user.fullName} */}
-                    <p>Tran Manh Thang</p>
+                    {user.fullName}
+                    {/* <p>Tran Manh Thang</p> */}
                   </Typography>
                   <ExpandMoreOutlinedIcon />
                   {openAccount ? (
@@ -338,8 +325,8 @@ function Admin() {
                         />
                         <Stack sx={{ paddingLeft: "10px" }}>
                           <Typography sx={{ fontWeight: "bold" }}>
-                            {/* {user.fullName} */}
-                            <p>Tran Manh Thang</p>
+                            {user.fullName}
+                            {/* <p>Tran Manh Thang</p> */}
                           </Typography>
                         </Stack>
                       </Stack>
@@ -470,17 +457,17 @@ function Admin() {
             }
           />
 
-          {/* <Route
+          <Route
             path="user/*"
             element={
               <Routes>
                 <Route index element={<User />} />
-                <Route path="detail/:id" element={<DetailUser />} />
+                {/* <Route path="detail/:id" element={<DetailUser />} /> */}
               </Routes>
             }
           />
 
-          <Route path="review" element={<Review />} /> */}
+          {/* <Route path="review" element={<Review />} /> */}
         </Routes>
       </Box>
     </Stack>

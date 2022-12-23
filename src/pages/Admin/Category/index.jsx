@@ -30,7 +30,7 @@ function Category() {
     const getData = async () => {
       apiCategory.showAllCategory()
         .then(res => {
-          setCategory(res.data.listCategory);
+          setCategory(res.data.category.filter((item)=> item.subCategories==""));
         })
     };
     getData();
@@ -100,7 +100,7 @@ function Category() {
           </TableHead>
           <TableBody>
             { 
-              category.filter((category) => (category.name.toLowerCase().includes(query)) || (category.parent.toLowerCase().includes(query))).map((item, id) => (
+              category?.filter((category) => (category.name?.toLowerCase().includes(query)) || (category.parent?.toLowerCase().includes(query))).map((item, id) => (
                 <TableRow
                   key={item.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -114,9 +114,6 @@ function Category() {
                       <Link to={`edit/${item.id}`} >
                         <Button sx={{ flex: 1 }} variant="contained" className="btn__update">Sửa</Button>
                       </Link>
-                      <Button onClick={() => openDialogDeleteAll(item)} variant="outlined" color="error">
-                        Xóa
-                      </Button>
                     </Stack>
                   </TableCell>
                 </TableRow>

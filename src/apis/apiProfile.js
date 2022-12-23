@@ -35,10 +35,14 @@ const apiProfile = {
     },
 
     getAllUser: async (params) => {
-        const res = await axiosClientWithToken.get('admin/user/all', params)
+        const res = await axiosClientWithToken.get('admin/user', params)
         return res.data;
     },
 
+    deleteUser: async (id) => {
+        const res = await axiosClientWithToken.delete(`/admin/user/${id}`)
+        return res.data;
+    },
     
 
 }

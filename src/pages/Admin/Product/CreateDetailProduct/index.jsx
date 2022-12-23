@@ -24,6 +24,7 @@ import { productBrand } from "../../../../constraints/Product";
 
 import apiCategory from "../../../../apis/apiCategory";
 import apiProduct from "../../../../apis/apiProduct";
+import LoadingPage from "../../../../components/LoadingPage";
 
 function CreateDetailProduct(props) {
   const [review, setReview] = React.useState(rev);
@@ -42,6 +43,8 @@ function CreateDetailProduct(props) {
 
   const idProduct = useParams().id;
 
+  const [loadingData, setLoadingData] = useState(false);
+
   useEffect(() => {
     const getData = () => {
       apiCategory.showAllCategory().then((res) => {
@@ -51,61 +54,22 @@ function CreateDetailProduct(props) {
     getData();
   }, []);
 
-
-
   // Change value of select box
 
   const onChangeImg = (e) => {
     setImg(e.target.files);
     console.log("img", e.target.files);
-    for(let i=0;i<img.length;i++){
-      formData.append(`files`,img[i])
+    for (let i = 0; i < img.length; i++) {
+      formData.append(`files`, img[i]);
     }
     // if (e.target.files.length > 0) {
     //   setReview(URL.createObjectURL(e.target.files[0]));
-      
 
     // }
   };
 
-
-  // handle Add product
-
-  // const handleInsert = async () => {
-  //   try {
-
-  //   } catch (error) {
-  //     toast.error("Thêm sản phẩm thất bại!");
-  //   }const params = {
-  //     name: name,
-  //     description: description,
-  //     price: price,
-  //     stock: quantity,
-  //     cate_id: category,
-  //     brand_id: brand,
-  //   };
-  //   if (!(name && category && quantity && price && brand && description)) {
-  //     toast.warning("Vui lòng nhập đầy đủ thông tin !!");
-  //     return;
-  //   } else {
-  //     apiProduct.insertProduct(params).then((res) => {
-  //       toast.success("Thêm sản phẩm thành công");
-  //       setName("");
-  //       setCategory("");
-  //       setQuantity("");
-  //       setPrice("");
-  //       setBrand("");
-  //       setMinPurchase("");
-  //       setDescription("");
-  //       setStatus("");
-  //     });
-
-  //     console.log("id",data)
-
-  //   }
-  // };
-
   const handleInsert = async () => {
+    setLoadingData(true);
     try {
       const params = {
         name: name,
@@ -116,22 +80,25 @@ function CreateDetailProduct(props) {
         brand_id: brand.toString(),
       };
 
-      console.log("pp",params)
-      
+      console.log("pp", params);
+
       if (!(name && category && quantity && price && brand && description)) {
         toast.warning("Vui lòng nhập đầy đủ thông tin !!");
         return;
       } else {
-        
-        const idProduct = await apiProduct.insertProduct(params).then((res) => {
-          return res.data.product_id;
-        });
-       
-        const formData=new FormData();
-        for(let i=0;i<img.length;i++){
-          formData.append(`files`,img[i])
+        const idProductInsert = await apiProduct
+          .insertProduct(params)
+          .then((res) => {
+            return res.data.product_id;
+          });
+
+        const formData = new FormData();
+        for (let i = 0; i < img.length; i++) {
+          formData.append(`files`, img[i]);
         }
-        await apiProduct.uploadImg(formData,idProduct)
+        await apiProduct.uploadImg(formData, idProductInsert).finally(() => {
+          setLoadingData(false);
+        });
         setName("");
         setCategory("");
         setQuantity("");
@@ -145,39 +112,34 @@ function CreateDetailProduct(props) {
     }
   };
 
-  // function uploadImg(id) {
-  //   const params = {
-  //     multipleFiles: img,
-  //   };
-  //   console.log("params", params);
-  //   apiProduct.uploadImg(params, id).then((res) => {
-  //     return;
-  //   });
-  // }
+  const handleUpdate = async () => {
+    setLoadingData(true);
+    try {
+      const params = {
+        name: name,
+        description: description,
+        price: price,
+        stock: quantity,
+        cate_id: category,
+        brand_id: brand.toString(),
+      };
+      if (!(name && category && quantity && price && brand && description)) {
+        toast.warning("Vui lòng nhập đầy đủ thông tin !!");
+        return;
+      } else {
+        await apiProduct.updateProduct(params, idProduct);
 
-  // handle update product
-
-  const handleUpdate = () => {
-    const params = {
-      name: name,
-      description: description,
-      price: price,
-      stock: quantity,
-      cate_id: category,
-      brand_id: brand.toString(),
-    };
-    if (!(name && category && quantity && price && brand && description)) {
-      toast.warning("Vui lòng nhập đầy đủ thông tin !!");
-      return;
-    } else {
-      apiProduct
-        .updateProduct(params, idProduct)
-        .then((res) => {
-          toast.success("Sửa sản phẩm thành công");
-        })
-        .catch((error) => {
-          toast.error("Sửa sản phẩm thất bại!");
+        const formData = new FormData();
+        for (let i = 0; i < img.length; i++) {
+          formData.append(`files`, img[i]);
+        }
+        await apiProduct.uploadImg(formData, idProduct).finally(() => {
+          setLoadingData(false);
         });
+        toast.success("Sửa sản phẩm thành công");
+      }
+    } catch (error) {
+      toast.error("Sửa sản phẩm thất bại!");
     }
   };
 
@@ -206,131 +168,135 @@ function CreateDetailProduct(props) {
 
   return (
     <Box width={"100%"} bgcolor="#fff">
-      <Stack
-        className="cruBrand"
-        p={3}
-        justifyContent="center"
-        width="700px"
-        spacing={2}
-        bgcolor="#fff"
-      >
-        <Stack direction="row">
-          <Typography className="cruBrand__label">Tên sản phẩm</Typography>
-          <TextField
-            value={name}
-            onChange={(event) => {
-              setName(event.target.value);
-            }}
-            size="small"
-            id="outlined-basic"
-            variant="outlined"
-            sx={{ flex: "1" }}
-          />
-        </Stack>
-        <Stack direction="row">
-          <Typography className="cruBrand__label">Giá</Typography>
-          <TextField
-            value={price}
-            onChange={(event) => {
-              setPrice(Number(event.target.value));
-            }}
-            size="small"
-            id="outlined-basic"
-            variant="outlined"
-            sx={{ flex: "1" }}
-          />
-        </Stack>
-        <Stack direction="row">
-          <Typography className="cruBrand__label">Danh mục</Typography>
-          <FormControl className="create-address__input" sx={{ flex: "1" }}>
-            <Select
+      {loadingData ? (
+        <LoadingPage />
+      ) : (
+        <Stack
+          className="cruBrand"
+          p={3}
+          justifyContent="center"
+          width="700px"
+          spacing={2}
+          bgcolor="#fff"
+        >
+          <Stack direction="row">
+            <Typography className="cruBrand__label">Tên sản phẩm</Typography>
+            <TextField
+              value={name}
+              onChange={(event) => {
+                setName(event.target.value);
+              }}
               size="small"
-              labelId="demo-simple-select-helper-label"
-              id="demo-simple-select-helper"
-              value={category}
-              label="Age"
-              onChange={(e) => setCategory(e.target.value)}
-              input={<InputCustom placeholder="Chọn đơn vị" />}
-            >
-              {listCategory?.map((item) =>
-                item.subCategories.map((itemSub) => (
-                  <MenuItem value={itemSub.id}>{itemSub.name}</MenuItem>
-                ))
-              )}
-            </Select>
-          </FormControl>
-        </Stack>
-        <Stack direction="row">
-          <Typography className="cruBrand__label">Số lượng</Typography>
-          <TextField
-            value={quantity}
-            onChange={(event) => {
-              setQuantity(Number(event.target.value));
-            }}
-            size="small"
-            id="outlined-basic"
-            variant="outlined"
-            sx={{ flex: "1" }}
-          />
-        </Stack>
-
-        <Stack direction="row">
-          <Typography className="cruBrand__label">Mô Tả</Typography>
-          <TextField
-            value={description}
-            onChange={(event) => {
-              setDescription(event.target.value);
-            }}
-            size="small"
-            id="outlined-basic"
-            variant="outlined"
-            sx={{ flex: "1" }}
-          />
-        </Stack>
-
-        <Stack direction="row">
-          <Typography className="cruBrand__label">Thương hiệu:</Typography>
-          <FormControl className="create-address__input" sx={{ flex: "1" }}>
-            <Select
+              id="outlined-basic"
+              variant="outlined"
+              sx={{ flex: "1" }}
+            />
+          </Stack>
+          <Stack direction="row">
+            <Typography className="cruBrand__label">Giá</Typography>
+            <TextField
+              value={price}
+              onChange={(event) => {
+                setPrice(Number(event.target.value));
+              }}
               size="small"
-              labelId="demo-simple-select-helper-label"
-              id="demo-simple-select-helper"
-              value={brand}
-              label="Age"
-              onChange={(e) => setBrand(e.target.value)}
-              input={<InputCustom placeholder="Chọn đơn vị" />}
-            >
-              {productBrand?.map((item) => (
-                <MenuItem value={item.id}>{item.name}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Stack>
+              id="outlined-basic"
+              variant="outlined"
+              sx={{ flex: "1" }}
+            />
+          </Stack>
+          <Stack direction="row">
+            <Typography className="cruBrand__label">Danh mục</Typography>
+            <FormControl className="create-address__input" sx={{ flex: "1" }}>
+              <Select
+                size="small"
+                labelId="demo-simple-select-helper-label"
+                id="demo-simple-select-helper"
+                value={category}
+                label="Age"
+                onChange={(e) => setCategory(e.target.value)}
+                input={<InputCustom placeholder="Chọn đơn vị" />}
+              >
+                {listCategory?.map((item) =>
+                  item.subCategories.map((itemSub) => (
+                    <MenuItem value={itemSub.id}>{itemSub.name}</MenuItem>
+                  ))
+                )}
+              </Select>
+            </FormControl>
+          </Stack>
+          <Stack direction="row">
+            <Typography className="cruBrand__label">Số lượng</Typography>
+            <TextField
+              value={quantity}
+              onChange={(event) => {
+                setQuantity(Number(event.target.value));
+              }}
+              size="small"
+              id="outlined-basic"
+              variant="outlined"
+              sx={{ flex: "1" }}
+            />
+          </Stack>
 
-        <Stack direction="row" p={2}>
-          <Typography className="cruBrand__label">Thêm ảnh</Typography>
-          <Stack>
-            <img src={review} width="210px" height="210px" alt="" />
-            <input
-              multiple
-              type="file"
-              id="myfile"
-              name="myfile"
-              onChange={onChangeImg}
-            ></input>
+          <Stack direction="row">
+            <Typography className="cruBrand__label">Mô Tả</Typography>
+            <TextField
+              value={description}
+              onChange={(event) => {
+                setDescription(event.target.value);
+              }}
+              size="small"
+              id="outlined-basic"
+              variant="outlined"
+              sx={{ flex: "1" }}
+            />
+          </Stack>
+
+          <Stack direction="row">
+            <Typography className="cruBrand__label">Thương hiệu:</Typography>
+            <FormControl className="create-address__input" sx={{ flex: "1" }}>
+              <Select
+                size="small"
+                labelId="demo-simple-select-helper-label"
+                id="demo-simple-select-helper"
+                value={brand}
+                label="Age"
+                onChange={(e) => setBrand(e.target.value)}
+                input={<InputCustom placeholder="Chọn đơn vị" />}
+              >
+                {productBrand?.map((item) => (
+                  <MenuItem value={item.id}>{item.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Stack>
+
+          <Stack direction="row" p={2}>
+            <Typography className="cruBrand__label">Thêm ảnh</Typography>
+            <Stack>
+              <img src={review} width="210px" height="210px" alt="" />
+              <input
+                multiple
+                type="file"
+                id="myfile"
+                name="myfile"
+                onChange={onChangeImg}
+              ></input>
+            </Stack>
+          </Stack>
+
+          <Stack justifyContent="center">
+            <Button
+              width="450px"
+              variant="contained"
+              onClick={edit ? handleUpdate : handleInsert}
+            >
+              {edit ? "Cập nhật" : "Thêm"}
+            </Button>
           </Stack>
         </Stack>
-
-        <Stack justifyContent="center">
-          <Button
-            width="450px"
-            variant="contained"
-            onClick={edit ? handleUpdate : handleInsert}
-          >
-            {edit ? "Cập nhật" : "Thêm"}
-          </Button>
-        </Stack>
-      </Stack>
+      )}
     </Box>
   );
 }

@@ -1,4 +1,8 @@
-import { axiosClient, axiosClientWithFile, axiosClientWithToken } from "./axiosClient";
+import {
+  axiosClient,
+  axiosClientWithFile,
+  axiosClientWithToken,
+} from "./axiosClient";
 
 const apiProduct = {
   getProductsById: async (id) => {
@@ -43,13 +47,18 @@ const apiProduct = {
     return res.data;
   },
 
-  updateProduct: async (params,id) => {
-    const res = await axiosClientWithToken.post(`/admin/product/${id}`, params);
+  updateProduct: async (params, id) => {
+    const res = await axiosClientWithToken.put(`/admin/product/${id}`, params);
     return res.data;
   },
 
-  uploadImg: async (params,id) => {
+  uploadImg: async (params, id) => {
     const res = await axiosClientWithFile.post(`/image/upload/${id}`, params);
+    return res.data;
+  },
+
+  deleteProduct: async (id) => {
+    const res = await axiosClientWithToken.delete(`/admin/product/${id}`);
     return res.data;
   },
 };

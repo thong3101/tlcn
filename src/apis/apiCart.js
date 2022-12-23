@@ -34,7 +34,7 @@ const apiCart = {
     },
     
     changeTypeOrder: async (params, id) => {
-        const res = await axiosClientWithToken.patch(`/myorders/${id}`,params)
+        const res = await axiosClientWithToken.patch(`/admin/order/${id}`,params)
         return res.data;
     },
     makePaymentMomo: async (params) => {
@@ -44,7 +44,13 @@ const apiCart = {
     makePaymentPaypal:async(id)=>{
         const res = await axiosClientWithToken.post(`/order/paypal/${id}`)
         return res.data;
-    }
+    },
+
+
+    getOrdersAdmin: async (params) => {
+        const res = await axiosClientWithToken.get('/admin/order', params)
+        return res.data;
+    },
 
     
 
