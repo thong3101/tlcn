@@ -128,7 +128,7 @@ function Header() {
           <ul className="navbar">
             <li>
               <Link
-                to={"/"}
+                to={"product-category/d98667d1-c9a3-4f64-8c7b-4ef83d0fac48"}
               >
                 <Typography sx={{ fontSize: "14px", paddingBottom: "6px" }} >
                   Đàn Guitar
@@ -138,7 +138,13 @@ function Header() {
               </Link>
               <ul className="subnav subnav__dropdown">
                 <li>
-                  <Link to={"/"}>Đàn Guitar Acoustic</Link>
+                  <Link to={"product-category/da2e6e42-7321-489c-9a82-7f726c27b235"}>Đàn Guitar Classic</Link>
+                </li>
+                <li>
+                  <Link to={"product-category/ee0f24bb-6a8d-4c9e-bc3e-90313c2d6852"}>Đàn Guitar Acoustic</Link>
+                </li>
+                <li>
+                  <Link to={"product-category/7bc16cfe-1ad4-4f7a-aba2-5b067591e90f"}>Đàn Guitar EQ</Link>
                 </li>
               </ul>
             </li>
@@ -173,8 +179,30 @@ function Header() {
                 </li>
               </ul>
             </li>
+
             <li>
-              <Link to={"/"}>
+              <Link to={"product-category/ab9b9251-8f67-4250-8b36-4106841b46e8"}>
+                <Typography sx={{ fontSize: "14px", paddingBottom: "6px" }}>
+                  Đàn Piano
+                  <ArrowDropDownOutlinedIcon />
+                </Typography>
+              </Link>
+              <ul className="subnav subnav__dropdown">
+                <li>
+                  <Link to={"product-category/4ca00442-e1f8-40c0-9c0a-ac753780ad2b"}>Grand Piano</Link>
+                </li>
+                <li>
+                  <Link to={"product-category/c0bb734a-76c8-41b3-ac60-9c34d5f12201"}>Digital Piano</Link>
+                </li>
+                <li>
+                  <Link to={"product-category/37d1b49b-69b4-4866-b81c-cc3389196883"}>Silent Piano</Link>
+                </li>
+              </ul>
+            </li>
+            
+
+            <li>
+              <Link to={"product-category/75bba741-2720-4ce3-8d24-7fb6bd3a2aa0"}>
                 <Typography sx={{ fontSize: "14px", paddingBottom: "6px" }}>
                   Phụ Kiện Guitar
                   <ArrowDropDownOutlinedIcon />
@@ -182,33 +210,13 @@ function Header() {
               </Link>
               <ul className="subnav subnav__dropdown">
                 <li>
-                  <Link to={"/"}>Đàn Guitar Acoustic</Link>
+                  <Link to={"product-category/fb320d77-73e1-490a-8f37-d9718448fc3c"}>Dây đàn guitar</Link>
                 </li>
-              </ul>
-            </li>
-            <li>
-              <Link to={"/"}>
-                <Typography sx={{ fontSize: "14px", paddingBottom: "6px" }}>
-                  Tự Học Guitar
-                  <ArrowDropDownOutlinedIcon />
-                </Typography>
-              </Link>
-              <ul className="subnav subnav__dropdown">
                 <li>
-                  <Link to={"/"}>Đàn Guitar Acoustic</Link>
+                  <Link to={"product-category/3fd314f0-219d-4233-99f4-f91b20c80a8b"}>Khóa đàn Guitar</Link>
                 </li>
-              </ul>
-            </li>
-            <li>
-              <Link to={"/"}>
-                <Typography sx={{ fontSize: "14px", paddingBottom: "6px" }}>
-                  Hỗ Trợ Khách Hàng
-                  <ArrowDropDownOutlinedIcon />
-                </Typography>
-              </Link>
-              <ul className="subnav subnav__dropdown">
                 <li>
-                  <Link to={"/"}>Đàn Guitar Acoustic</Link>
+                  <Link to={"product-category/ae53d467-c176-4a94-8e27-6fd3de971ba3"}>Giá đỡ, chân đàn</Link>
                 </li>
               </ul>
             </li>

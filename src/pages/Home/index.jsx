@@ -19,6 +19,8 @@ import DoneIcon from "@mui/icons-material/Done";
 import CardProduct from "../../components/CardProduct";
 import CardCategory from "../../components/CardCategory";
 
+import apiCategory from "../../apis/apiCategory";
+
 //import img
 import img from "../../assets/img/HD-119-TOP-Copy-2-360x360.jpg";
 
@@ -29,6 +31,7 @@ import "swiper/css/navigation";
 import apiMain from "../../apis/apiMain";
 
 function Home() {
+
   return (
     <Stack spacing={2} className="home">
       <Box id="section1">
@@ -155,6 +158,22 @@ function SlideBackGround() {
 function SlideHome() {
   const [products, setProducts] = useState([]);
 
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    console.log(categories);
+    const getData = async () => {
+      apiCategory
+        .showAllCategoryHeader()
+        .then((res) => {
+          setCategories(res.data.category);
+        })
+        .catch((error) => {
+          setCategories([]);
+        });
+    };
+    getData();
+  }, []);
+
   useEffect(() => {
     let params = {
       page: 0,
@@ -168,8 +187,6 @@ function SlideHome() {
     };
     getData();
   }, []);
-
-  console.log("p", products);
 
   return (
     <>
@@ -473,9 +490,9 @@ function SlideHome() {
             </Stack>
 
             <Swiper
-              slidesPerView={5}
+              slidesPerView={4}
               spaceBetween={20}
-              slidesPerGroup={5}
+              slidesPerGroup={4}
               loop={true}
               loopFillGroupWithBlank={true}
               pagination={{
@@ -485,8 +502,12 @@ function SlideHome() {
               modules={[Pagination, Navigation]}
               className="mySwiper"
             >
-              <SwiperSlide>
-                {/* <CardProduct data={item} /> */}
+              {categories?.map((item) => (
+                <SwiperSlide key={`${item.id}`}>
+                  <CardCategory key={item.id} data={item} />
+                </SwiperSlide>
+              ))}
+              {/* <SwiperSlide>
                 <CardCategory />
               </SwiperSlide>
               <SwiperSlide>
@@ -509,10 +530,7 @@ function SlideHome() {
               </SwiperSlide>
               <SwiperSlide>
                 <CardCategory />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardCategory />
-              </SwiperSlide>
+              </SwiperSlide> */}
             </Swiper>
           </Box>
 

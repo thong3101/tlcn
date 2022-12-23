@@ -74,12 +74,12 @@ function Header() {
         </div>
 
         <div style={{ padding: "0px 15px" }}  className="footer__item">
-          <span className="footer_title">Kết Nối Với Guitar Station</span>
+          <span className="footer_title">Kết Nối Với Senki</span>
           <div className="footer_divier"></div>
           <div>
             <ul style={{ listStyle: "none" }}>
               <li>
-              <a href="https://www.facebook.com/guitarstation.vn/">
+              <a href="">
                 <FacebookOutlinedIcon sx={{color:"#fff"}}></FacebookOutlinedIcon>
               </a>
               </li>
@@ -93,13 +93,13 @@ function Header() {
           <div>
             <ul style={{ listStyle: "none" }}>
               <li>
-              D35 KQH Ngô Quyền, phường 7 Tp Đà Lạt, Lâm Đồng
+              64/2C, Đường số 11, Tăng Nhơn Phú B, Thành Phố Thủ Đức
               </li>
               <li>
               Làm việc kể cả Thứ 7 - Chủ Nhật
               </li>
               <li>
-                Hotline: 093 471 0592
+                Hotline: 094 548 4310
               </li>
             </ul>
           </div>

@@ -14,6 +14,8 @@ import {
   Select,
   InputLabel,
   InputBase,
+  ImageList,
+  ImageListItem,
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { styled } from "@mui/material/styles";
@@ -93,7 +95,7 @@ function CreateDetailProduct(props) {
           });
 
         const formData = new FormData();
-        if(img){
+        if (img) {
           for (let i = 0; i < img.length; i++) {
             formData.append(`files`, img[i]);
           }
@@ -131,7 +133,7 @@ function CreateDetailProduct(props) {
         await apiProduct.updateProduct(params, idProduct);
 
         const formData = new FormData();
-       
+
         if (img) {
           for (let i = 0; i < img.length; i++) {
             formData.append(`files`, img[i]);
@@ -162,12 +164,15 @@ function CreateDetailProduct(props) {
             setQuantity(product.stock);
             setDescription(product.description);
             setBrand(product.brand.id);
+            setReview(product.imageList);
           }
         });
       }
     };
     loaddata();
   }, [edit]);
+
+  console.log("r", typeof(category));
 
   return (
     <Box width={"100%"} bgcolor="#fff">
@@ -278,7 +283,23 @@ function CreateDetailProduct(props) {
           <Stack direction="row" p={2}>
             <Typography className="cruBrand__label">Thêm ảnh</Typography>
             <Stack>
-              <img src={review} width="210px" height="210px" alt="" />
+              {/* {review?.map((item) => {
+                <img src={item.url} width="210px" height="210px" alt="" />;
+              })} */}
+              <ImageList
+                sx={{ width: 500, height: 200 }}
+                cols={3}
+                rowHeight={164}
+              >
+                {review?.map((item) => (
+                  <ImageListItem key={item.id}>
+                    <img
+                      src={`${item.url}?w=164&h=164&fit=crop&auto=format`}
+                      loading="lazy"
+                    />
+                  </ImageListItem>
+                ))}
+              </ImageList>
               <input
                 multiple
                 type="file"
