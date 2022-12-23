@@ -45,16 +45,26 @@ export const productStatus = [
 
 
 
-export const productUnit = [
-    {
-        id: 0,
-        value: 'WEIGHT',
-        text: 'Trọng lượng',
-    },
+export const productBrand = [
     {
         id: 1,
-        value: 'UNIT',
-        text: 'Số lượng',
+        name: "Yamaha"
+    },
+    {
+        id: 2,
+        name: "Taylor"
+    },
+    {
+        id: 3,
+        name: "Roland"
+    },
+    {
+        id: 4,
+        name: "Kawai"
+    },
+    {
+        id: 5,
+        name: "Korg"
     },
 ]
 

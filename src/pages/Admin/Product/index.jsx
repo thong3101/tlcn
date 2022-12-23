@@ -30,6 +30,12 @@ function Product() {
   const [page, setPage] = React.useState(1);
   const [totalPage, setTotalPage] = React.useState(1);
 
+  const [searchText, setSearchText] = React.useState("");
+
+  const onChangeSearch = (event) => {
+    setSearchText(event.target.value);
+  };
+
   const openModalDelete = () => setModalDelete(true);
   const closeModalDelete = () => setModalDelete(false);
 
@@ -38,12 +44,12 @@ function Product() {
     setPrice(event.target.value);
   };
 
-  console.log(price);
+  console.log(products);
 
   React.useEffect(() => {
     const getData = async () => {
       let param = {
-        sort:"",
+        sort: "",
       };
 
       switch (price) {
@@ -59,21 +65,33 @@ function Product() {
           break;
         }
       }
-      apiProduct
-        .getAllProduct(param)
-        .then((res) => {
-          setProducts(res.data.list);
-          setTotalPage(Math.ceil(res.data.list.length / size));
-        })
-        .catch((error) => {
-          setProducts(null);
-        });
 
-        console.log("pp", param);
+      if (searchText == "") {
+        apiProduct
+          .getAllProduct(param)
+          .then((res) => {
+            setProducts(res.data.list);
+            setTotalPage(Math.ceil(res.data.list.length / size));
+          })
+          .catch((error) => {
+            setProducts(null);
+          });
+      } else {
+        apiProduct
+          .getProductsSearch(param, searchText)
+          .then((res) => {
+            setProducts(res.data.list);
+            setTotalPage(Math.ceil(res.data.list.length / size));
+          })
+          .catch((error) => {
+            setProducts(null);
+          });
+      }
+
+      console.log("pp", param);
     };
     getData();
-  }, [price]);
-
+  }, [price, searchText]);
 
   const lastPostIndex = page * size;
   const firstPostIndex = lastPostIndex - size;
@@ -81,6 +99,7 @@ function Product() {
   const handleChangePage = (event, newValue) => {
     setPage(newValue);
   };
+
   return (
     <>
       <Box className="productAdmin">
@@ -138,6 +157,8 @@ function Product() {
                 id="outlined-basic"
                 label="Search"
                 variant="outlined"
+                value={searchText}
+                onChange={onChangeSearch}
                 sx={{ width: "100%" }}
                 size="small"
               />
@@ -159,7 +180,6 @@ function Product() {
                 <TableCell>Giá bán</TableCell>
                 <TableCell>Danh mục</TableCell>
                 <TableCell>Số lượng</TableCell>
-                <TableCell>Trạng thái</TableCell>
                 <TableCell>Thao tác</TableCell>
               </TableRow>
             </TableHead>
@@ -191,17 +211,17 @@ function Product() {
                       </Stack>
                     </TableCell>
                     <TableCell align="center">
-                      <Typography>{item?.category?.name}</Typography>
+                      <Typography>{item?.productCategory?.name}</Typography>
                     </TableCell>
                     <TableCell align="center">
                       <Typography>{item?.stock}</Typography>
                     </TableCell>
                     <TableCell align="center">
-                      <Typography>{item?.status}</Typography>
-                    </TableCell>
-                    <TableCell align="center">
                       <Stack spacing={1} justifyContent="center" py={1}>
-                        <Button variant="contained">Sửa</Button>
+                        <Link to={`/admin/product/edit/${item.id}`}>
+                          <Button variant="contained" sx={{width:"100%"}}>Sửa</Button>
+                        </Link>
+
                         <Button
                           onClick={openModalDelete}
                           variant="outlined"

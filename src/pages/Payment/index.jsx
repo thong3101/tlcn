@@ -446,11 +446,11 @@ function Payment() {
         </Grid>
       </Box>
       {/* <ChooseCoupon handleOpen={handleOpen} handleClose={handleClose} open={open} /> */}
-      <ChooseAddress
+      {/* <ChooseAddress
         handleOpen={handleOpenAddress}
         handleClose={handleCloseAddress}
         open={openAddress}
-      />
+      /> */}
     </>
   );
 }

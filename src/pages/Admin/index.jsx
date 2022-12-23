@@ -1,5 +1,3 @@
-
-
 /* eslint-disable jsx-a11y/anchor-has-content */
 /* eslint-disable jsx-a11y/alt-text */
 import * as React from "react";
@@ -325,7 +323,8 @@ function Admin() {
                       fontWeight: "Light",
                     }}
                   >
-                    {/* {user.fullName} */}<p>Tran Manh Thang</p>
+                    {/* {user.fullName} */}
+                    <p>Tran Manh Thang</p>
                   </Typography>
                   <ExpandMoreOutlinedIcon />
                   {openAccount ? (
@@ -339,7 +338,8 @@ function Admin() {
                         />
                         <Stack sx={{ paddingLeft: "10px" }}>
                           <Typography sx={{ fontWeight: "bold" }}>
-                            {/* {user.fullName} */}<p>Tran Manh Thang</p>
+                            {/* {user.fullName} */}
+                            <p>Tran Manh Thang</p>
                           </Typography>
                         </Stack>
                       </Stack>
@@ -430,7 +430,6 @@ function Admin() {
         </List>
       </Drawer>
 
-        
       <Box
         component="main"
         flexGrow={1}
@@ -449,7 +448,10 @@ function Admin() {
               <Routes>
                 <Route index element={<Product />} />
                 <Route path="create" element={<CreateDetailProduct />} />
-                <Route path="detail/:id" element={<CreateDetailProduct />} />
+                <Route
+                  path="edit/:id"
+                  element={<CreateDetailProduct edit={true} />}
+                />
               </Routes>
             }
           />
@@ -481,9 +483,8 @@ function Admin() {
           <Route path="review" element={<Review />} /> */}
         </Routes>
       </Box>
-
     </Stack>
-    );
+  );
 }
 
 export default Admin;

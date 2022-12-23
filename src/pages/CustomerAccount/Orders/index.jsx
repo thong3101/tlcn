@@ -19,13 +19,13 @@ function Orders() {
   const [orders, setOrders] = useState([]);
   const theme = useTheme();
   const [value, setValue] = useState(0);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(5);
   const user = useSelector((state) => state.auth.user);
 
   const [loadingData, setLoadingData] = useState(false);
 
-  const size = 1;
+  const size = 6;
   useEffect(() => {
     // let params = {
     //   page: page,
@@ -129,23 +129,23 @@ function Orders() {
                     {tmp.slice(firstPostIndex, lastPostIndex).map((item) => (
                       <OrderItem key={item.id} order={item} />
                     ))}
+
+                    {totalPage > 1 ? (
+                      <Stack spacing={2}>
+                        <Pagination
+                          sx={{ justifyContent: "center" }}
+                          count={totalPage}
+                          page={page}
+                          onChange={handleChangePage}
+                        />
+                      </Stack>
+                    ) : (
+                      <></>
+                    )}
                   </TabPanel>
                 );
             })}
           </Box>
-        )}
-
-        {totalPage > 1 ? (
-          <Stack spacing={2}>
-            <Pagination
-              sx={{ justifyContent: "center" }}
-              count={totalPage}
-              page={page}
-              onChange={handleChangePage}
-            />
-          </Stack>
-        ) : (
-          <></>
         )}
       </Box>
     </>
