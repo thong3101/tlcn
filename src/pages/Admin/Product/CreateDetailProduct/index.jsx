@@ -93,10 +93,12 @@ function CreateDetailProduct(props) {
           });
 
         const formData = new FormData();
-        for (let i = 0; i < img.length; i++) {
-          formData.append(`files`, img[i]);
+        if(img){
+          for (let i = 0; i < img.length; i++) {
+            formData.append(`files`, img[i]);
+          }
+          await apiProduct.uploadImg(formData, idProductInsert);
         }
-        await apiProduct.uploadImg(formData, idProductInsert);
         setName("");
         setCategory("");
         setQuantity("");
@@ -129,10 +131,11 @@ function CreateDetailProduct(props) {
         await apiProduct.updateProduct(params, idProduct);
 
         const formData = new FormData();
-        for (let i = 0; i < img.length; i++) {
-          formData.append(`files`, img[i]);
-        }
+       
         if (img) {
+          for (let i = 0; i < img.length; i++) {
+            formData.append(`files`, img[i]);
+          }
           await apiProduct.uploadImg(formData, idProduct);
         }
         setLoadingData(false);

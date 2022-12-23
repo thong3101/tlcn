@@ -3,7 +3,9 @@ import queryString from 'query-string';
 
 
 // create axiosProducts to test favorite product
+// const baseURL='https://www.senki.me/api'
 const baseURL='https://www.senki.me/api'
+
 export const axiosProducts = axios.create({
     baseURL: baseURL,
     headers: {
