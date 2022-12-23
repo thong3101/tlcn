@@ -36,7 +36,6 @@ function CreateDetailProduct(props) {
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
   const [brand, setBrand] = useState("");
-
   const [description, setDescription] = useState("");
 
   const navigate = useNavigate();
@@ -57,13 +56,18 @@ function CreateDetailProduct(props) {
   // Change value of select box
 
   const onChangeImg = (e) => {
-    if (e.target.files.length > 0) {
-      setReview(URL.createObjectURL(e.target.files[0]));
-      setImg(e.target.files);
+    setImg(e.target.files);
+    console.log("img", e.target.files);
+    for(let i=0;i<img.length;i++){
+      formData.append(`files`,img[i])
     }
+    // if (e.target.files.length > 0) {
+    //   setReview(URL.createObjectURL(e.target.files[0]));
+      
+
+    // }
   };
 
-  console.log("img", typeof(price));
 
   // handle Add product
 
@@ -122,10 +126,12 @@ function CreateDetailProduct(props) {
         const idProduct = await apiProduct.insertProduct(params).then((res) => {
           return res.data.product_id;
         });
-        const paramsImg = {
-          multipleFiles: img,
-        };
-        await apiProduct.uploadImg(paramsImg,idProduct)
+       
+        const formData=new FormData();
+        for(let i=0;i<img.length;i++){
+          formData.append(`files`,img[i])
+        }
+        await apiProduct.uploadImg(formData,idProduct)
         setName("");
         setCategory("");
         setQuantity("");

@@ -3,6 +3,7 @@ import queryString from 'query-string';
 import jwt_decode from 'jwt-decode';
 // const baseURL='https://playerhostedapitest.herokuapp.com/api/'
 //const baseURL='http://localhost:5000/api'
+// const baseURL='http://localhost:8080/api'
 const baseURL='https://www.senki.me/api'
 export const axiosClient = axios.create({
     baseURL: baseURL,
@@ -28,6 +29,15 @@ export const axiosClientWithToken = axios.create({
     withCredentials: true,
     paramsSerializer: (params) => queryString.stringify(params)
 });
+export const axiosClientWithFile = axios.create({
+    baseURL: baseURL,
+    headers: {
+        "Content-Type": "multipart/form-data"
+    },
+    withCredentials: true,
+    paramsSerializer: (params) => queryString.stringify(params)
+});
+
 
 var myInterceptor = null;
 export const axiosInstance = (user, dispatch, stateSuccess,stateFail) => {

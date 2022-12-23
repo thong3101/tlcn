@@ -1,4 +1,4 @@
-import { axiosClient, axiosClientWithToken } from "./axiosClient";
+import { axiosClient, axiosClientWithFile, axiosClientWithToken } from "./axiosClient";
 
 const apiProduct = {
   getProductsById: async (id) => {
@@ -49,7 +49,7 @@ const apiProduct = {
   },
 
   uploadImg: async (params,id) => {
-    const res = await axiosClientWithToken.post(`/admin/product/upload/${id}`, params);
+    const res = await axiosClientWithFile.post(`/image/upload/${id}`, params);
     return res.data;
   },
 };
