@@ -1,8 +1,20 @@
 import {
   Box,
-  Button, Collapse, FormControl, FormGroup,
-  Grid, IconButton, InputBase, List, ListItemButton,
-  ListItemText, NativeSelect, Slider, Stack, Typography
+  Button,
+  Collapse,
+  FormControl,
+  FormGroup,
+  Grid,
+  IconButton,
+  InputBase,
+  List,
+  ListItemButton,
+  ListItemText,
+  NativeSelect,
+  Slider,
+  Stack,
+  Typography,
+  Pagination,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import CardProduct from "../../components/CardProduct";
@@ -23,13 +35,12 @@ function FilterProduct(props) {
   const [open, setOpen] = useState(false);
   const [openId, setOpenId] = useState();
   const handleOpen = (id) => {
-    if(openId!==id){
+    if (openId !== id) {
       setOpenId(id);
       setOpen(true);
-    }else{
+    } else {
       setOpen(!open);
     }
-   
   };
   const navigate = useNavigate();
   const handleClickCategory = (id) => {
@@ -43,6 +54,12 @@ function FilterProduct(props) {
 
   const [value, setValue] = useState(1);
   const [filter, setFilter] = useState({});
+
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
+
+  const size = 8;
+
   const [filterPrice, setFilterPrice] = useState({
     minPrice: "",
     maxPrice: "",
@@ -67,10 +84,6 @@ function FilterProduct(props) {
     const getData = async () => {
       setLoadingData(true);
       let param = {
-        page: 0,
-        size: 6,
-        min_price: 0,
-        max_price: 10000000,
       };
 
       if (filterPrice.apply) {
@@ -105,6 +118,7 @@ function FilterProduct(props) {
         .getProductsByCateId(param, idCategory)
         .then((res) => {
           setProducts(res.data.list);
+          setTotalPage(Math.ceil(res.data.list.length / size));
         })
         .catch((error) => {
           setProducts(null);
@@ -117,6 +131,8 @@ function FilterProduct(props) {
     };
     getData();
   }, [idCategory, filter, filterPrice.apply, value]);
+
+  console.log("t",totalPage)
 
   useEffect(() => {
     console.log(categories);
@@ -132,8 +148,6 @@ function FilterProduct(props) {
     };
     getData();
   }, []);
-
-  
 
   const handleChangeFilterPrice = (event, newValue) => {
     setValueFilterPrice(newValue);
@@ -171,7 +185,12 @@ function FilterProduct(props) {
     });
   };
 
-  
+  const lastPostIndex = page * size;
+  const firstPostIndex = lastPostIndex - size;
+
+  const handleChangePage = (event, newValue) => {
+    setPage(newValue);
+  };
 
   return (
     <Stack className="filterProduct container" direction="row" spacing={1}>
@@ -249,36 +268,47 @@ function FilterProduct(props) {
             {categories.map((item) => (
               <React.Fragment>
                 <ListItemButton
-                  onClick={()=>{
-                    handleOpen(item?.id)
+                  onClick={() => {
+                    handleOpen(item?.id);
                   }}
                   key={item.id}
                   // onClick={()=>{handleClickCategory(item?.id)}}
                   // onClick={() => refreshPage()}
-                  sx={{ padding: "6px" }} 
+                  sx={{ padding: "6px" }}
                 >
-                  <ListItemText primary={item?.name} onClick={()=>{
-                    handleClickCategory(item?.id)
-                  }} />
-                  {openId===item?.id&&open ? <ExpandLess /> : <ExpandMore />}
+                  <ListItemText
+                    primary={item?.name}
+                    onClick={() => {
+                      handleClickCategory(item?.id);
+                    }}
+                  />
+                  {openId === item?.id && open ? (
+                    <ExpandLess />
+                  ) : (
+                    <ExpandMore />
+                  )}
                 </ListItemButton>
-                <Collapse in={openId===item?.id&&open} timeout="auto" unmountOnExit>
+                <Collapse
+                  in={openId === item?.id && open}
+                  timeout="auto"
+                  unmountOnExit
+                >
                   <List component="div" disablePadding>
                     {item?.subCategories.map((item) => (
-                      <ListItemButton sx={{ pl: 4 }} key={item?.id} 
-                      onClick={()=>{
-                        handleClickCategory(item?.id)
-                      }}>
-                        <ListItemText primary={item?.name} 
-                        
-                        />
+                      <ListItemButton
+                        sx={{ pl: 4 }}
+                        key={item?.id}
+                        onClick={() => {
+                          handleClickCategory(item?.id);
+                        }}
+                      >
+                        <ListItemText primary={item?.name} />
                       </ListItemButton>
                     ))}
                   </List>
                 </Collapse>
               </React.Fragment>
             ))}
-            
           </List>
         </Box>
         <Box className="filterProduct__form">
@@ -386,7 +416,7 @@ function FilterProduct(props) {
               {(value === 2
                 ? products?.sort((a, b) => b.sellAmount - a.sellAmount)
                 : products
-              )?.map((item) => (
+              )?.slice(firstPostIndex,lastPostIndex).map((item) => (
                 <Grid key={item.id} item xs={3}>
                   <CardProduct data={item} />
                 </Grid>
@@ -394,6 +424,18 @@ function FilterProduct(props) {
             </Grid>
           )}
         </Box>
+        {totalPage > 1 ? (
+          <Stack spacing={2} mt="10px">
+            <Pagination
+              count={totalPage}
+              page={page}
+              onChange={handleChangePage}
+              color="primary"
+            />
+          </Stack>
+        ) : (
+          <></>
+        )}
       </Box>
     </Stack>
   );

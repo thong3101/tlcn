@@ -160,7 +160,7 @@ function OrderList() {
             <TableHead>
               <TableRow>
                 <TableCell sx={{ width: "20%", top: "64px" }}>
-                  Mã đơn hàng/Ngày đặt hàng
+                  Mã đơn hàng
                 </TableCell>
                 <TableCell sx={{ width: "15%", top: "64px" }}>
                   Trạng thái&nbsp;
@@ -172,7 +172,7 @@ function OrderList() {
                   Giá trị đơn hàng&nbsp;
                 </TableCell>
                 <TableCell sx={{ width: "15%", top: "64px" }}>
-                  Nhãn đơn hàng&nbsp;
+                Ngày đặt hàng&nbsp;
                 </TableCell>
                 <TableCell sx={{ width: "10%", top: "64px" }}>
                   Thao tác&nbsp;
@@ -190,12 +190,11 @@ function OrderList() {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {row?.id} <br /> Ngày:
-                      {formatJavaLocalDateTime(row?.createdAt)}
+                      {row?.id} <br />
                     </TableCell>
                     <TableCell align="left">{row?.status}</TableCell>
                     <TableCell align="center">{row?.total}</TableCell>
-                    <TableCell align="left">{row?.status}</TableCell>
+                    <TableCell align="left">{formatJavaLocalDateTime(row?.createdAt)}</TableCell>
                     <TableCell align="center">
                       <Stack spacing={1} justifyContent="center" py={1}>
                         <Link to={`detail/${row?.id}`}>
