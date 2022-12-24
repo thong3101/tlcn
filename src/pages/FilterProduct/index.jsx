@@ -133,6 +133,8 @@ function FilterProduct(props) {
     getData();
   }, []);
 
+  
+
   const handleChangeFilterPrice = (event, newValue) => {
     setValueFilterPrice(newValue);
     setFilterPrice({
@@ -169,7 +171,7 @@ function FilterProduct(props) {
     });
   };
 
-  console.log("33", products);
+  
 
   return (
     <Stack className="filterProduct container" direction="row" spacing={1}>
@@ -355,7 +357,7 @@ function FilterProduct(props) {
                 textTransform: "uppercase",
               }}
             >
-              Category
+              Danh mục
             </Typography>
           </Box>
           <Box sx={{ minWidth: 120 }}>

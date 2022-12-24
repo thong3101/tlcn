@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useState } from "react";
 import { useEffect } from "react";
+import { useTheme } from "@mui/material/styles";
 import { Link, Routes, Route } from "react-router-dom";
 import "./Order.scss";
 import {
@@ -15,6 +16,9 @@ import {
   TableCell,
   InputBase,
   Pagination,
+  Box,
+  Tab,
+  Tabs,
 } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
@@ -24,6 +28,10 @@ import Select from "@mui/material/Select";
 import { styled } from "@mui/material/styles";
 import DetailOrder from "./DetailOrder";
 import apiCart from "../../../apis/apiCart";
+
+import { orderTabs } from "../../../constraints/OrderItem";
+
+import LoadingPage from "../../../components/LoadingPage";
 
 import {
   formatJavaLocalDateTime,
@@ -46,6 +54,8 @@ const items = [
 ];
 
 function OrderList() {
+  const theme = useTheme();
+
   const [selected, setSelected] = React.useState(0);
   const [orders, setOrders] = useState([]);
   const [page, setPage] = useState(1);
@@ -53,33 +63,44 @@ function OrderList() {
 
   const [query, setQuery] = useState("");
 
+  const [value, setValue] = useState(0);
+
+  const [loadingData, setLoadingData] = useState(false);
+
   const size = 6;
 
   useEffect(() => {
+    setLoadingData(true);
     const getData = async () => {
       apiCart
         .getOrdersAdmin()
         .then((response) => {
           setOrders(response.data.orders);
         })
-        .catch(setOrders([]));
+        .catch(setOrders([]))
+        .finally(() => {
+          setLoadingData(false);
+        });
     };
     getData();
   }, [page, selected]);
 
+  // const handleClickTab = (i) => {
+  //   if (i !== selected) setSelected(i);
+  // };
+  // const [status, setStatus] = useState(0);
+  // const onChangeStatus = (e) => {
+  //   setStatus(e.target.value);
+  // };
+  // const [orderDate, setOrderDate] = useState(0);
+  // const onChangeOrderDate = (e) => {
+  //   setOrderDate(e.target.value);
+  // };
 
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
-  const handleClickTab = (i) => {
-    if (i !== selected) setSelected(i);
-  };
-  const [status, setStatus] = useState(0);
-  const onChangeStatus = (e) => {
-    setStatus(e.target.value);
-  };
-  const [orderDate, setOrderDate] = useState(0);
-  const onChangeOrderDate = (e) => {
-    setOrderDate(e.target.value);
-  };
   const handleChangePage = (event, newValue) => {
     setPage(newValue);
   };
@@ -100,8 +121,37 @@ function OrderList() {
             </Typography>
           </a>
         </Stack>
-      
-        <Stack direction="row" alignItems="center" spacing={1} sx={{margin:"20px 0px" }}>
+
+        <Box className="myorder__tabs">
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            textColor="primary"
+            indicatorColor="primary"
+            variant="fullWidth"
+            aria-label="full width tabs example"
+          >
+            {orderTabs.map((item) => (
+              <Tab
+                key={item.id}
+                label={item.type}
+                sx={{
+                  fontSize: "12px",
+                  textTransform: "none",
+                  fontWeight: "400",
+                }}
+                {...a11yProps(item.id)}
+              />
+            ))}
+          </Tabs>
+        </Box>
+
+        <Stack
+          direction="row"
+          alignItems="center"
+          spacing={1}
+          sx={{ margin: "20px 0px" }}
+        >
           <Stack direction="row" sx={{ width: "500px", position: "relative" }}>
             <TextField
               id="outlined-basic"
@@ -117,63 +167,144 @@ function OrderList() {
           </Stack>
         </Stack>
 
-        <Table
-          className="tableCategory"
-          sx={{ minWidth: "650px"}}
-          stickyHeader
-          size="small"
-        >
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ width: "20%", top: "64px" }}>
-                Mã đơn hàng/Ngày đặt hàng
-              </TableCell>
-              <TableCell sx={{ width: "15%", top: "64px" }}>
-                Trạng thái&nbsp;
-              </TableCell>
-              {/* <TableCell align="center" sx={{ width: "20%", top: "64px" }}>
+        {loadingData ? (
+          <LoadingPage />
+        ) : (
+          <Table
+            className="tableCategory"
+            sx={{ minWidth: "650px" }}
+            stickyHeader
+            size="small"
+          >
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ width: "20%", top: "64px" }}>
+                  Mã đơn hàng/Ngày đặt hàng
+                </TableCell>
+                <TableCell sx={{ width: "15%", top: "64px" }}>
+                  Trạng thái&nbsp;
+                </TableCell>
+                {/* <TableCell align="center" sx={{ width: "20%", top: "64px" }}>
                 Ngày xác nhận/hạn xác nhận&nbsp;
               </TableCell> */}
-              <TableCell align="center" sx={{ width: "20%", top: "64px" }}>
-                Giá trị đơn hàng&nbsp;
-              </TableCell>
-              <TableCell sx={{ width: "15%", top: "64px" }}>
-                Nhãn đơn hàng&nbsp;
-              </TableCell>
-              <TableCell sx={{ width: "10%", top: "64px" }}>
-                Thao tác&nbsp;
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {orders?.filter((order) => (order.id?.toLowerCase().includes(query))).map((row) => (
-              <TableRow
-                key={row?.id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {row?.id} <br /> Ngày:{formatJavaLocalDateTime(row?.createdAt)}
+                <TableCell align="center" sx={{ width: "20%", top: "64px" }}>
+                  Giá trị đơn hàng&nbsp;
                 </TableCell>
-                <TableCell align="left">{row?.status}</TableCell>
-                {/* <TableCell align="center">
-                  {convertDate(row.updatedAt)}
-                </TableCell> */}
-                <TableCell align="center">{row?.total}</TableCell>
-                <TableCell align="left">{row?.status}</TableCell>
-                <TableCell align="center">
-                  <Stack spacing={1} justifyContent="center" py={1}>
-                    <Link to={`detail/${row?.id}`}>
-                      <Button sx={{ width: "100px" }} variant="outlined">
-                        Xem chi tiết
-                      </Button>
-                    </Link>
-                  </Stack>
+                <TableCell sx={{ width: "15%", top: "64px" }}>
+                  Nhãn đơn hàng&nbsp;
+                </TableCell>
+                <TableCell sx={{ width: "10%", top: "64px" }}>
+                  Thao tác&nbsp;
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        {totalPage > 1 ? (
+            </TableHead>
+
+            {/* {orders
+              ?.filter((order) => order.id?.toLowerCase().includes(query))
+              .map((row) => (
+                <TableRow
+                  key={row?.id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {row?.id} <br /> Ngày:
+                    {formatJavaLocalDateTime(row?.createdAt)}
+                  </TableCell>
+                  <TableCell align="left">{row?.status}</TableCell>
+                  <TableCell align="center">{row?.total}</TableCell>
+                  <TableCell align="left">{row?.status}</TableCell>
+                  <TableCell align="center">
+                    <Stack spacing={1} justifyContent="center" py={1}>
+                      <Link to={`detail/${row?.id}`}>
+                        <Button sx={{ width: "100px" }} variant="outlined">
+                          Xem chi tiết
+                        </Button>
+                      </Link>
+                    </Stack>
+                  </TableCell>
+                </TableRow>
+              ))} */}
+
+            {orderTabs.map((item) => {
+              const tmp = getOrderByType(orders, item.slug);
+              if (tmp.length === 0)
+                return (
+                  <TabPanel
+                    key={item.id}
+                    value={value}
+                    index={item.id}
+                    dir={theme.direction}
+                  >
+                    <Box className="myorder__none">
+                      <img
+                        height="200px"
+                        width="200px"
+                        src="https://frontend.tikicdn.com/_desktop-next/static/img/account/empty-order.png"
+                        alt=""
+                      />
+                      <Typography>Chưa có đơn hàng</Typography>
+                    </Box>
+                  </TabPanel>
+                );
+              else
+                return (
+                  <TabPanel
+                    key={item.id}
+                    value={value}
+                    index={item.id}
+                    dir={theme.direction}
+                  >
+                    {tmp
+                      ?.filter((order) =>
+                        order.id?.toLowerCase().includes(query)
+                      )
+                      .map((row) => (
+                        <TableRow
+                          key={row?.id}
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                          }}
+                        >
+                          <TableCell component="th" scope="row">
+                            {row?.id} <br /> Ngày:
+                            {formatJavaLocalDateTime(row?.createdAt)}
+                          </TableCell>
+                          <TableCell align="left">{row?.status}</TableCell>
+                          <TableCell align="center">{row?.total}</TableCell>
+                          <TableCell align="left">{row?.status}</TableCell>
+                          <TableCell align="center">
+                            <Stack spacing={1} justifyContent="center" py={1}>
+                              <Link to={`detail/${row?.id}`}>
+                                <Button
+                                  sx={{ width: "100px" }}
+                                  variant="outlined"
+                                >
+                                  Xem chi tiết
+                                </Button>
+                              </Link>
+                            </Stack>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+
+                    {totalPage > 1 ? (
+                      <Stack spacing={2}>
+                        <Pagination
+                          sx={{ justifyContent: "center" }}
+                          count={totalPage}
+                          page={page}
+                          onChange={handleChangePage}
+                        />
+                      </Stack>
+                    ) : (
+                      <></>
+                    )}
+                  </TabPanel>
+                );
+            })}
+          </Table>
+        )}
+        {/* {totalPage > 1 ? (
           <Stack spacing={2} mt="10px">
             <Pagination
               count={totalPage}
@@ -184,7 +315,7 @@ function OrderList() {
           </Stack>
         ) : (
           <></>
-        )}
+        )} */}
       </Stack>
       <Routes>
         <Route path="detail" element={<DetailOrder />} />
@@ -192,6 +323,14 @@ function OrderList() {
     </>
   );
 }
+
+function a11yProps(index) {
+  return {
+    id: `full-width-tab-${index}`,
+    "aria-controls": `full-width-tabpanel-${index}`,
+  };
+}
+
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
   "& .MuiInputBase-input": {
     boxSizing: "border-box",
@@ -212,5 +351,24 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
+
+const getOrderByType = (orders, slug) =>
+  orders.filter((item) => item.status === slug);
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`full-width-tabpanel-${index}`}
+      aria-labelledby={`full-width-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box>{children}</Box>}
+    </div>
+  );
+}
 
 export default OrderList;

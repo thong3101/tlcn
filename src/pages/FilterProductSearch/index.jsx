@@ -2,23 +2,10 @@ import { useState, useEffect, useCallback } from "react";
 import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import {
-  Stack,
   Box,
-  Button,
-  Typography,
-  Checkbox,
-  FormGroup,
-  Grid,
-  Rating,
-  Tab,
-  RadioGroup,
-  Tabs,
-  Radio,
-  Slider,
-  FormControl,
-  NativeSelect,
-  Input,
-  IconButton,
+  Button, Collapse, FormControl, FormGroup,
+  Grid, IconButton, InputBase, List, ListItemButton,
+  ListItemText, NativeSelect, Slider, Stack, Typography,Input
 } from "@mui/material";
 import "./FilterProductSearch.scss";
 import StarIcon from "@mui/icons-material/Star";
@@ -30,6 +17,8 @@ import apiProduct from "../../apis/apiProduct";
 import apiCategory from "../../apis/apiCategory";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
+
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
 import LoadingPage from "../../components/LoadingPage";
 
@@ -46,6 +35,9 @@ function FilterProduct(props) {
 
   const [products, setProducts] = useState();
   const [categories, setCategories] = useState([]);
+
+  const [open, setOpen] = useState(false);
+  const [openId, setOpenId] = useState();
 
   const [value, setValue] = useState(1);
   const [filter, setFilter] = useState({});
@@ -154,20 +146,20 @@ function FilterProduct(props) {
     });
   };
 
-  // const onSetFilterPrice = (value, index) => {
-  //   setFilterPrice((pre) => {
-  //     return {
-  //       ...pre,
-  //       option: index,
-  //       value: value,
-  //     };
-  //   });
-  // };
+  const handleOpen = (id) => {
+    if(openId!==id){
+      setOpenId(id);
+      setOpen(true);
+    }else{
+      setOpen(!open);
+    }
+   
+  };
 
-  // const handleChange = (event, newValue) => {
-  //   setValue(newValue);
-  //   console.log(newValue)
-  // };
+  const handleClickCategory = (id) => {
+    navigate(`/product-category/${id}`);
+  };
+
   const handleChange = (event) => {
     setValue(Number(event.target.value));
   };
@@ -243,19 +235,44 @@ function FilterProduct(props) {
               width: "100%",
             }}
           />
-          <FormGroup>
+          <List
+            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+            component="nav"
+          >
             {categories.map((item) => (
-              <Box
-                key={item.id}
-                onClick={() => refreshPage()}
-                sx={{ padding: "6px" }}
-              >
-                <Link to={`/product-category/${item.id}`}>
-                  <Box fontSize="14px">{item.name}</Box>
-                </Link>
-              </Box>
+              <React.Fragment>
+                <ListItemButton
+                  onClick={()=>{
+                    handleOpen(item?.id)
+                  }}
+                  key={item.id}
+                  // onClick={()=>{handleClickCategory(item?.id)}}
+                  // onClick={() => refreshPage()}
+                  sx={{ padding: "6px" }} 
+                >
+                  <ListItemText primary={item?.name} onClick={()=>{
+                    handleClickCategory(item?.id)
+                  }} />
+                  {openId===item?.id&&open ? <ExpandLess /> : <ExpandMore />}
+                </ListItemButton>
+                <Collapse in={openId===item?.id&&open} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    {item?.subCategories.map((item) => (
+                      <ListItemButton sx={{ pl: 4 }} key={item?.id} 
+                      onClick={()=>{
+                        handleClickCategory(item?.id)
+                      }}>
+                        <ListItemText primary={item?.name} 
+                        
+                        />
+                      </ListItemButton>
+                    ))}
+                  </List>
+                </Collapse>
+              </React.Fragment>
             ))}
-          </FormGroup>
+            
+          </List>
         </Box>
         <Box className="filterProduct__form">
           <Box sx={{ width: "100%" }}>
@@ -354,7 +371,7 @@ function FilterProduct(props) {
                 textTransform: "uppercase",
               }}
             >
-              Category
+              Tìm kiếm với từ khóa : {search}
             </Typography>
           </Box>
           <Box sx={{ minWidth: 120 }}>

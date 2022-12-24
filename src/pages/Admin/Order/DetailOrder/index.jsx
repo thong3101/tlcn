@@ -5,8 +5,8 @@ import { Link, useParams } from "react-router-dom";
 import apiCart from "../../../../apis/apiCart";
 import { toast } from "react-toastify";
 import { formatJavaLocalDateTime,numWithCommas } from "../../../../constraints/Util";
-import { orderTabs } from "../../../../constraints/OrderItem";
-import apiNotify from "../../../../apis/apiNotify";
+
+
 
 function DetailOrder() {
   const id = useParams().id;
@@ -32,7 +32,7 @@ function DetailOrder() {
   useEffect(() => {
     const getData = () => {
       apiCart
-        .getOrdersById(id)
+        .getOrdersByIdAmin(id)
         .then((res) => {
           setOrder(res.data.order);
           setTotalPrice(

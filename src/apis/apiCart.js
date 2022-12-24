@@ -37,6 +37,12 @@ const apiCart = {
         const res = await axiosClientWithToken.patch(`/admin/order/${id}`,params)
         return res.data;
     },
+
+    getOrdersByIdAmin: async (id,params) => {
+        const res = await axiosClientWithToken.get(`/admin/order/${id}`,params)
+        return res.data;
+    },
+    
     makePaymentMomo: async (params) => {
         const res = await axiosClientWithPayment.post('/create-payment',params)
         return res.data;

@@ -20,20 +20,20 @@ export const orderTabs = [
     // },
     {
         id: 1,
-        type: "Chờ lấy hàng",
+        type: "Đã thanh toán",
         slug: "processing",
         icon: AutoModeIcon
     },
    
     {
         id: 2,
-        type: "Đang giao",
+        type: "Đang giao hàng",
         slug: "shipping",
         icon: HourglassBottomIcon
     },
     {
         id: 3,
-        type: "Hoàn thành",
+        type: "Đã giao hàng",
         slug: "delivered",
         icon: LocalShippingIcon
     },
