@@ -76,6 +76,7 @@ function OrderList() {
         .getOrdersAdmin()
         .then((response) => {
           setOrders(response.data.orders);
+          setTotalPage(Math.ceil(response.data.orders.length / size));
         })
         .catch(setOrders([]))
         .finally(() => {
@@ -96,6 +97,9 @@ function OrderList() {
   // const onChangeOrderDate = (e) => {
   //   setOrderDate(e.target.value);
   // };
+
+  const lastPostIndex = page * size;
+  const firstPostIndex = lastPostIndex - size;
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -122,29 +126,6 @@ function OrderList() {
           </a>
         </Stack>
 
-        <Box className="myorder__tabs">
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            textColor="primary"
-            indicatorColor="primary"
-            variant="fullWidth"
-            aria-label="full width tabs example"
-          >
-            {orderTabs.map((item) => (
-              <Tab
-                key={item.id}
-                label={item.type}
-                sx={{
-                  fontSize: "12px",
-                  textTransform: "none",
-                  fontWeight: "400",
-                }}
-                {...a11yProps(item.id)}
-              />
-            ))}
-          </Tabs>
-        </Box>
 
         <Stack
           direction="row"
@@ -199,112 +180,37 @@ function OrderList() {
               </TableRow>
             </TableHead>
 
-            {/* {orders
-              ?.filter((order) => order.id?.toLowerCase().includes(query))
-              .map((row) => (
-                <TableRow
-                  key={row?.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {row?.id} <br /> Ngày:
-                    {formatJavaLocalDateTime(row?.createdAt)}
-                  </TableCell>
-                  <TableCell align="left">{row?.status}</TableCell>
-                  <TableCell align="center">{row?.total}</TableCell>
-                  <TableCell align="left">{row?.status}</TableCell>
-                  <TableCell align="center">
-                    <Stack spacing={1} justifyContent="center" py={1}>
-                      <Link to={`detail/${row?.id}`}>
-                        <Button sx={{ width: "100px" }} variant="outlined">
-                          Xem chi tiết
-                        </Button>
-                      </Link>
-                    </Stack>
-                  </TableCell>
-                </TableRow>
-              ))} */}
-
-            {orderTabs.map((item) => {
-              const tmp = getOrderByType(orders, item.slug);
-              if (tmp.length === 0)
-                return (
-                  <TabPanel
-                    key={item.id}
-                    value={value}
-                    index={item.id}
-                    dir={theme.direction}
+            <TableBody>
+              {orders
+                ?.filter((order) => order.id?.toLowerCase().includes(query))
+                .slice(firstPostIndex, lastPostIndex)
+                .map((row) => (
+                  <TableRow
+                    key={row?.id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <Box className="myorder__none">
-                      <img
-                        height="200px"
-                        width="200px"
-                        src="https://frontend.tikicdn.com/_desktop-next/static/img/account/empty-order.png"
-                        alt=""
-                      />
-                      <Typography>Chưa có đơn hàng</Typography>
-                    </Box>
-                  </TabPanel>
-                );
-              else
-                return (
-                  <TabPanel
-                    key={item.id}
-                    value={value}
-                    index={item.id}
-                    dir={theme.direction}
-                  >
-                    {tmp
-                      ?.filter((order) =>
-                        order.id?.toLowerCase().includes(query)
-                      )
-                      .map((row) => (
-                        <TableRow
-                          key={row?.id}
-                          sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
-                          }}
-                        >
-                          <TableCell component="th" scope="row">
-                            {row?.id} <br /> Ngày:
-                            {formatJavaLocalDateTime(row?.createdAt)}
-                          </TableCell>
-                          <TableCell align="left">{row?.status}</TableCell>
-                          <TableCell align="center">{row?.total}</TableCell>
-                          <TableCell align="left">{row?.status}</TableCell>
-                          <TableCell align="center">
-                            <Stack spacing={1} justifyContent="center" py={1}>
-                              <Link to={`detail/${row?.id}`}>
-                                <Button
-                                  sx={{ width: "100px" }}
-                                  variant="outlined"
-                                >
-                                  Xem chi tiết
-                                </Button>
-                              </Link>
-                            </Stack>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-
-                    {totalPage > 1 ? (
-                      <Stack spacing={2}>
-                        <Pagination
-                          sx={{ justifyContent: "center" }}
-                          count={totalPage}
-                          page={page}
-                          onChange={handleChangePage}
-                        />
+                    <TableCell component="th" scope="row">
+                      {row?.id} <br /> Ngày:
+                      {formatJavaLocalDateTime(row?.createdAt)}
+                    </TableCell>
+                    <TableCell align="left">{row?.status}</TableCell>
+                    <TableCell align="center">{row?.total}</TableCell>
+                    <TableCell align="left">{row?.status}</TableCell>
+                    <TableCell align="center">
+                      <Stack spacing={1} justifyContent="center" py={1}>
+                        <Link to={`detail/${row?.id}`}>
+                          <Button sx={{ width: "100px" }} variant="outlined">
+                            Xem chi tiết
+                          </Button>
+                        </Link>
                       </Stack>
-                    ) : (
-                      <></>
-                    )}
-                  </TabPanel>
-                );
-            })}
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
           </Table>
         )}
-        {/* {totalPage > 1 ? (
+        {totalPage > 1 ? (
           <Stack spacing={2} mt="10px">
             <Pagination
               count={totalPage}
@@ -315,7 +221,7 @@ function OrderList() {
           </Stack>
         ) : (
           <></>
-        )} */}
+        )}
       </Stack>
       <Routes>
         <Route path="detail" element={<DetailOrder />} />
