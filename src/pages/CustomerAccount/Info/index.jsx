@@ -1,54 +1,28 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import ImageUploading from "react-images-uploading";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { loginSuccess } from "../../../slices/authSlice";
-import { useDispatch } from "react-redux";
 
-import "./Info.scss";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import avatar from "../../../assets/img/logo.png";
+import "./Info.scss";
 
 import {
-  Avatar,
-  Typography,
-  Stack,
-  ListItemText,
-  Button,
-  Select,
-  MenuItem,
-  RadioGroup,
-  Radio,
-  FormControlLabel,
-  hexToRgb,
-  Modal,
-  Box,
-  IconButton,
-  Paper,
-  InputBase,
-  Divider,
-  Badge,
-  ClickAwayListener,
+  Avatar, Badge, Box, Button, ClickAwayListener, Divider, FormControlLabel, IconButton, ListItemText, MenuItem, Modal, Radio, RadioGroup, Stack, Typography
 } from "@mui/material";
 
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import SearchIcon from "@mui/icons-material/Search";
-import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
-import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import LockIcon from "@mui/icons-material/Lock";
-import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
-import GoogleIcon from "@mui/icons-material/Google";
 import CloseIcon from "@mui/icons-material/Close";
-import Add from "@mui/icons-material/Add";
 import Edit from "@mui/icons-material/Edit";
-import WallpaperIcon from "@mui/icons-material/Wallpaper";
-import DeleteIcon from "@mui/icons-material/Delete";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
+import LockIcon from "@mui/icons-material/Lock";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import WallpaperIcon from "@mui/icons-material/Wallpaper";
 import { useSelector } from "react-redux";
 
 import apiProfile from "../../../apis/apiProfile";
 import Loading from "../../../components/Loading";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function Info() {
   const user = useSelector((state) => state.auth.user);

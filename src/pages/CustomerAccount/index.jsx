@@ -32,15 +32,6 @@ import {
   useNavigate,
 } from "react-router-dom";
 
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import DeleteIcon from "@mui/icons-material/Delete";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import WallpaperIcon from "@mui/icons-material/Wallpaper";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import ImageUploading from "react-images-uploading";
-import CloseIcon from "@mui/icons-material/Close";
-import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
-
 import OverView from "./OverView/index";
 import Info from "./Info";
 import Addresses from "./Addresses";

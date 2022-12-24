@@ -1,27 +1,17 @@
-import React from "react";
-import {
-  Box,
-  Typography,
-  Stack,
-  Button,
-  TextField,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Pagination,
-  MenuItem,
-  FormControl,
-  Select,
-  Modal,
-} from "@mui/material";
-import "./Product.scss";
-import { Link } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import SearchIcon from "@mui/icons-material/Search";
+import {
+  Box, Button, FormControl, MenuItem, Modal, Pagination, Select, Stack, Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow, TextField, Typography
+} from "@mui/material";
+import React from "react";
+import { Link } from "react-router-dom";
 import apiProduct from "../../../apis/apiProduct";
+import "./Product.scss";
 
 import { toast } from "react-toastify";
 
@@ -285,19 +275,19 @@ function Product() {
             sx={{ overflowY: "scroll",justifyContent:"center" }}
             open={modalDelete}
             onClose={closeModalDelete}
+            className="!flex !justify-center !items-center "
           >
             <Stack
-              className="modal-info"
+              className="modal-info !bg-white !h-36 !rounded-md"
               direction="row"
-              spacing={2}
+              spacing={0}
               justifyContent="center"
-              width="26rem"
+              alignItems="center"
+              width="18rem"
             >
-              <Stack>
-                <InfoOutlinedIcon color="primary" />
-              </Stack>
+             
 
-              <Stack spacing={3}>
+              <Stack spacing={3} className="" >
                 <Stack>
                   <Typography fontWeight="bold">
                     Bạn có chắc muốn xoá sản phẩm?
