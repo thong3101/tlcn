@@ -36,6 +36,8 @@ import LoadingPage from "../../../components/LoadingPage";
 import {
   formatJavaLocalDateTime,
   convertDate,
+  numWithCommas,
+  reduceUUIDDisplayLength,
 } from "../../../constraints/Util";
 
 const listStatus = ["Mã đơn hàng", "SKU", "Thông tin khách hàng"];
@@ -190,16 +192,16 @@ function OrderList() {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {row?.id} <br />
+                      {reduceUUIDDisplayLength(row?.id)} <br />
                     </TableCell>
                     <TableCell align="left">{row?.status}</TableCell>
-                    <TableCell align="center">{row?.total}</TableCell>
+                    <TableCell align="center" className="!text-rose-500 !text-lg">{numWithCommas(row?.total)} đ</TableCell>
                     <TableCell align="left">{formatJavaLocalDateTime(row?.createdAt)}</TableCell>
                     <TableCell align="center">
                       <Stack spacing={1} justifyContent="center" py={1}>
                         <Link to={`detail/${row?.id}`}>
                           <Button sx={{ width: "100px" }} variant="outlined">
-                            Xem chi tiết
+                            Xem
                           </Button>
                         </Link>
                       </Stack>

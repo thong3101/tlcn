@@ -58,7 +58,7 @@ function FilterProduct(props) {
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
 
-  const size = 8;
+  const size = 6;
 
   const [filterPrice, setFilterPrice] = useState({
     minPrice: "",
@@ -85,7 +85,7 @@ function FilterProduct(props) {
       setLoadingData(true);
       let param = {
       };
-
+      setPage(1);
       if (filterPrice.apply) {
         param = {
           ...param,
@@ -429,6 +429,7 @@ function FilterProduct(props) {
             <Pagination
               count={totalPage}
               page={page}
+              sx={{mb:"4x"}}
               onChange={handleChangePage}
               color="primary"
             />

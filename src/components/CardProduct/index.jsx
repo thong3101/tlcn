@@ -43,6 +43,7 @@ function CardProduct({ data }) {
             width="270px"
             height="270px"
             image={data?.imageList[0]?.url}
+            loading="lazy"
             //   sx={{ position: "absolute" }}
           />
           <CardContent className="card__content">

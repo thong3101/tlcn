@@ -1,6 +1,11 @@
 export const numWithCommas = (num) =>
   num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
+export const reduceUUIDDisplayLength= (uuid) => {
+  if (uuid) {
+    return `${uuid.substring(0, 4)}...${uuid.substring(uuid.length - 4)}`;
+  }
+  return "";
+};
 export const roundPrice = (num) => Math.round(num / 100) * 100;
 
 export const formatJavaLocalDateTime = (date) => {
