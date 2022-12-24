@@ -16,6 +16,7 @@ import {
   InputBase,
   ImageList,
   ImageListItem,
+  Autocomplete,
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { styled } from "@mui/material/styles";
@@ -78,7 +79,7 @@ function CreateDetailProduct(props) {
         description: description,
         price: price,
         stock: quantity,
-        cate_id: category,
+        cate_id: category.id,
         brand_id: brand.toString(),
       };
 
@@ -123,14 +124,16 @@ function CreateDetailProduct(props) {
         description: description,
         price: price,
         stock: quantity,
-        cate_id: category,
+        cate_id: category.id.toString(),
         brand_id: brand.toString(),
       };
       if (!(name && category && quantity && price && brand && description)) {
         toast.warning("Vui lòng nhập đầy đủ thông tin !!");
         return;
       } else {
-        await apiProduct.updateProduct(params, idProduct);
+        await apiProduct.updateProduct(params, idProduct).then((res) => {
+          console.log("res", res);
+        });
 
         const formData = new FormData();
 
@@ -142,8 +145,10 @@ function CreateDetailProduct(props) {
         }
         setLoadingData(false);
         toast.success("Sửa sản phẩm thành công");
+        navigate("/admin/product");
       }
     } catch (error) {
+      setLoadingData(false);
       toast.error("Sửa sản phẩm thất bại!");
     }
   };
@@ -154,13 +159,15 @@ function CreateDetailProduct(props) {
   useEffect(() => {
     const loaddata = () => {
       if (edit === true) {
+        setLoadingData(true);
         apiProduct.getProductsById(idProduct).then((res) => {
+          setLoadingData(false);
           const product = res.data.product;
           console.log("p", product);
           if (product) {
             setName(product.name);
             setPrice(product.price);
-            setCategory(product.productCategory.id);
+            setCategory(product.productCategory);
             setQuantity(product.stock);
             setDescription(product.description);
             setBrand(product.brand.id);
@@ -172,7 +179,7 @@ function CreateDetailProduct(props) {
     loaddata();
   }, [edit]);
 
-  console.log("r", typeof(category));
+  console.log("r", category);
 
   return (
     <Box width={"100%"} bgcolor="#fff">
@@ -216,7 +223,7 @@ function CreateDetailProduct(props) {
           <Stack direction="row">
             <Typography className="cruBrand__label">Danh mục</Typography>
             <FormControl className="create-address__input" sx={{ flex: "1" }}>
-              <Select
+              {/* <Select
                 size="small"
                 labelId="demo-simple-select-helper-label"
                 id="demo-simple-select-helper"
@@ -230,7 +237,26 @@ function CreateDetailProduct(props) {
                     <MenuItem value={itemSub.id}>{itemSub.name}</MenuItem>
                   ))
                 )}
-              </Select>
+              </Select> */}
+              <Autocomplete
+                // value={category||null}
+                defaultValue={category||null}
+                size="small"
+                id="combo-box"
+                disablePortal
+                options={listCategory?.map((item) => item.subCategories.sort((itemSub) => itemSub)).flat()}
+                
+                getOptionLabel={(option) => `${option.name}`}
+                onChange={(event, newValue) => {
+                  setCategory(newValue.id);
+                }}
+              
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                  />
+                )}
+              />
             </FormControl>
           </Stack>
           <Stack direction="row">
