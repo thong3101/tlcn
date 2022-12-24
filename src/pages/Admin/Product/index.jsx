@@ -1,5 +1,4 @@
 import EditIcon from "@mui/icons-material/Edit";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import {
   Box, Button, FormControl, MenuItem, Modal, Pagination, Select, Stack, Table,

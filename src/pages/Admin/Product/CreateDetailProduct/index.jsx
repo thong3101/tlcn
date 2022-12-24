@@ -1,29 +1,15 @@
 /* eslint-disable */
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 // import apiBrand from "../../../../apis/apiBrand";
-import "./CreateDetailProduct.scss";
 import {
-  Stack,
-  Button,
-  Typography,
-  TextField,
-  Box,
-  MenuItem,
-  FormControl,
-  Select,
-  InputLabel,
-  InputBase,
-  ImageList,
-  ImageListItem,
-  Autocomplete,
+  Autocomplete, Box, Button, FormControl, ImageList,
+  ImageListItem, InputBase, MenuItem, Select, Stack, TextField, Typography
 } from "@mui/material";
-import { toast } from "react-toastify";
 import { styled } from "@mui/material/styles";
-import rev from "../../../../assets/img/product_le_han_quoc.jpg";
-import SelectBoxAddress from "../../../../components/SelectBoxAddress";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { productBrand } from "../../../../constraints/Product";
+import "./CreateDetailProduct.scss";
 
 import apiCategory from "../../../../apis/apiCategory";
 import apiProduct from "../../../../apis/apiProduct";

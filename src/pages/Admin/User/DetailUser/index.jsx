@@ -1,27 +1,18 @@
  /* eslint-disable */
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Doughnut } from "react-chartjs-2";
-import "./DetailUser.scss"
-import apiProfile from "../../../../apis/apiProfile";
-import apiAddress from '../../../../apis/apiAddress';
 import {
-  Stack,
-  Button,
-  Typography,
-  Box,
-  TableCell,
-  TableBody,
-  TableRow,
-  Table,
-  TableHead,
-  Avatar,
+  Avatar, Box, Button, Stack, Table, TableBody, TableCell, TableHead, TableRow, Typography
 } from "@mui/material";
+import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
+import { useEffect, useState } from "react";
+import { Doughnut } from "react-chartjs-2";
+import { Link, useParams } from "react-router-dom";
+import apiAddress from '../../../../apis/apiAddress';
+import apiProfile from "../../../../apis/apiProfile";
+import "./DetailUser.scss";
 
-import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
-import EmailIcon from "@mui/icons-material/Email";
 import CakeIcon from "@mui/icons-material/Cake";
+import EmailIcon from "@mui/icons-material/Email";
+import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 
 import LinearProgress from "@mui/material/LinearProgress";
 

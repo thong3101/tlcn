@@ -1,43 +1,28 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
 /* eslint-disable jsx-a11y/alt-text */
+import { styled } from "@mui/material/styles";
 import * as React from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
 import { sidebar } from "../../constraints/Admin";
 import { Notifies } from "../../constraints/AdminNotify";
-import { styled } from "@mui/material/styles";
 import "./Admin.scss";
 
-import MuiDrawer from "@mui/material/Drawer";
-import MuiAppBar from "@mui/material/AppBar";
-import "./Admin.scss";
 import {
-  Box,
-  Toolbar,
-  List,
-  CssBaseline,
-  Typography,
-  Divider,
-  Stack,
-  ClickAwayListener,
-  Button,
-  Badge,
-  SwipeableDrawer,
-  IconButton,
-  ListItemIcon,
-  ListItemText,
-  ListItem,
-  ListItemButton,
+  Box, Button, ClickAwayListener, CssBaseline, Divider, IconButton, List, ListItem,
+  ListItemButton, ListItemIcon,
+  ListItemText, Stack, SwipeableDrawer, Toolbar, Typography
 } from "@mui/material";
+import MuiAppBar from "@mui/material/AppBar";
+import MuiDrawer from "@mui/material/Drawer";
+import "./Admin.scss";
 
-import MenuIcon from "@mui/icons-material/Menu";
-import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
-import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import DriveFileRenameOutlineOutlinedIcon from "@mui/icons-material/DriveFileRenameOutlineOutlined";
-import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CloseIcon from "@mui/icons-material/Close";
+import DriveFileRenameOutlineOutlinedIcon from "@mui/icons-material/DriveFileRenameOutlineOutlined";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import MenuIcon from "@mui/icons-material/Menu";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 // import AdminLogin from "./Login";
 import Category from "./Category";
 import CreateCategory from "./Category/CruCategory/index";

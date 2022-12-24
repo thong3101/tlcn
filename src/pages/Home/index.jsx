@@ -1,33 +1,31 @@
-import "./Home.scss";
-import { Stack, Button, Box } from "@mui/material";
-import React, { useState, useRef, useEffect } from "react";
+import { Box, Button, Card, CardMedia, Stack } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Link, useNavigate } from "react-router-dom";
-import { Card, CardMedia } from "@mui/material";
+import "./Home.scss";
 
 // import required modules
-import { Pagination, Navigation, Autoplay } from "swiper";
+import { Autoplay, Navigation, Pagination } from "swiper";
 
 //import icons
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
+import DoneIcon from "@mui/icons-material/Done";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import PriceCheckIcon from "@mui/icons-material/PriceCheck";
 import StarIcon from "@mui/icons-material/Star";
-import DoneIcon from "@mui/icons-material/Done";
 
 //import component
-import CardProduct from "../../components/CardProduct";
 import CardCategory from "../../components/CardCategory";
+import CardProduct from "../../components/CardProduct";
 
 import apiCategory from "../../apis/apiCategory";
 
 //import img
-import img from "../../assets/img/HD-119-TOP-Copy-2-360x360.jpg";
 
 // styles swiper
 import "swiper/css";
-import "swiper/css/pagination";
 import "swiper/css/navigation";
+import "swiper/css/pagination";
 import apiMain from "../../apis/apiMain";
 
 function Home() {

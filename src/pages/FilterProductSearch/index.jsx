@@ -1,22 +1,16 @@
-import { useState, useEffect, useCallback } from "react";
-import React, { useRef } from "react";
-import { Link } from "react-router-dom";
 import {
   Box,
   Button, Collapse, FormControl, FormGroup,
-  Grid, IconButton, InputBase, List, ListItemButton,
-  ListItemText, NativeSelect, Slider, Stack, Typography,Input
+  Grid, IconButton, Input, List, ListItemButton,
+  ListItemText, NativeSelect, Slider, Stack, Typography
 } from "@mui/material";
-import "./FilterProductSearch.scss";
-import StarIcon from "@mui/icons-material/Star";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { numWithCommas } from "../../constraints/Util";
-import CardProduct from "../../components/CardProduct";
-import apiProduct from "../../apis/apiProduct";
-import apiCategory from "../../apis/apiCategory";
-import { toast } from "react-toastify";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import apiCategory from "../../apis/apiCategory";
+import apiProduct from "../../apis/apiProduct";
+import CardProduct from "../../components/CardProduct";
+import { numWithCommas } from "../../constraints/Util";
+import "./FilterProductSearch.scss";
 
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
@@ -24,7 +18,6 @@ import LoadingPage from "../../components/LoadingPage";
 
 import SearchIcon from "@mui/icons-material/Search";
 
-import { fontSize } from "@mui/system";
 
 function FilterProduct(props) {
   const search = useParams().key;

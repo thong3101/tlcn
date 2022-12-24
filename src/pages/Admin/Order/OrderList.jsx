@@ -1,43 +1,24 @@
 /* eslint-disable */
-import React, { useState } from "react";
-import { useEffect } from "react";
-import { useTheme } from "@mui/material/styles";
-import { Link, Routes, Route } from "react-router-dom";
-import "./Order.scss";
 import {
-  Stack,
-  Button,
-  Typography,
-  TextField,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  InputBase,
-  Pagination,
-  Box,
-  Tab,
-  Tabs,
+  Box, Button, InputBase,
+  Pagination, Stack, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import React, { useEffect, useState } from "react";
+import { Link, Route, Routes } from "react-router-dom";
+import "./Order.scss";
 
 import SearchIcon from "@mui/icons-material/Search";
-import Checkbox from "@mui/material/Checkbox";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
 import { styled } from "@mui/material/styles";
-import DetailOrder from "./DetailOrder";
 import apiCart from "../../../apis/apiCart";
+import DetailOrder from "./DetailOrder";
 
-import { orderTabs } from "../../../constraints/OrderItem";
 
 import LoadingPage from "../../../components/LoadingPage";
 
 import {
-  formatJavaLocalDateTime,
-  convertDate,
-  numWithCommas,
-  reduceUUIDDisplayLength,
+  formatJavaLocalDateTime, numWithCommas,
+  reduceUUIDDisplayLength
 } from "../../../constraints/Util";
 
 const listStatus = ["Mã đơn hàng", "SKU", "Thông tin khách hàng"];

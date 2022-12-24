@@ -1,7 +1,6 @@
-import { Link } from "react-router-dom";
+import { Button, Modal, Stack, TextField, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import apiProfile from "../../../apis/apiProfile";
-import React, { useState, useEffect } from "react";
-import { Stack, Button, Typography, Modal, TextField } from "@mui/material";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -10,12 +9,11 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { toast } from "react-toastify";
 
-import SearchIcon from "@mui/icons-material/Search";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import SearchIcon from "@mui/icons-material/Search";
 
 import {
-  formatJavaLocalDateTime,
-  numWithCommas,
+  formatJavaLocalDateTime
 } from "../../../constraints/Util";
 
 function User() {

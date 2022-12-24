@@ -1,46 +1,28 @@
-import { useState, useEffect } from "react";
-import { toast, ToastContainer } from "react-toastify";
 import {
-  Avatar,
-  Stack,
-  Box,
-  Button,
-  Typography,
-  FormGroup,
-  Grid,
-  Rating,
-  Tab,
-  Tabs,
-  ClickAwayListener,
-  Badge,
-  MenuItem,
-  Modal,
-  Divider,
-  IconButton,
+  Box, Tab,
+  Tabs
 } from "@mui/material";
+import { useEffect, useState } from "react";
 
 import { useSelector } from "react-redux";
 
-import "./CustomerAccount.scss";
 import { sidebarTab } from "../../constraints/Profile";
+import "./CustomerAccount.scss";
 
 import {
-  Routes,
-  Route,
-  Link,
-  useLocation,
-  useNavigate,
+  Link, Route, Routes, useLocation,
+  useNavigate
 } from "react-router-dom";
 
-import OverView from "./OverView/index";
-import Info from "./Info";
 import Addresses from "./Addresses";
 import CreateAddress from "./Addresses/CreateAddress";
-import PhoneNumber from "./Info/PhoneNumber";
-import Password from "./Info/Password";
+import Info from "./Info";
 import Email from "./Info/Email";
+import Password from "./Info/Password";
+import PhoneNumber from "./Info/PhoneNumber";
 import Orders from "./Orders";
 import DetailOrder from "./Orders/DetailOrder";
+import OverView from "./OverView/index";
 
 function CustomerAccount() {
   const navigate = useNavigate();

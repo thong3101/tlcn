@@ -1,26 +1,17 @@
-import { useCallback, useEffect, useState } from "react";
-import "./ShoppingCart.scss";
-import {
-  Grid,
-  Typography,
-  Checkbox,
-  Button,
-  Stack,
-  Box,
-  Dialog,
-} from "@mui/material";
-import CartItem from "../../components/CartItem";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import {
+  Box, Button, Dialog, Grid, Stack, Typography
+} from "@mui/material";
+import { useCallback, useEffect, useState } from "react";
+import CartItem from "../../components/CartItem";
+import "./ShoppingCart.scss";
 // import { CartItems } from "../../constraints/Cart"
-import InfoIcon from "@mui/icons-material/Info";
-import DiscountIcon from "@mui/icons-material/Discount";
+import { useDispatch, useSelector } from "react-redux";
 import { numWithCommas } from "../../constraints/Util";
-import { useSelector, useDispatch } from "react-redux";
 
-import { deleteAll } from "../../slices/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { clearCoupon } from "../../slices/paymentSlice";
+import { deleteAll } from "../../slices/cartSlice";
 
 function ShoppingCart() {
   const [open, setOpen] = useState(false);
