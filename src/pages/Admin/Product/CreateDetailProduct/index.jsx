@@ -65,7 +65,7 @@ function CreateDetailProduct(props) {
         description: description,
         price: price,
         stock: quantity,
-        cate_id: category.id,
+        cate_id: category,
         brand_id: brand.toString(),
       };
 
@@ -110,7 +110,7 @@ function CreateDetailProduct(props) {
         description: description,
         price: price,
         stock: quantity,
-        cate_id: category.id.toString(),
+        cate_id: category?.id?category.id:category,
         brand_id: brand.toString(),
       };
       if (!(name && category && quantity && price && brand && description)) {
@@ -164,8 +164,6 @@ function CreateDetailProduct(props) {
     };
     loaddata();
   }, [edit]);
-
-  console.log("r", category);
 
   return (
     <Box width={"100%"} bgcolor="#fff">
