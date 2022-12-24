@@ -425,11 +425,12 @@ function FilterProduct(props) {
           )}
         </Box>
         {totalPage > 1 ? (
-          <Stack spacing={2} mt="10px">
+          <Stack spacing={2} mt="10px" >
             <Pagination
+            className="!flex !justify-center"
               count={totalPage}
               page={page}
-              sx={{mb:"4x"}}
+              sx={{mb:"12px"}}
               onChange={handleChangePage}
               color="primary"
             />

@@ -40,8 +40,9 @@ function CardProduct({ data }) {
           </div>):(<></>)} */}
           <CardMedia
             component="img"
-            width="270px"
-            height="270px"
+            width="100px"
+            height="100px"
+            className="max-w-[240px] max-h-[240px]"
             image={data?.imageList[0]?.url}
             loading="lazy"
             //   sx={{ position: "absolute" }}
