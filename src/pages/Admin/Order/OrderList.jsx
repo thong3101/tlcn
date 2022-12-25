@@ -1,7 +1,17 @@
 /* eslint-disable */
 import {
-  Box, Button, InputBase,
-  Pagination, Stack, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography
+  Box,
+  Button,
+  InputBase,
+  Pagination,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
@@ -13,12 +23,12 @@ import { styled } from "@mui/material/styles";
 import apiCart from "../../../apis/apiCart";
 import DetailOrder from "./DetailOrder";
 
-
 import LoadingPage from "../../../components/LoadingPage";
 
 import {
-  formatJavaLocalDateTime, numWithCommas,
-  reduceUUIDDisplayLength
+  formatJavaLocalDateTime,
+  numWithCommas,
+  reduceUUIDDisplayLength,
 } from "../../../constraints/Util";
 
 const listStatus = ["Mã đơn hàng", "SKU", "Thông tin khách hàng"];
@@ -83,7 +93,25 @@ function OrderList() {
 
   const lastPostIndex = page * size;
   const firstPostIndex = lastPostIndex - size;
-
+  const colorOnOrderStatus = (status) => {
+    console.log(status);
+    if (status) {
+      switch (status) {
+        case "cancel":
+          return "!text-red-600 !bg-red-100";
+        case "pending":
+          return "!text-yellow-600 !bg-yellow-100";
+        case "shipping":
+          return "!text-violet-600 !bg-violet-100";
+        case "processing":
+          return "!text-sky-600 !bg-sky-100";
+        case "delivered":
+          return "!text-green-600 !bg-green-100";
+        default:
+          return "!text-black";
+      }
+    }
+  };
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -108,7 +136,6 @@ function OrderList() {
             </Typography>
           </a>
         </Stack>
-
 
         <Stack
           direction="row"
@@ -145,7 +172,7 @@ function OrderList() {
                 <TableCell sx={{ width: "20%", top: "64px" }}>
                   Mã đơn hàng
                 </TableCell>
-                <TableCell sx={{ width: "15%", top: "64px" }}>
+                <TableCell sx={{ width: "15%", top: "64px" }} align="center">
                   Trạng thái&nbsp;
                 </TableCell>
                 {/* <TableCell align="center" sx={{ width: "20%", top: "64px" }}>
@@ -154,10 +181,13 @@ function OrderList() {
                 <TableCell align="center" sx={{ width: "20%", top: "64px" }}>
                   Giá trị đơn hàng&nbsp;
                 </TableCell>
-                <TableCell sx={{ width: "15%", top: "64px" }}>
-                Ngày đặt hàng&nbsp;
+                <TableCell sx={{ width: "15%", top: "64px" }} align="center">
+                  Ngày đặt hàng&nbsp;
                 </TableCell>
-                <TableCell sx={{ width: "10%", top: "64px" }}>
+                <TableCell
+                  sx={{ width: "10%", top: "64px" }}
+                  className="!pl-10"
+                >
                   Thao tác&nbsp;
                 </TableCell>
               </TableRow>
@@ -172,14 +202,29 @@ function OrderList() {
                     key={row?.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell component="th" scope="row">
+                    <TableCell
+                      component="th"
+                      scope="row"
+                      sx={{ fontSize: "1rem" }}
+                    >
                       {reduceUUIDDisplayLength(row?.id)} <br />
                     </TableCell>
-                    <TableCell align="left">{row?.status}</TableCell>
-                    <TableCell align="center" className="!text-rose-500 !text-lg">{numWithCommas(row?.total)} đ</TableCell>
-                    <TableCell align="left">{formatJavaLocalDateTime(row?.createdAt)}</TableCell>
+                    <TableCell
+                      className={`uppercase ${colorOnOrderStatus(row?.status)} !text-center`}
+                    >
+                      {row?.status}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      className="!text-rose-500 !text-2xl"
+                    >
+                      {numWithCommas(row?.total)} đ
+                    </TableCell>
                     <TableCell align="center">
-                      <Stack spacing={1} justifyContent="center" py={1}>
+                      {formatJavaLocalDateTime(row?.createdAt)}
+                    </TableCell>
+                    <TableCell align="left">
+                      <Stack spacing={1} justifyContent="start" py={1}>
                         <Link to={`detail/${row?.id}`}>
                           <Button sx={{ width: "100px" }} variant="outlined">
                             Xem

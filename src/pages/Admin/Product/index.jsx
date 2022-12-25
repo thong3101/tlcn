@@ -263,6 +263,7 @@ function Product() {
               <Pagination
                 count={totalPage}
                 page={page}
+                defaultPage={1}
                 onChange={handleChangePage}
                 color="primary"
               />
