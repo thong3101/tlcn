@@ -86,9 +86,9 @@ function CrudCategory(props) {
   const handleSave = () => {
     const params = {
       name: name,
-      parentId: parent,
+      parentId: parent||null,
     };
-    if (!(name && parent)) {
+    if (!(name)) {
       toast.warning("Vui lòng nhập đầy đủ thông tin !!");
       return;
     } else {
