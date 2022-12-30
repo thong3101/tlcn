@@ -140,7 +140,7 @@ function DetailProduct({ data, rating }) {
             >
               <Button
                 onClick={() => {
-                  quantity > 0 ? setQuantity(quantity - 1) : setQuantity(0);
+                  quantity > 1 ? setQuantity(quantity - 1) : setQuantity(1);
                 }}
               >
                 -
@@ -194,7 +194,7 @@ function DetailProduct({ data, rating }) {
                   marginRight: "15px",
                 }}
               />
-              <p>Đặt hàng online, giao hàng COD toàn quốc</p>
+              <p className="!mt-2">Đặt hàng online, giao hàng COD toàn quốc</p>
             </div>
             <div className="detailProduct__support-box-item">
               <VolunteerActivismIcon
@@ -204,7 +204,7 @@ function DetailProduct({ data, rating }) {
                   marginRight: "15px",
                 }}
               />
-              <p>Đặt hàng online, giao hàng COD toàn quốc</p>
+              <p className="!mt-2">Đặt hàng online, giao hàng COD toàn quốc</p>
             </div>
             <div className="detailProduct__support-box-item">
               <VolunteerActivismIcon
@@ -214,7 +214,7 @@ function DetailProduct({ data, rating }) {
                   marginRight: "15px",
                 }}
               />
-              <p>Đặt hàng online, giao hàng COD toàn quốc</p>
+              <p className="!mt-2">Đặt hàng online, giao hàng COD toàn quốc</p>
             </div>
           </div>
           <div className="detailProduct__support-box">
@@ -226,7 +226,7 @@ function DetailProduct({ data, rating }) {
                   marginRight: "15px",
                 }}
               />
-              <p>Đặt hàng online, giao hàng COD toàn quốc</p>
+              <p className="!mt-4">Đặt hàng online, giao hàng COD toàn quốc</p>
             </div>
             <div className="detailProduct__support-box-item">
               <VolunteerActivismIcon
@@ -236,7 +236,7 @@ function DetailProduct({ data, rating }) {
                   marginRight: "15px",
                 }}
               />
-              <p>Đặt hàng online, giao hàng COD toàn quốc</p>
+              <p className="!mt-4" >Đặt hàng online, giao hàng COD toàn quốc</p>
             </div>
           </div>
         </div>

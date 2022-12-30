@@ -80,6 +80,11 @@ function CreateAddress(props) {
     setCommune(value);
   };
   const handleSave = () => {
+    //Check phone if contain alphabet
+    if (phone.match(/[a-z]/i)) {
+      toast.error("Số điện thoại không được chứa chữ cái!");
+      return;
+    }
     const params = {
       addressDetail: addressDetail,
       // addressType: Number(addressType),
@@ -127,6 +132,10 @@ function CreateAddress(props) {
   };
 
   const handleUpdate = () => {
+    if (phone.match(/[a-z]/i)) {
+      toast.error("Số điện thoại không được chứa chữ cái!");
+      return;
+    }
     const params = {
       addressDetail: addressDetail,
       // addressType: Number(addressType),
