@@ -6,10 +6,12 @@ import ScrollToTop from "./components/ScrollToTop";
 import { BrowserRouter } from "react-router-dom";
 import ConfigRoute from "./ConfigRoute";
 import "./app/style/App.scss";
-
+import "./input.css";
 import { useDispatch, useSelector } from "react-redux";
 import { axiosInstance } from "./apis/axiosClient";
 import { loginSuccess, logoutSuccess } from "./slices/authSlice";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   // const isAdmin = window.location.href.includes("admin");
@@ -24,9 +26,12 @@ function App() {
       <BrowserRouter>
         {/* <CheckAuthentication /> */}
         <ScrollToTop>
+          <ToastContainer />
           {isAdmin ? null : <Header />}
+          
           <ConfigRoute />
           {isAdmin ? null : <Footer />}
+
         </ScrollToTop>
       </BrowserRouter>
     </div>

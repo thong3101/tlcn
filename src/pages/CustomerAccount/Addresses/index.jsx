@@ -1,13 +1,10 @@
-import { useEffect, useState,useMemo,memo } from "react";
+import AddIcon from "@mui/icons-material/Add";
+import { Button, Stack, Typography } from "@mui/material";
+import { memo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import "./Addresses.scss";
-import { Typography, Button, Stack, Box, Dialog } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import apiAddress from "../../../apis/apiAddress";
 // import EmptyNotify from '../../../components/EmptyNotify';
-
-import { toast } from "react-toastify";
 
 function Addresses() {
   const user = useSelector((state) => state.auth.user);

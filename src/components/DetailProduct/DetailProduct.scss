@@ -13,6 +13,7 @@
         padding-top: 100%;
         position: relative;
         margin-bottom: 13px;
+        transition: 0.3s;
         cursor: pointer;
         &>* {
             position: absolute;
@@ -20,6 +21,10 @@
             left: 0;
             width: 100%;
             border-radius: 4px;
+        }
+        &:hover{
+            //Zoom on hover
+            transform: scale(1.1) ;
         }
     }
     &__list-img {
@@ -33,7 +38,7 @@
         width: 93px;
         height: 100%;
         border: 1px solid #CCCCCC;
-        opacity: 0.2;
+        opacity: 0.5;
         transition: 1s ease;
         cursor: pointer;
         &:hover {
@@ -79,6 +84,7 @@
         }
         &-rate {
             display: flex;
+            align-items: center;
             &-star{
                 text-align: center;
                 color: yellow;

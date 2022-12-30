@@ -1,23 +1,18 @@
-import * as React from "react";
-import "./Dashboard.scss";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Stack from "@mui/material/Stack";
+import DescriptionIcon from "@mui/icons-material/Description";
 import GroupsIcon from "@mui/icons-material/Groups";
 import InventoryIcon from "@mui/icons-material/Inventory";
-import DescriptionIcon from "@mui/icons-material/Description";
 import PaidIcon from "@mui/icons-material/Paid";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
+  BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title,
+  Tooltip
 } from "chart.js";
+import * as React from "react";
 import { Bar } from "react-chartjs-2";
-import {numWithCommas} from "../../../constraints/Util"
+import { numWithCommas } from "../../../constraints/Util";
+import "./Dashboard.scss";
 
 ChartJS.register(
   CategoryScale,

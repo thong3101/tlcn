@@ -1,79 +1,292 @@
-import { useEffect, useState } from 'react'
-import './ChooseAddress.scss'
-import { Button, Modal, Box, Stack, Typography } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close';
-import apiAddress from '../../apis/apiAddress'
-import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
-import { setAddress } from '../../slices/paymentSlice';
+import "./ChooseAddress.scss";
+import React from "react";
+import {
+  Box,
+  Typography,
+  Stack,
+  Checkbox,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  Button,
+  InputBase,
+  TextField,
+} from "@mui/material";
+import SelectBoxAddress from "../../components/SelectBoxAddress";
+import { styled } from "@mui/material/styles";
+import { useState } from "react";
+import apiAddress from "../../apis/apiAddress";
+import apiProfile from "../../apis/apiProfile";
+import { useEffect } from "react";
+
+import { useParams, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { loginSuccess } from "../../slices/authSlice";
+import { ErrorInput } from "../../components/ErrorHelper";
+
+import { useForm } from "react-hook-form";
+
+import { toast } from "react-toastify";
 
 function ChooseAddress(props) {
-    const [addresses, setAddresses] = useState([]);
-    const dispatch = useDispatch()
-    
-    useEffect(() => {
-        const getAddresses = () => {
-            apiAddress.getUserAddress()
-                .then(res => {
-                    setAddresses(res.data.addressList)
-                })
+  const [fullName, setFullName] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [addressDetail, setAddressDetail] = useState("");
+
+  const [edit, setEdit] = useState(props.edit);
+  const [province, setProvince] = useState("");
+  const [district, setDistrict] = useState("");
+  const [commune, setCommune] = useState("");
+  const navigate = useNavigate();
+  const params = useParams();
+
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+  const [address, setAddress] = useState(user.address);
+
+  const { register, errors } = useForm();
+
+  useEffect(() => {
+    const loaddata = () => {
+      if (edit === true) {
+        if (address) {
+          setFullName(address.fullName);
+          setCompanyName(address.companyName);
+          setPhone(address.phoneNumber);
+          setAddressDetail(address.addressDetail);
+          setCommune(address.commune.id);
+          setDistrict(address.district.id);
+          setProvince(address.province.id);
+        } else {
+          navigate("/my-account/address/create");
+          toast.error("Địa chỉ này không tồn tại!");
         }
-        getAddresses()
-    }, [])
+      }
+    };
+    loaddata();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [edit]);
 
-    const chooseAddressShip = (address)=>{
-    //props.chooseAddressShip(address)
-        props.handleClose()
-        dispatch(setAddress(address))
+  const handleChangeProvince = (value) => {
+    setProvince(value);
+  };
+
+  const handleChangeDistrict = (value) => {
+    setDistrict(value);
+  };
+
+  const handleChangeCommune = (value) => {
+    setCommune(value);
+  };
+  const handleSave = () => {
+    const params = {
+      addressDetail: addressDetail,
+      // addressType: Number(addressType),
+      commune: commune,
+      companyName: companyName,
+      district: district,
+      fullName: fullName,
+      phone: phone,
+      province: province,
+    };
+    if (
+      !(
+        addressDetail &&
+        // addressType &&
+        commune &&
+        // companyName &&
+        district &&
+        fullName &&
+        phone &&
+        province
+      )
+    ) {
+      toast.warning("Vui lòng nhập đầy đủ thông tin !!");
+      return;
+    } else {
+      apiAddress
+        .saveAddress(params)
+        .then((res) => {
+          toast.success("Thêm địa chỉ thành công");
+          getUserProfile();
+
+          setFullName("");
+          setCompanyName("");
+          setPhone("");
+          setAddressDetail("");
+          // setAddressType(1);
+          setCommune("");
+          setDistrict("");
+          setProvince("");
+        })
+        .catch((error) => {
+          toast.error("Thêm địa chỉ thất bại!");
+        });
     }
+  };
 
-    return (
-        <Modal
-            open={props.open}
-            onClose={props.handleClose}
+  const handleUpdate = () => {
+    const params = {
+      addressDetail: addressDetail,
+      // addressType: Number(addressType),
+      commune: commune,
+      companyName: companyName,
+      district: district,
+      fullName: fullName,
+      phone: phone,
+      province: province,
+    };
+
+    console.log(params);
+    if (
+      !(
+        addressDetail &&
+        // addressType &&
+        commune &&
+        // companyName &&
+        district &&
+        fullName &&
+        phone &&
+        province
+      )
+    ) {
+      toast.warning("Vui lòng nhập đầy đủ thông tin !!");
+      return;
+    }
+    apiAddress
+      .saveAddress(params)
+      .then((res) => {
+        toast.success("Cập nhật thành công");
+        getUserProfile();
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("Cập nhật thất bại!");
+      });
+  };
+  const getUserProfile = () => {
+    apiProfile.getUserProfile().then((res) => {
+      let newUser = res.data.user;
+      dispatch(loginSuccess({ ...user, ...newUser }));
+    });
+  };
+
+  return (
+    <Box className="create-address" p={2} m={2}>
+      <Typography variant="h6">Địa chỉ nhận hàng</Typography>
+
+      <Stack p="2rem" spacing={1.875} width="80%">
+        <SelectBoxAddress
+          province={province}
+          district={district}
+          commune={commune}
+          onChangeProvince={handleChangeProvince}
+          onChangeDistrict={handleChangeDistrict}
+          onChangeCommune={handleChangeCommune}
+        />
+
+        <Stack direction="row">
+          <Typography className="create-address__label">
+            Tên người nhận:
+          </Typography>
+          <Stack className="create-address__input">
+            <InputCustom
+              value={fullName}
+              onChange={(event) => {
+                setFullName(event.target.value);
+              }}
+              placeholder="Nhập họ và tên"
+              size="small"
+            ></InputCustom>
+          </Stack>
+        </Stack>
+
+        <Stack direction="row">
+          <Typography className="create-address__label ">
+            Số nhà, tên đường
+          </Typography>
+          <Stack className="create-address__input">
+            <TextField
+              value={addressDetail}
+              onChange={(event) => {
+                setAddressDetail(event.target.value);
+              }}
+              multiline
+              rows={4}
+              placeholder="Nhập địa chỉ"
+            ></TextField>
+          </Stack>
+        </Stack>
+
+        <Stack direction="row">
+          <Typography className="create-address__label">
+            Số điện thoại nhận hàng:
+          </Typography>
+          <Stack className="create-address__input">
+            <InputCustom
+            //   {...register("phone", {
+            //     pattern: {
+            //       value: /\d+/,
+            //       message: "Số điện thoại không hợp lệ",
+            //     },
+            //     minLength: {
+            //       value: 10,
+            //       message: "Số điện thoại phải có ít nhất 10 chữ số",
+            //     },
+            //   })}
+              value={phone}
+              onChange={(event) => {
+                setPhone(event.target.value);
+              }}
+              size="small"
+              placeholder="Nhập số điện thoại"
+            >
+              {/* {errors.phone && (
+                <ErrorInput message={errors.phone.message} />
+              )} */}
+            </InputCustom>
+          </Stack>
+        </Stack>
+
+        <Stack
+          direction="row"
+          justifyContent="flex-start"
+          className="!flex !justify-center"
         >
-            <Box className='choose-address'>
-                <Stack direction='row' className="choose-coupon__heading">
-                    <span>Chọn địa chỉ</span>
-                    <CloseIcon onClick={props.handleClose} height="24px" />
-                </Stack>
-                <Stack spacing={5}>{
-                    addresses.map((item) => {
-                        return (
-                            <Stack
-                                direction="row"
-                                width="100%"
-                                className="items"
-                                key={item.id}
-                            >
-                                <Stack className="info">
-                                    <Typography className="name">{item.fullName}</Typography>
-                                    <Typography className="address">Địa chỉ: {`${item.addressDetail}, ${item.commune.name}, ${item.district.name}, ${item.province.name}`}</Typography>
-                                    <Typography className="number">Điện thoại: {item.phoneNumber}</Typography>
-                                </Stack>
-
-                                <Stack direction="row" className="action">
-                                    <Button className="Modify" variant="text">
-                                        Chỉnh sửa
-                                    </Button>
-                                    <Button onClick={()=>chooseAddressShip(item)} className="Delete" variant="text">
-                                        Chọn
-                                    </Button>
-                                </Stack>
-                            </Stack>
-                        );
-                    })
-                }</Stack>
-
-            </Box>
-        </Modal>
-    )
+          {/* <Typography className="create-address__label"></Typography> */}
+          <Button
+            onClick={edit ? handleUpdate : handleSave}
+            className="btn__Update"
+            variant="contained"
+          >
+            Lưu địa chỉ
+          </Button>
+        </Stack>
+      </Stack>
+    </Box>
+  );
 }
 
-ChooseAddress.propsTypes = {
-    open: PropTypes.bool,
-    handleOpen: PropTypes.func,
-    handleClose: PropTypes.func,
-    chooseAddressShip: PropTypes.func
-}
-export default ChooseAddress
+const InputCustom = styled(InputBase)(({ theme }) => ({
+  "& .MuiInputBase-input": {
+    boxSizing: "border-box",
+    borderRadius: 4,
+    position: "relative",
+    backgroundColor: theme.palette.background.paper,
+    border: "1px solid #ced4da",
+    fontSize: 16,
+    display: "flex",
+    height: "40px !important",
+    padding: "0px 26px 0px 12px",
+    alignItems: "center",
+    transition: theme.transitions.create(["border-color", "box-shadow"]),
+    "&:focus": {
+      borderRadius: 4,
+      borderColor: "#1890ff",
+      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
+    },
+  },
+}));
+
+export default ChooseAddress;

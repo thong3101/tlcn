@@ -1,26 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
-import "./Payment.scss";
 import {
-  Grid,
-  Typography,
   Box,
-  Button,
-  Stack,
-  Radio,
-  RadioGroup,
+  Button, Grid, Radio,
+  RadioGroup, Stack, Typography
 } from "@mui/material";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import InfoIcon from "@mui/icons-material/Info";
-import DiscountIcon from "@mui/icons-material/Discount";
-import { numWithCommas } from "../../constraints/Util";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { numWithCommas } from "../../constraints/Util";
+import "./Payment.scss";
 
-import ChooseAddress from "../../components/ChooseAddress";
-import { clearCoupon } from "../../slices/paymentSlice";
 import { Link, useNavigate } from "react-router-dom";
-import apiCart from "../../apis/apiCart";
 import { toast } from "react-toastify";
+import apiCart from "../../apis/apiCart";
 import { deleteAll } from "../../slices/cartSlice";
 
 import apiAddress from "../../apis/apiAddress";
@@ -122,22 +112,6 @@ function Payment() {
       return;
     }
 
-    // if (!addressShip) {
-    //   toast.warning("Vui lòng chọn địa chỉ giao hàng");
-    //   return;
-    // }
-
-    // const payload = {
-    //   CartItems.map((item) => {
-    //     return {
-    //       productId: item.id,
-    //       productName: item.name,
-    //       productImage: item.imageList[0].url,
-    //       quantity: item.quantity,
-    //       price: item.price,
-    //     };
-    //   }),
-    // };
 
     let payload = CartItems.map((item) => {
       return {
@@ -165,7 +139,6 @@ function Payment() {
         .finally(() => {
           setLoading(false);
         });
-
     } else {
       apiCart
         .saveOrderCOD(payload)
@@ -180,7 +153,6 @@ function Payment() {
         .finally(() => {
           setLoading(false);
         });
-
     }
   };
 
@@ -279,13 +251,24 @@ function Payment() {
                 >
                   Giao tới
                 </Typography>
-                <Typography
-                  onClick={handleOpenAddress}
-                  color="#1890ff"
-                  sx={{ cursor: "pointer" }}
-                >
-                  Thay đổi
-                </Typography>
+                {addresses === null ? (
+                  <Link to="/my-account/address/create">
+                    <Button
+                      className="new"
+                      variant="outlined"
+                    >
+                      Thêm địa chỉ mới
+                    </Button>
+                  </Link>
+                ) : (
+                  <Stack direction="row" className="action">
+                    <Link to={`/my-account/address/edit`}>
+                      <Button className="Modify" variant="text">
+                        Chỉnh sửa
+                      </Button>
+                    </Link>
+                  </Stack>
+                )}
               </Stack>
               {addresses && (
                 <>
@@ -437,11 +420,11 @@ function Payment() {
         </Grid>
       </Box>
       {/* <ChooseCoupon handleOpen={handleOpen} handleClose={handleClose} open={open} /> */}
-      <ChooseAddress
+      {/* <ChooseAddress
         handleOpen={handleOpenAddress}
         handleClose={handleCloseAddress}
         open={openAddress}
-      />
+      /> */}
     </>
   );
 }

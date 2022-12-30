@@ -1,45 +1,28 @@
-
-
 /* eslint-disable jsx-a11y/anchor-has-content */
 /* eslint-disable jsx-a11y/alt-text */
+import { styled } from "@mui/material/styles";
 import * as React from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
 import { sidebar } from "../../constraints/Admin";
 import { Notifies } from "../../constraints/AdminNotify";
-import { styled } from "@mui/material/styles";
 import "./Admin.scss";
 
-import MuiDrawer from "@mui/material/Drawer";
-import MuiAppBar from "@mui/material/AppBar";
-import "./Admin.scss";
 import {
-  Box,
-  Toolbar,
-  List,
-  CssBaseline,
-  Typography,
-  Divider,
-  Stack,
-  ClickAwayListener,
-  Button,
-  Badge,
-  SwipeableDrawer,
-  IconButton,
-  ListItemIcon,
-  ListItemText,
-  ListItem,
-  ListItemButton,
+  Box, Button, ClickAwayListener, CssBaseline, Divider, IconButton, List, ListItem,
+  ListItemButton, ListItemIcon,
+  ListItemText, Stack, SwipeableDrawer, Toolbar, Typography
 } from "@mui/material";
+import MuiAppBar from "@mui/material/AppBar";
+import MuiDrawer from "@mui/material/Drawer";
+import "./Admin.scss";
 
-import MenuIcon from "@mui/icons-material/Menu";
-import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
-import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import DriveFileRenameOutlineOutlinedIcon from "@mui/icons-material/DriveFileRenameOutlineOutlined";
-import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CloseIcon from "@mui/icons-material/Close";
+import DriveFileRenameOutlineOutlinedIcon from "@mui/icons-material/DriveFileRenameOutlineOutlined";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import MenuIcon from "@mui/icons-material/Menu";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 // import AdminLogin from "./Login";
 import Category from "./Category";
 import CreateCategory from "./Category/CruCategory/index";
@@ -49,7 +32,7 @@ import Product from "./Product";
 import CreateDetailProduct from "./Product/CreateDetailProduct";
 // import DetailProduct from "./Product/DetailProduct";
 // import Review from "./Review";
-// import User from "./User";
+import User from "./User";
 // import DetailUser from "./User/DetailUser";
 
 import { useSelector } from "react-redux";
@@ -271,19 +254,6 @@ function Admin() {
             </IconButton>
 
             <Stack direction="row" spacing={3} alignItems="center">
-              <IconButton sx={{ border: "1px solid silver" }}>
-                <TextsmsOutlinedIcon sx={{ borderRadius: "50%" }} />
-              </IconButton>
-
-              <IconButton
-                onClick={() => setOpenNotify(true)}
-                sx={{ border: "1px solid silver" }}
-              >
-                <Badge color="info" badgeContent={3}>
-                  <NotificationsNoneOutlinedIcon />
-                </Badge>
-              </IconButton>
-
               <SwipeableDrawer
                 anchor="right"
                 open={openNotify}
@@ -325,7 +295,8 @@ function Admin() {
                       fontWeight: "Light",
                     }}
                   >
-                    {/* {user.fullName} */}<p>Tran Manh Thang</p>
+                    {user.fullName}
+                    {/* <p>Tran Manh Thang</p> */}
                   </Typography>
                   <ExpandMoreOutlinedIcon />
                   {openAccount ? (
@@ -339,7 +310,8 @@ function Admin() {
                         />
                         <Stack sx={{ paddingLeft: "10px" }}>
                           <Typography sx={{ fontWeight: "bold" }}>
-                            {/* {user.fullName} */}<p>Tran Manh Thang</p>
+                            {user.fullName}
+                            {/* <p>Tran Manh Thang</p> */}
                           </Typography>
                         </Stack>
                       </Stack>
@@ -430,7 +402,6 @@ function Admin() {
         </List>
       </Drawer>
 
-        
       <Box
         component="main"
         flexGrow={1}
@@ -449,7 +420,10 @@ function Admin() {
               <Routes>
                 <Route index element={<Product />} />
                 <Route path="create" element={<CreateDetailProduct />} />
-                <Route path="detail/:id" element={<CreateDetailProduct />} />
+                <Route
+                  path="edit/:id"
+                  element={<CreateDetailProduct edit={true} />}
+                />
               </Routes>
             }
           />
@@ -468,22 +442,21 @@ function Admin() {
             }
           />
 
-          {/* <Route
+          <Route
             path="user/*"
             element={
               <Routes>
                 <Route index element={<User />} />
-                <Route path="detail/:id" element={<DetailUser />} />
+                {/* <Route path="detail/:id" element={<DetailUser />} /> */}
               </Routes>
             }
           />
 
-          <Route path="review" element={<Review />} /> */}
+          {/* <Route path="review" element={<Review />} /> */}
         </Routes>
       </Box>
-
     </Stack>
-    );
+  );
 }
 
 export default Admin;

@@ -13,6 +13,12 @@ export const axiosClientWithPayment = axios.create({
 });
 
 const apiCart = {
+
+    getOrdersById: async (id,params) => {
+        const res = await axiosClientWithToken.get(`/order/${id}`,params)
+        return res.data;
+    },
+
     getOrders: async (params) => {
         const res = await axiosClientWithToken.get('/user/profile/orderList', {params})
         return res.data;
@@ -28,11 +34,27 @@ const apiCart = {
     },
     
     changeTypeOrder: async (params, id) => {
-        const res = await axiosClientWithToken.patch(`/myorders/${id}`,params)
+        const res = await axiosClientWithToken.patch(`/admin/order/${id}`,params)
         return res.data;
     },
+
+    getOrdersByIdAmin: async (id,params) => {
+        const res = await axiosClientWithToken.get(`/admin/order/${id}`,params)
+        return res.data;
+    },
+    
     makePaymentMomo: async (params) => {
         const res = await axiosClientWithPayment.post('/create-payment',params)
+        return res.data;
+    },
+    makePaymentPaypal:async(id)=>{
+        const res = await axiosClientWithToken.post(`/order/paypal/${id}`)
+        return res.data;
+    },
+
+
+    getOrdersAdmin: async (params) => {
+        const res = await axiosClientWithToken.get('/admin/order', params)
         return res.data;
     },
 

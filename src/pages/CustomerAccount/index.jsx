@@ -1,54 +1,28 @@
-import { useState, useEffect } from "react";
-import { toast } from "react-toastify";
 import {
-  Avatar,
-  Stack,
-  Box,
-  Button,
-  Typography,
-  FormGroup,
-  Grid,
-  Rating,
-  Tab,
-  Tabs,
-  ClickAwayListener,
-  Badge,
-  MenuItem,
-  Modal,
-  Divider,
-  IconButton,
+  Box, Tab,
+  Tabs
 } from "@mui/material";
+import { useEffect, useState } from "react";
 
 import { useSelector } from "react-redux";
 
-import "./CustomerAccount.scss";
 import { sidebarTab } from "../../constraints/Profile";
+import "./CustomerAccount.scss";
 
 import {
-  Routes,
-  Route,
-  Link,
-  useLocation,
-  useNavigate,
+  Link, Route, Routes, useLocation,
+  useNavigate
 } from "react-router-dom";
 
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import DeleteIcon from "@mui/icons-material/Delete";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import WallpaperIcon from "@mui/icons-material/Wallpaper";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import ImageUploading from "react-images-uploading";
-import CloseIcon from "@mui/icons-material/Close";
-import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
-
-import OverView from "./OverView/index";
-import Info from "./Info";
 import Addresses from "./Addresses";
 import CreateAddress from "./Addresses/CreateAddress";
-import PhoneNumber from "./Info/PhoneNumber";
-import Password from "./Info/Password";
+import Info from "./Info";
 import Email from "./Info/Email";
-import Orders from "./Orders"
+import Password from "./Info/Password";
+import PhoneNumber from "./Info/PhoneNumber";
+import Orders from "./Orders";
+import DetailOrder from "./Orders/DetailOrder";
+import OverView from "./OverView/index";
 
 function CustomerAccount() {
   const navigate = useNavigate();
@@ -117,6 +91,7 @@ function CustomerAccount() {
             indicatorColor="primary"
             aria-label="Vertical tabs example"
             sx={{
+             
               borderRight: 1,
               borderColor: "divider",
               width: "25%",
@@ -137,6 +112,9 @@ function CustomerAccount() {
                     label={item.name}
                     value={value}
                     sx={{
+                      '.MuiTabs-indicator': {
+                        left: 0,
+                      },
                       width: "100%",
                       fontSize: "12px",
                       textTransform: "none",
@@ -163,11 +141,11 @@ function CustomerAccount() {
               />
 
               <Route
-                path="orders"
+                path="orders/*"
                 element={
                   <Routes>
                     <Route index element={<Orders />} />
-                    {/* <Route path="detail/:id" element={<DetailOrder />} /> */}
+                    <Route path="detail/:id" element={<DetailOrder />} />
                   </Routes>
                 }
               />

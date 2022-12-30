@@ -1,274 +1,357 @@
- /* eslint-disable */
-import React from "react";
-import { useEffect, useState } from "react";
+/* eslint-disable */
+import React, { useEffect, useState } from "react";
 // import apiBrand from "../../../../apis/apiBrand";
-import "./CreateDetailProduct.scss";
 import {
-  Stack,
-  Button,
-  Typography,
-  TextField,
-  Box,
-  MenuItem,
-  FormControl,
-  Select,
-  InputLabel,
-  InputBase
+  Autocomplete, Box, Button, FormControl, ImageList,
+  ImageListItem, InputBase, MenuItem, Select, Stack, TextField, Typography
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { styled } from '@mui/material/styles';
-import rev from "../../../../assets/img/product_le_han_quoc.jpg";
-import SelectBoxAddress from "../../../../components/SelectBoxAddress";
-import { useParams,useNavigate } from "react-router-dom";
-import { productUnit } from "../../../../constraints/Product";
+import { productBrand } from "../../../../constraints/Product";
+import "./CreateDetailProduct.scss";
+
+import apiCategory from "../../../../apis/apiCategory";
+import apiProduct from "../../../../apis/apiProduct";
+import LoadingPage from "../../../../components/LoadingPage";
+
 function CreateDetailProduct(props) {
-  const [review, setReview] = React.useState(rev)
-  const [edit, setEdit] = useState(props.edit)
-  const [product, setProduct] = useState({})
-  const [name, setName] = useState("")
-  const [category, setCategory] = useState("")
-  const [listCategory, setListCategory] = useState([])
-  const [price, setPrice] = useState("")
-  const [quantity, setQuantity] = useState("")
-  const [unit, setUnit] = useState("")
-  const [minPurchase, setMinPurchase] = useState("")
-  const [description, setDescription] = useState("")
-  const [status, setStatus] = useState("")
+  const [review, setReview] = React.useState();
+  const [img, setImg] = React.useState();
+  const [edit, setEdit] = useState(props.edit);
+  const [product, setProduct] = useState();
+  const [name, setName] = useState("");
+  const [category, setCategory] = useState();
+  const [listCategory, setListCategory] = useState([]);
+  const [price, setPrice] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [brand, setBrand] = useState("");
+  const [description, setDescription] = useState("");
+
   const navigate = useNavigate();
-  
-  const idBrand=useParams().id
-  
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     apiBrand.getAllBrand()
-  //       .then(res => {
-  //         setBrand(res.data.ListBrand);
-  //         console.log(res.data.ListBrand)
-  //       })
-  //   };
-  //   getData();
-  // }, []);
+
+  const idProduct = useParams().id;
+
+  const [loadingData, setLoadingData] = useState(false);
 
   useEffect(() => {
-    const getData = async () => {
-      const params = { id: props.district }
-      setListCategory([]);
-      apiCategory.getAll()
-        .then(res => {
-          setListCategory(res.data.categories);
-        })
+    const getData = () => {
+      apiCategory.showAllCategory().then((res) => {
+        setListCategory(res.data.category);
+      });
     };
     getData();
-  }, [listCategory])
+  }, []);
 
   // Change value of select box
 
   const onChangeImg = (e) => {
-    if (e.target.files.length > 0) {
-      setReview(URL.createObjectURL(e.target.files[0]))
+    setImg(e.target.files);
+    console.log("img", e.target.files);
+    for (let i = 0; i < img.length; i++) {
+      formData.append(`files`, img[i]);
     }
-  }
+    // if (e.target.files.length > 0) {
+    //   setReview(URL.createObjectURL(e.target.files[0]));
 
-  // handle Add product
+    // }
+  };
 
-  const handleInsert = () => {
-    const params = {
-      "Name": name,
-      "CategoryId": category,
-      "Quantity": quantity,
-      "Price": price,
-      "Unit": unit,
-      "MinPurchase": minPurchase,
-      "Description": description,
-      "Status": status,
-    }
-    if(!(name && category && quantity && price && unit && minPurchase && description && status)) {
-      toast.warning("Vui lòng nhập đầy đủ thông tin !!");
-      return
-    }
-    else{
-    apiProduct.insertProduct(params)
-      .then(res => {
-        toast.success("Thêm sản phẩm thành công")
-        setName("")
-        setCategory("")
-        setQuantity("")
-        setPrice("")
-        setUnit("")
-        setMinPurchase("")
-        setDescription("")
-        setStatus("")
-      })
-      .catch(error => {
-        toast.error("Thêm sản phẩm thất bại!")
-      })
-    }
-  }
+  const handleInsert = async () => {
+    setLoadingData(true);
+    try {
+      const params = {
+        name: name,
+        description: description,
+        price: price,
+        stock: quantity,
+        cate_id: category,
+        brand_id: brand.toString(),
+      };
 
-  // handle update product
+      console.log("pp", params);
 
-  const handleUpdate = () => {
-    const params = {
-      "Name": name,
-      "CategoryId": category,
-      "Quantity": quantity,
-      "Price": price,
-      "Unit": unit,
-      "MinPurchase": minPurchase,
-      "Description": description,
-      "Status": status,
+      if (!(name && category && quantity && price && brand && description)) {
+        toast.warning("Vui lòng nhập đầy đủ thông tin !!");
+        return;
+      } else {
+        const idProductInsert = await apiProduct
+          .insertProduct(params)
+          .then((res) => {
+            return res.data.product_id;
+          });
+
+        const formData = new FormData();
+        if (img) {
+          for (let i = 0; i < img.length; i++) {
+            formData.append(`files`, img[i]);
+          }
+          await apiProduct.uploadImg(formData, idProductInsert);
+        }
+        setName("");
+        setCategory("");
+        setQuantity("");
+        setPrice("");
+        setBrand("");
+        setDescription("");
+        setLoadingData(false);
+        toast.success("Thêm sản phẩm thành công");
+      }
+    } catch (error) {
+      toast.error("Thêm sản phẩm thất bại!");
     }
-    if(!(name && category && quantity && price && unit && minPurchase && description && status)) {
-      toast.warning("Vui lòng nhập đầy đủ thông tin !!");
-      return
+  };
+
+  const handleUpdate = async () => {
+    setLoadingData(true);
+    try {
+      const params = {
+        name: name,
+        description: description,
+        price: price,
+        stock: quantity,
+        cate_id: category?.id?category.id:category,
+        brand_id: brand.toString(),
+      };
+      if (!(name && category && quantity && price && brand && description)) {
+        toast.warning("Vui lòng nhập đầy đủ thông tin !!");
+        return;
+      } else {
+        await apiProduct.updateProduct(params, idProduct).then((res) => {
+          console.log("res", res);
+        });
+
+        const formData = new FormData();
+
+        if (img) {
+          for (let i = 0; i < img.length; i++) {
+            formData.append(`files`, img[i]);
+          }
+          await apiProduct.uploadImg(formData, idProduct);
+        }
+        setLoadingData(false);
+        toast.success("Sửa sản phẩm thành công");
+        navigate("/admin/product");
+      }
+    } catch (error) {
+      setLoadingData(false);
+      toast.error("Sửa sản phẩm thất bại!");
     }
-    else{
-    apiProduct.insertProduct(params,idProduct)
-      .then(res => {
-        toast.success("Sửa sản phẩm thành công")
-      })
-      .catch(error => {
-        toast.error("Sửa sản phẩm thất bại!")
-      })
-    }
-  }
+  };
 
   // get data for a particular product
 
-
   // Set thông tin cho product detail
-  // useEffect(() => {
-  //   const loaddata = () => {
-  //     if (edit === true) {
-  //       apiBrand.getBrandByID({id:idBrand})
-  //         .then(res => {
-  //           const brand = res.data.brand
-  //           console.log(brand)
-  //             if (brand) {
-  //               setName(brand.name)
-                
-  //               setPhone(brand.phone)
-  //               setAddressDetails(brand.addressDetails)
-  //               setDescription(brand.description)
-  //               setCommune(brand.brandCommune)
-  //               setDistrict(brand.brandDistrict.id)
-  //               setProvince(brand.brandProvince.id)
-  //               setCountry(brand.brandCountry.id)
-  //             }
-  //             else {
-  //               navigate("/admin/brand/create")
-  //               toast.error("Địa chỉ này không tồn tại!")
-  //             }
-  //         })
-  //     }
-  //   }
-  //   loaddata()
-  // }, [edit])
+  useEffect(() => {
+    const loaddata = () => {
+      if (edit === true) {
+        setLoadingData(true);
+        apiProduct.getProductsById(idProduct).then((res) => {
+          setLoadingData(false);
+          const product = res.data.product;
+          console.log("p", product);
+          if (product) {
+            setName(product.name);
+            setPrice(product.price);
+            setCategory(product.productCategory);
+            setQuantity(product.stock);
+            setDescription(product.description);
+            setBrand(product.brand.id);
+            setReview(product.imageList);
+          }
+        });
+      }
+    };
+    loaddata();
+  }, [edit]);
 
   return (
-    <Box width={'100%'} bgcolor='#fff'>
-      <Stack className="cruBrand" p={3} justifyContent="center" width="700px" spacing={2} bgcolor='#fff'>
-        <Stack direction="row">
-          <Typography className="cruBrand__label">Nhập tên sản phẩm</Typography>
-          <TextField value={name} onChange={(event) => { setName(event.target.value) }}
-              size="small" id="outlined-basic" variant="outlined" sx={{ flex: "1" }} />
-        </Stack>
-        <Stack direction="row">
-          <Typography className="cruBrand__label">Giá</Typography>
-          <TextField value={name} onChange={(event) => { setName(event.target.value) }}
-              size="small" id="outlined-basic" variant="outlined" sx={{ flex: "1" }} />
-        </Stack>
-        <Stack direction="row">
-          <Typography className="cruBrand__label">Loại sản phẩm</Typography>
-          <TextField value={name} onChange={(event) => { setName(event.target.value) }}
-              size="small" id="outlined-basic" variant="outlined" sx={{ flex: "1" }} />
-        </Stack>
-        <Stack direction="row">
-          <Typography className="cruBrand__label">Số lượng</Typography>
-          <TextField value={name} onChange={(event) => { setName(event.target.value) }}
-              size="small" id="outlined-basic" variant="outlined" sx={{ flex: "1" }} />
-        </Stack>
-
-        <Stack direction="row" >
-          <Typography className="cruBrand__label">Mô Tả</Typography>
-          <TextField value={description} onChange={(event) => { setDescription(event.target.value) }} size="small" id="outlined-basic" variant="outlined" sx={{ flex: "1" }} />
-        </Stack>
-
-        <Stack direction="row" >
-          <Typography className="cruBrand__label">Tình trạng</Typography>
-          <TextField value={description} onChange={(event) => { setDescription(event.target.value) }} size="small" id="outlined-basic" variant="outlined" sx={{ flex: "1" }} />
-        </Stack>
-
-        <Stack direction="row">
-          <Typography className="cruBrand__label">
-            Đơn vị:
-          </Typography>
-          <FormControl className="create-address__input" sx={{flex:"1"}}>
-            <Select
+    <Box width={"100%"} bgcolor="#fff">
+      {loadingData ? (
+        <LoadingPage />
+      ) : (
+        <Stack
+          className="cruBrand"
+          p={3}
+          justifyContent="center"
+          width="700px"
+          spacing={2}
+          bgcolor="#fff"
+        >
+          <Stack direction="row">
+            <Typography className="cruBrand__label">Tên sản phẩm</Typography>
+            <TextField
+              value={name}
+              onChange={(event) => {
+                setName(event.target.value);
+              }}
               size="small"
-              labelId="demo-simple-select-helper-label"
-              id="demo-simple-select-helper"
-              value={unit}
-              label="Age"
-              onChange={e=>setUnit(e.target.value)}
+              id="outlined-basic"
+              variant="outlined"
+              sx={{ flex: "1" }}
+            />
+          </Stack>
+          <Stack direction="row">
+            <Typography className="cruBrand__label">Giá</Typography>
+            <TextField
+              value={price}
+              onChange={(event) => {
+                setPrice(Number(event.target.value));
+              }}
+              size="small"
+              id="outlined-basic"
+              variant="outlined"
+              sx={{ flex: "1" }}
+            />
+          </Stack>
+          <Stack direction="row">
+            <Typography className="cruBrand__label">Danh mục</Typography>
+            <FormControl className="create-address__input" sx={{ flex: "1" }}>
+              {/* <Select
+                size="small"
+                labelId="demo-simple-select-helper-label"
+                id="demo-simple-select-helper"
+                value={category}
+                label="Age"
+                onChange={(e) => setCategory(e.target.value)}
+                input={<InputCustom placeholder="Chọn đơn vị" />}
+              >
+                {listCategory?.map((item) =>
+                  item.subCategories.map((itemSub) => (
+                    <MenuItem value={itemSub.id}>{itemSub.name}</MenuItem>
+                  ))
+                )}
+              </Select> */}
+              <Autocomplete
+                // value={category||null}
+                defaultValue={category||null}
+                size="small"
+                id="combo-box"
+                disablePortal
+                options={listCategory?.map((item) => item.subCategories.sort((itemSub) => itemSub)).flat()}
+                
+                getOptionLabel={(option) => `${option.name}`}
+                onChange={(event, newValue) => {
+                  setCategory(newValue.id);
+                }}
               
-              input={<InputCustom placeholder="Chọn đơn vị" />}
-            >
-              {
-                productUnit.map(item => <MenuItem value={item.id}>{item.text}</MenuItem>)
-              }
-            </Select>
-          </FormControl>
-        </Stack>
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                  />
+                )}
+              />
+            </FormControl>
+          </Stack>
+          <Stack direction="row">
+            <Typography className="cruBrand__label">Số lượng</Typography>
+            <TextField
+              value={quantity}
+              onChange={(event) => {
+                setQuantity(Number(event.target.value));
+              }}
+              size="small"
+              id="outlined-basic"
+              variant="outlined"
+              sx={{ flex: "1" }}
+            />
+          </Stack>
 
-        {/* <Stack direction="row">
-          <Typography className="cruBrand__label">Liên hệ</Typography>
-          <TextField value={phone} onChange={(event) => { setPhone(event.target.value) }} size="small" id="outlined-multiline-flexible"
-            multiline
-            maxRows={4} variant="outlined" sx={{ flex: "1" }} />
-        </Stack>
-        <SelectBoxAddress province={province} district={district} commune={commune}
-          onChangeProvince={handleChangeProvince}
-          onChangeDistrict={handleChangeDistrict}
-          onChangeCommune={handleChangeCommune}
-          classLabel="cruBrand__label"
-        /> */}
-        <Stack direction="row" p={2}>
-          <Typography className="cruBrand__label">Thêm ảnh</Typography>
-          <Stack>
-            <img src={review} width="210px" height="210px" alt="" />
-            <input type="file" id="myfile" name="myfile" onChange={onChangeImg}></input>
+          <Stack direction="row">
+            <Typography className="cruBrand__label">Mô Tả</Typography>
+            <TextField
+              value={description}
+              onChange={(event) => {
+                setDescription(event.target.value);
+              }}
+              size="small"
+              id="outlined-basic"
+              variant="outlined"
+              sx={{ flex: "1" }}
+            />
+          </Stack>
+
+          <Stack direction="row">
+            <Typography className="cruBrand__label">Thương hiệu:</Typography>
+            <FormControl className="create-address__input" sx={{ flex: "1" }}>
+              <Select
+                size="small"
+                labelId="demo-simple-select-helper-label"
+                id="demo-simple-select-helper"
+                value={brand}
+                label="Age"
+                onChange={(e) => setBrand(e.target.value)}
+                input={<InputCustom placeholder="Chọn đơn vị" />}
+              >
+                {productBrand?.map((item) => (
+                  <MenuItem value={item.id}>{item.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Stack>
+
+          <Stack direction="row" p={2}>
+            <Typography className="cruBrand__label">Thêm ảnh</Typography>
+            <Stack>
+              {/* {review?.map((item) => {
+                <img src={item.url} width="210px" height="210px" alt="" />;
+              })} */}
+              <ImageList
+                sx={{ width: 500, height: 200 }}
+                cols={3}
+                rowHeight={164}
+              >
+                {review?.map((item) => (
+                  <ImageListItem key={item.id}>
+                    <img
+                      src={`${item.url}?w=164&h=164&fit=crop&auto=format`}
+                      loading="lazy"
+                    />
+                  </ImageListItem>
+                ))}
+              </ImageList>
+              <input
+                multiple
+                type="file"
+                id="myfile"
+                name="myfile"
+                onChange={onChangeImg}
+              ></input>
+            </Stack>
+          </Stack>
+
+          <Stack justifyContent="center">
+            <Button
+              width="450px"
+              variant="contained"
+              onClick={edit ? handleUpdate : handleInsert}
+            >
+              {edit ? "Cập nhật" : "Thêm"}
+            </Button>
           </Stack>
         </Stack>
-
-        <Stack justifyContent="center">
-          <Button width="450px" variant="contained" onClick={edit ? handleUpdate
-                : handleInsert} >{edit? "Cập nhật":"Thêm"}</Button>
-        </Stack>
-      </Stack>
+      )}
     </Box>
-  )
+  );
 }
 
-
-
 const InputCustom = styled(InputBase)(({ theme }) => ({
-  '& .MuiInputBase-input': {
+  "& .MuiInputBase-input": {
     boxSizing: "border-box",
     borderRadius: 4,
-    position: 'relative',
+    position: "relative",
     backgroundColor: theme.palette.background.paper,
-    border: '1px solid #ced4da',
+    border: "1px solid #ced4da",
     fontSize: 16,
     display: "flex",
     height: "40px !important",
-    padding: '0px 26px 0px 12px',
+    padding: "0px 26px 0px 12px",
     alignItems: "center",
-    transition: theme.transitions.create(['border-color', 'box-shadow']),
-    '&:focus': {
+    transition: theme.transitions.create(["border-color", "box-shadow"]),
+    "&:focus": {
       borderRadius: 4,
-      borderColor: '#1890ff',
-      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
+      borderColor: "#1890ff",
+      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
     },
   },
 }));

@@ -1,8 +1,8 @@
+import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import React from "react";
-import "./CardProduct.scss";
-import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
 import { Link } from "react-router-dom";
-import { numWithCommas, roundPrice } from "../../constraints/Util";
+import { numWithCommas } from "../../constraints/Util";
+import "./CardProduct.scss";
 
 
 function CardProduct({ data }) {
@@ -40,9 +40,11 @@ function CardProduct({ data }) {
           </div>):(<></>)} */}
           <CardMedia
             component="img"
-            width="270px"
-            height="270px"
+            width="100px"
+            height="100px"
+            className="max-w-[240px] max-h-[240px]"
             image={data?.imageList[0]?.url}
+            loading="lazy"
             //   sx={{ position: "absolute" }}
           />
           <CardContent className="card__content">

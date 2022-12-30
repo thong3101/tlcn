@@ -1,29 +1,27 @@
-import {React,memo } from "react";
-import "./DetailProduct.scss";
-import { Link } from "react-router-dom";
-import { Box, Typography, Button, ButtonGroup } from "@mui/material";
-import StarIcon from "@mui/icons-material/Star";
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import QuantityButtons from "../../components/QuantityButtons";
-import InfoIcon from "@mui/icons-material/Info";
 import BookIcon from "@mui/icons-material/Book";
 import FacebookIcon from "@mui/icons-material/Facebook";
+import InfoIcon from "@mui/icons-material/Info";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import StarIcon from "@mui/icons-material/Star";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
+import { Box, Button, ButtonGroup, Typography, Rating } from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import { memo, React, useEffect } from "react";
+import "./DetailProduct.scss";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 //import store additem
 import { addItem } from "../../slices/cartSlice";
 
 //import img
-import imgDefault from "../../assets/img/img_default.jpg";
-import { toast } from "react-toastify";
 import { useState } from "react";
+import { toast } from "react-toastify";
+import imgDefault from "../../assets/img/img_default.jpg";
 import { numWithCommas } from "../../constraints/Util";
 
-function DetailProduct({ data }) {
+function DetailProduct({ data, rating }) {
   const list_cities = () => [
     { label: "Ho Chi Minh", year: 1994 },
     { label: "Ha Noi", year: 1972 },
@@ -34,6 +32,22 @@ function DetailProduct({ data }) {
 
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
+
+  const [ratingProduct, setRatingProduct] = useState(0);
+
+  console.log("r", rating);
+
+  const handleRating = (rating) => {
+    if (rating) {
+      let sum = 0;
+      for (const a of rating) {
+        sum += a.rating;
+      }
+      return Math.round(sum / rating.length);
+    }
+  };
+
+  console.log("rr", ratingProduct);
 
   const handleLoadImage = (img) => {
     if (img?.imageList) {
@@ -69,7 +83,7 @@ function DetailProduct({ data }) {
             onError={(err) => (err.target.src = imgDefault)}
           ></img>
         </div>
-        <div className="detailProduct__list-img">
+        <div className="detailProduct__list-img !flex !justify-around">
           {data?.imageList?.slice(0, 6).map((item) => (
             <img
               className="detailProduct__item-img"
@@ -90,17 +104,11 @@ function DetailProduct({ data }) {
             <h4 className="detailProduct__info-price-sale">{data?.discount}</h4>
           </div>
           <div className="detailProduct__info-rate">
+            <p> Đánh giá:</p>
             <div className="detailProduct__info-rate-star">
-              <StarIcon sx={{ fontSize: 18 }} />
-              <StarIcon sx={{ fontSize: 18 }} />
-              <StarIcon sx={{ fontSize: 18 }} />
-              <StarIcon sx={{ fontSize: 18 }} />
-              <StarIcon sx={{ fontSize: 18 }} />
+              <Rating readOnly value={handleRating(rating)} />
             </div>
-            <p>
-              {" "}
-              ({data?.rate} đánh giá) | Đã bán {data?.sellAmount}
-            </p>
+            <p> | Đã bán {data?.sellAmount}</p>
           </div>
           <Typography sx={{ padding: "20px" }}>Mô tả</Typography>
           <Typography>{data?.description}</Typography>
@@ -127,7 +135,7 @@ function DetailProduct({ data }) {
             {/* <QuantityButtons /> */}
             <ButtonGroup
               size="small"
-              aria-label="small outlined button group"
+              aria-label="small outline button group"
               className="quantity-buttons"
             >
               <Button

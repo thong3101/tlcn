@@ -1,26 +1,17 @@
-import { useCallback, useEffect, useState } from "react";
-import "./ShoppingCart.scss";
-import {
-  Grid,
-  Typography,
-  Checkbox,
-  Button,
-  Stack,
-  Box,
-  Dialog,
-} from "@mui/material";
-import CartItem from "../../components/CartItem";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import {
+  Box, Button, Dialog, Grid, Stack, Typography
+} from "@mui/material";
+import { useCallback, useEffect, useState } from "react";
+import CartItem from "../../components/CartItem";
+import "./ShoppingCart.scss";
 // import { CartItems } from "../../constraints/Cart"
-import InfoIcon from "@mui/icons-material/Info";
-import DiscountIcon from "@mui/icons-material/Discount";
+import { useDispatch, useSelector } from "react-redux";
 import { numWithCommas } from "../../constraints/Util";
-import { useSelector, useDispatch } from "react-redux";
 
-import { deleteAll } from "../../slices/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { clearCoupon } from "../../slices/paymentSlice";
+import { deleteAll } from "../../slices/cartSlice";
 
 function ShoppingCart() {
   const [open, setOpen] = useState(false);
@@ -103,8 +94,7 @@ function ShoppingCart() {
   //     : 0;
   // };
 
-
-  console.log("ci",CartItems)
+  console.log("ci", CartItems);
   return (
     <>
       <Box className="container">
@@ -119,7 +109,7 @@ function ShoppingCart() {
         <Grid container spacing={2} style={{ marginTop: "24px" }}>
           <Grid item lg={9} md={12} sm={12} xs={12}>
             <Box>
-              <Box className="cart__heading cart">
+              <Box className="cart__heading cart ">
                 <Stack direction="row">
                   {`Sản phẩm (${CartItems.length} sản phẩm)`}
                 </Stack>
@@ -132,9 +122,9 @@ function ShoppingCart() {
                   </span>
                 </Stack>
               </Box>
-              <Stack className="cart__list">
+              <Stack className="cart__list ">
                 {CartItems.map((item) => (
-                  <CartItem key={item.id} data={item} />
+                  <CartItem key={item.id} data={item} className="" />
                 ))}
               </Stack>
             </Box>

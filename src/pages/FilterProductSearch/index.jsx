@@ -1,39 +1,23 @@
-import { useState, useEffect, useCallback } from "react";
-import React, { useRef } from "react";
-import { Link } from "react-router-dom";
 import {
-  Stack,
   Box,
-  Button,
-  Typography,
-  Checkbox,
-  FormGroup,
-  Grid,
-  Rating,
-  Tab,
-  RadioGroup,
-  Tabs,
-  Radio,
-  Slider,
-  FormControl,
-  NativeSelect,
-  Input,
-  IconButton,
+  Button, Collapse, FormControl, FormGroup,
+  Grid, IconButton, Input, List, ListItemButton,
+  ListItemText, NativeSelect, Slider, Stack, Typography
 } from "@mui/material";
-import "./FilterProductSearch.scss";
-import StarIcon from "@mui/icons-material/Star";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { numWithCommas } from "../../constraints/Util";
-import CardProduct from "../../components/CardProduct";
-import apiProduct from "../../apis/apiProduct";
-import apiCategory from "../../apis/apiCategory";
-import { toast } from "react-toastify";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import apiCategory from "../../apis/apiCategory";
+import apiProduct from "../../apis/apiProduct";
+import CardProduct from "../../components/CardProduct";
+import { numWithCommas } from "../../constraints/Util";
+import "./FilterProductSearch.scss";
+
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
+
+import LoadingPage from "../../components/LoadingPage";
 
 import SearchIcon from "@mui/icons-material/Search";
 
-import { fontSize } from "@mui/system";
 
 function FilterProduct(props) {
   const search = useParams().key;
@@ -41,10 +25,12 @@ function FilterProduct(props) {
   const navigate = useNavigate();
 
   const [searchText, setSearchText] = useState("");
-  
 
   const [products, setProducts] = useState();
   const [categories, setCategories] = useState([]);
+
+  const [open, setOpen] = useState(false);
+  const [openId, setOpenId] = useState();
 
   const [value, setValue] = useState(1);
   const [filter, setFilter] = useState({});
@@ -60,10 +46,11 @@ function FilterProduct(props) {
     295000, 7500000,
   ]);
 
+  const [loadingData, setLoadingData] = useState(false);
+
   const onChangeSearch = (event) => {
     setSearchText(event.target.value);
   };
-
 
   const handleSubmitSearch = () => {
     // let obj = {
@@ -76,6 +63,7 @@ function FilterProduct(props) {
 
   useEffect(() => {
     const getData = async () => {
+      setLoadingData(true);
       let param = {
         page: 0,
         size: 6,
@@ -118,6 +106,9 @@ function FilterProduct(props) {
         })
         .catch((error) => {
           setProducts(null);
+        })
+        .finally(() => {
+          setLoadingData(false);
         });
 
       console.log("111", param);
@@ -148,20 +139,20 @@ function FilterProduct(props) {
     });
   };
 
-  // const onSetFilterPrice = (value, index) => {
-  //   setFilterPrice((pre) => {
-  //     return {
-  //       ...pre,
-  //       option: index,
-  //       value: value,
-  //     };
-  //   });
-  // };
+  const handleOpen = (id) => {
+    if(openId!==id){
+      setOpenId(id);
+      setOpen(true);
+    }else{
+      setOpen(!open);
+    }
+   
+  };
 
-  // const handleChange = (event, newValue) => {
-  //   setValue(newValue);
-  //   console.log(newValue)
-  // };
+  const handleClickCategory = (id) => {
+    navigate(`/product-category/${id}`);
+  };
+
   const handleChange = (event) => {
     setValue(Number(event.target.value));
   };
@@ -213,7 +204,7 @@ function FilterProduct(props) {
                   height: "100%",
                   width: "2rem",
                   backgroundColor: "#f4ba36",
-                  borderRadius:"0",
+                  borderRadius: "0",
                 }}
                 variant="contained"
                 onClick={() => handleSubmitSearch(searchText)}
@@ -237,19 +228,44 @@ function FilterProduct(props) {
               width: "100%",
             }}
           />
-          <FormGroup>
+          <List
+            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+            component="nav"
+          >
             {categories.map((item) => (
-              <Box
-                key={item.id}
-                onClick={() => refreshPage()}
-                sx={{ padding: "6px" }}
-              >
-                <Link to={`/product-category/${item.id}`}>
-                  <Box fontSize="14px">{item.name}</Box>
-                </Link>
-              </Box>
+              <React.Fragment>
+                <ListItemButton
+                  onClick={()=>{
+                    handleOpen(item?.id)
+                  }}
+                  key={item.id}
+                  // onClick={()=>{handleClickCategory(item?.id)}}
+                  // onClick={() => refreshPage()}
+                  sx={{ padding: "6px" }} 
+                >
+                  <ListItemText primary={item?.name} onClick={()=>{
+                    handleClickCategory(item?.id)
+                  }} />
+                  {openId===item?.id&&open ? <ExpandLess /> : <ExpandMore />}
+                </ListItemButton>
+                <Collapse in={openId===item?.id&&open} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    {item?.subCategories.map((item) => (
+                      <ListItemButton sx={{ pl: 4 }} key={item?.id} 
+                      onClick={()=>{
+                        handleClickCategory(item?.id)
+                      }}>
+                        <ListItemText primary={item?.name} 
+                        
+                        />
+                      </ListItemButton>
+                    ))}
+                  </List>
+                </Collapse>
+              </React.Fragment>
             ))}
-          </FormGroup>
+            
+          </List>
         </Box>
         <Box className="filterProduct__form">
           <Box sx={{ width: "100%" }}>
@@ -348,7 +364,7 @@ function FilterProduct(props) {
                 textTransform: "uppercase",
               }}
             >
-              Category
+              Tìm kiếm với từ khóa : {search}
             </Typography>
           </Box>
           <Box sx={{ minWidth: 120 }}>
@@ -370,23 +386,20 @@ function FilterProduct(props) {
           </Box>
         </Stack>
         <Box>
-          {/* <Grid container spacing={2}>
-            {productFilter.map((item) => (
-              <Grid key={item.id} item xs={3}>
-                <CardProduct data={item} />
-              </Grid>
-            ))}
-          </Grid> */}
-          <Grid container spacing={2}>
-            {(value === 2
-              ? products?.sort((a, b) => b.sellAmount - a.sellAmount)
-              : products
-            )?.map((item) => (
-              <Grid key={item.id} item xs={3}>
-                <CardProduct data={item} />
-              </Grid>
-            ))}
-          </Grid>
+          {loadingData ? (
+            <LoadingPage />
+          ) : (
+            <Grid container spacing={2}>
+              {(value === 2
+                ? products?.sort((a, b) => b.sellAmount - a.sellAmount)
+                : products
+              )?.map((item) => (
+                <Grid key={item.id} item xs={3}>
+                  <CardProduct data={item} />
+                </Grid>
+              ))}
+            </Grid>
+          )}
         </Box>
       </Box>
     </Stack>

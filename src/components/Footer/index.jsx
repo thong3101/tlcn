@@ -8,7 +8,7 @@ const { Stack } = require("@mui/system");
 function Header() {
   return (
     <header id="footer" className="footer">
-      <Stack
+      <Stack className="footer__container"
         justifyContent="space-between"
         direction="row"
         alignItems="flex-start"
@@ -20,7 +20,7 @@ function Header() {
           paddingTop: "30px",
         }}
       >
-        <div style={{ padding: "0px 15px" }}>
+        <div style={{ padding: "0px 15px" }} className="footer__item">
           <span className="footer_title">Hỗ trợ khách hàng</span>
           <div className="footer_divier"></div>
           <div>
@@ -44,7 +44,7 @@ function Header() {
           </div>
         </div>
 
-        <div style={{ padding: "0px 15px" }}>
+        <div style={{ padding: "0px 15px" }} className="footer__item">
           <span className="footer_title">Danh mục sản phẩm</span>
           <div className="footer_divier"></div>
           <div>
@@ -73,13 +73,13 @@ function Header() {
           </div>
         </div>
 
-        <div style={{ padding: "0px 15px" }}>
-          <span className="footer_title">Kết Nối Với Guitar Station</span>
+        <div style={{ padding: "0px 15px" }}  className="footer__item">
+          <span className="footer_title">Kết Nối Với Senki</span>
           <div className="footer_divier"></div>
           <div>
             <ul style={{ listStyle: "none" }}>
               <li>
-              <a href="https://www.facebook.com/guitarstation.vn/">
+              <a href="">
                 <FacebookOutlinedIcon sx={{color:"#fff"}}></FacebookOutlinedIcon>
               </a>
               </li>
@@ -87,19 +87,19 @@ function Header() {
           </div>
         </div>
 
-        <div style={{ padding: "0px 15px" }}>
+        <div style={{ padding: "0px 15px" }}  className="footer__item">
           <span className="footer_title">Địa Chỉ Liên Hệ</span>
           <div className="footer_divier"></div>
           <div>
             <ul style={{ listStyle: "none" }}>
               <li>
-              D35 KQH Ngô Quyền, phường 7 Tp Đà Lạt, Lâm Đồng
+              64/2C, Đường số 11, Tăng Nhơn Phú B, Thành Phố Thủ Đức
               </li>
               <li>
               Làm việc kể cả Thứ 7 - Chủ Nhật
               </li>
               <li>
-                Hotline: 093 471 0592
+                Hotline: 094 548 4310
               </li>
             </ul>
           </div>

@@ -1,47 +1,66 @@
-import { useState,memo } from "react";
+import { Box, Pagination, Stack, Tab, Tabs, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { Box, Tabs, Tab, Typography, Pagination, Stack } from "@mui/material";
-import "./Orders.scss";
-import SearchIcon from "@mui/icons-material/Search";
-import OrderItem from "../../../components/OrderItem/index.jsx";
-import { orderTabs} from "../../../constraints/OrderItem";
-import { useEffect } from "react";
-import apiCart from "../../../apis/apiCart";
+import { memo, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import apiCart from "../../../apis/apiCart";
+import LoadingPage from "../../../components/LoadingPage";
+import OrderItem from "../../../components/OrderItem/index.jsx";
+import { orderTabs } from "../../../constraints/OrderItem";
+import "./Orders.scss";
+
+import {
+  convertDate
+} from "../../../constraints/Util";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
   const theme = useTheme();
   const [value, setValue] = useState(0);
-  // const [page, setPage] = useState(1);
-  // const [totalPage, setTotalPage] = useState(1);
-  const user = useSelector(state => state.auth.user)
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(5);
+  const user = useSelector((state) => state.auth.user);
 
+  const [loadingData, setLoadingData] = useState(false);
 
+  const size = 6;
   useEffect(() => {
-
     // let params = {
-    //   _sort:'createAt',
-    // }
+    //   page: page,
+    //   size: size,
+    // };
+    setLoadingData(true);
     const getData = async () => {
-      apiCart.getOrders()
-        .then(response=>{
-           setOrders(response.data.orders.sort((a,b)=>b.createAt - a.createAt));
+      apiCart
+        .getOrders()
+        .then((response) => {
+          setOrders(
+            response.data.orders.sort((a, b) => {
+              return convertDate(b?.createdAt) - convertDate(a?.createdAt);
+            })
+          );
+          setTotalPage(Math.round(response.data.orders.length / size));
         })
         .catch(setOrders([]))
+        .finally(() => {
+          setLoadingData(false);
+        });
     };
     getData();
-  }, [user]);
+  }, [page, user]);
 
-  console.log("222",orders)
+  console.log("222", totalPage);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  // const handleChangePage = (event, newValue) => {
-  //   setPage(newValue);
-  // };
+  const handleChangePage = (event, newValue) => {
+    console.log(newValue);
+    setPage(newValue);
+  };
+
+  const lastPostIndex = page * size;
+  const firstPostIndex = lastPostIndex - size;
 
   return (
     <>
@@ -71,54 +90,60 @@ function Orders() {
           </Tabs>
         </Box>
 
+        {loadingData ? (
+          <LoadingPage />
+        ) : (
+          <Box>
+            {orderTabs.map((item) => {
+              const tmp = getOrderByType(orders, item.slug);
+              if (tmp.length === 0)
+                return (
+                  <TabPanel
+                    key={item.id}
+                    value={value}
+                    index={item.id}
+                    dir={theme.direction}
+                  >
+                    <Box className="myorder__none">
+                      <img
+                        height="200px"
+                        width="200px"
+                        src="https://frontend.tikicdn.com/_desktop-next/static/img/account/empty-order.png"
+                        alt=""
+                      />
+                      <Typography>Chưa có đơn hàng</Typography>
+                    </Box>
+                  </TabPanel>
+                );
+              else
+                return (
+                  <TabPanel
+                    key={item.id}
+                    value={value}
+                    index={item.id}
+                    dir={theme.direction}
+                  >
+                    {tmp.slice(firstPostIndex, lastPostIndex).map((item) => (
+                      <OrderItem key={item.id} order={item} />
+                    ))}
 
-        <Box>
-          {/* <TabPanel value={value} index={0} dir={theme.direction}>
-            {orders.length!==0 ? (
-              orders.map((item) => <OrderItem key={item.id} order={item} />)
-            ) : (
-              <Box  className="myorder__none">
-                <img
-                 height="200px"
-                 width="200px"
-                  src="https://frontend.tikicdn.com/_desktop-next/static/img/account/empty-order.png"
-                  alt=""
-                />
-                <Typography>Chưa có đơn hàng</Typography>
-              </Box>
-            )}
-          </TabPanel> */}
-          {orderTabs.map((item) => {
-            const tmp = getOrderByType(orders, item.slug);
-            if (tmp.length === 0)
-              return (
-                <TabPanel key={item.id} value={value} index={item.id} dir={theme.direction}>
-                  <Box className="myorder__none">
-                    <img
-                      height="200px"
-                      width="200px"
-                      src="https://frontend.tikicdn.com/_desktop-next/static/img/account/empty-order.png"
-                      alt=""
-                    />
-                    <Typography>Chưa có đơn hàng</Typography>
-                  </Box>
-                </TabPanel>
-              );
-            else
-              return (
-                <TabPanel key={item.id} value={value} index={item.id} dir={theme.direction}>
-                  {tmp.map((item) => (
-                    <OrderItem key={item.id} order={item} />
-                  ))}
-                </TabPanel>
-              );
-          })}
-
-          {/* {totalPage > 1 ? <Stack spacing={2}>
-            <Typography>Page: {page}</Typography>
-            <Pagination count={totalPage} page={page} onChange={handleChangePage} />
-          </Stack> : <></>} */}
-        </Box>
+                    {totalPage > 1 ? (
+                      <Stack spacing={2}>
+                        <Pagination
+                          sx={{ justifyContent: "center" }}
+                          count={totalPage}
+                          page={page}
+                          onChange={handleChangePage}
+                        />
+                      </Stack>
+                    ) : (
+                      <></>
+                    )}
+                  </TabPanel>
+                );
+            })}
+          </Box>
+        )}
       </Box>
     </>
   );

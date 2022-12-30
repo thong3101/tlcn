@@ -1,34 +1,35 @@
-import "./Home.scss";
-import { Stack, Button, Box } from "@mui/material";
-import React, { useState, useRef, useEffect } from "react";
+import { Box, Button, Card, CardMedia, Stack } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Link, useNavigate } from "react-router-dom";
-import { Card, CardMedia } from "@mui/material";
+import "./Home.scss";
 
 // import required modules
-import { Pagination, Navigation, Autoplay } from "swiper";
+import { Autoplay, Navigation, Pagination } from "swiper";
 
 //import icons
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
+import DoneIcon from "@mui/icons-material/Done";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import PriceCheckIcon from "@mui/icons-material/PriceCheck";
 import StarIcon from "@mui/icons-material/Star";
-import DoneIcon from "@mui/icons-material/Done";
 
 //import component
-import CardProduct from "../../components/CardProduct";
 import CardCategory from "../../components/CardCategory";
+import CardProduct from "../../components/CardProduct";
+
+import apiCategory from "../../apis/apiCategory";
 
 //import img
-import img from "../../assets/img/HD-119-TOP-Copy-2-360x360.jpg";
 
 // styles swiper
 import "swiper/css";
-import "swiper/css/pagination";
 import "swiper/css/navigation";
+import "swiper/css/pagination";
 import apiMain from "../../apis/apiMain";
 
 function Home() {
+
   return (
     <Stack spacing={2} className="home">
       <Box id="section1">
@@ -155,6 +156,22 @@ function SlideBackGround() {
 function SlideHome() {
   const [products, setProducts] = useState([]);
 
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    console.log(categories);
+    const getData = async () => {
+      apiCategory
+        .showAllCategoryHeader()
+        .then((res) => {
+          setCategories(res.data.category);
+        })
+        .catch((error) => {
+          setCategories([]);
+        });
+    };
+    getData();
+  }, []);
+
   useEffect(() => {
     let params = {
       page: 0,
@@ -168,8 +185,6 @@ function SlideHome() {
     };
     getData();
   }, []);
-
-  console.log("p", products);
 
   return (
     <>
@@ -473,9 +488,9 @@ function SlideHome() {
             </Stack>
 
             <Swiper
-              slidesPerView={5}
+              slidesPerView={4}
               spaceBetween={20}
-              slidesPerGroup={5}
+              slidesPerGroup={4}
               loop={true}
               loopFillGroupWithBlank={true}
               pagination={{
@@ -485,8 +500,12 @@ function SlideHome() {
               modules={[Pagination, Navigation]}
               className="mySwiper"
             >
-              <SwiperSlide>
-                {/* <CardProduct data={item} /> */}
+              {categories?.map((item) => (
+                <SwiperSlide key={`${item.id}`}>
+                  <CardCategory key={item.id} data={item} />
+                </SwiperSlide>
+              ))}
+              {/* <SwiperSlide>
                 <CardCategory />
               </SwiperSlide>
               <SwiperSlide>
@@ -509,10 +528,7 @@ function SlideHome() {
               </SwiperSlide>
               <SwiperSlide>
                 <CardCategory />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardCategory />
-              </SwiperSlide>
+              </SwiperSlide> */}
             </Swiper>
           </Box>
 

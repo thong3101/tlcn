@@ -17,7 +17,7 @@ export function ErrorAfterSubmit(props) {
 export function ErrorInput(props) {
   return (
     <Stack direction="row" alignItems="center" spacing={1}>
-      <Typography variant="caption" color="gray">
+      <Typography variant="caption" className="!text-rose-400 !translate-x-2 !mt-1">
         {props.message}
       </Typography>
     </Stack>

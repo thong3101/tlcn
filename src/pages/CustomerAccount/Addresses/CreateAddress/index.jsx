@@ -1,27 +1,24 @@
 /* eslint-disable */
-import React from "react";
 import {
   Box,
-  Typography,
-  Stack,
-  Checkbox,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
   Button,
   InputBase,
+  Stack,
+  TextField,
+  Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import React, { useEffect, useState } from "react";
+import apiAddress from "../../../../apis/apiAddress";
+import apiProfile from "../../../../apis/apiProfile";
 import SelectBoxAddress from "../../../../components/SelectBoxAddress";
 import "./CreateAddress.scss";
-import { styled } from "@mui/material/styles";
-import { useState } from "react";
-import apiAddress from "../../../../apis/apiAddress";
-import apiProfile from "../../../../apis/apiProfile"
-import { useEffect } from "react";
 
-import { useParams, useNavigate } from "react-router-dom";
-import { useSelector,useDispatch } from "react-redux";
-import { loginSuccess } from '../../../../slices/authSlice';
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { loginSuccess } from "../../../../slices/authSlice";
+
+import { useForm } from "react-hook-form";
 
 import { toast } from "react-toastify";
 
@@ -30,7 +27,6 @@ function CreateAddress(props) {
   const [companyName, setCompanyName] = useState("");
   const [phone, setPhone] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
-
 
   const [edit, setEdit] = useState(props.edit);
   const [province, setProvince] = React.useState("");
@@ -41,7 +37,15 @@ function CreateAddress(props) {
 
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
-  const [address,setAddress] = useState(user.address)
+  const [address, setAddress] = useState(user.address);
+
+  const [message, setMessage] = React.useState("");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   useEffect(() => {
     const loaddata = () => {
@@ -115,8 +119,6 @@ function CreateAddress(props) {
           setCommune("");
           setDistrict("");
           setProvince("");
-
-          
         })
         .catch((error) => {
           toast.error("Thêm địa chỉ thất bại!");
@@ -136,7 +138,7 @@ function CreateAddress(props) {
       province: province,
     };
 
-    console.log(params)
+    console.log(params);
     if (
       !(
         addressDetail &&
@@ -159,17 +161,26 @@ function CreateAddress(props) {
         getUserProfile();
       })
       .catch((error) => {
+        console.log(error);
         toast.error("Cập nhật thất bại!");
       });
   };
   const getUserProfile = () => {
-    apiProfile.getUserProfile()
-      .then((res) => {
-        let newUser = res.data.user
-        dispatch(loginSuccess({ ...user, ...newUser }))
-      })
-      console.log("1",newUser)
-  }
+    apiProfile.getUserProfile().then((res) => {
+      let newUser = res.data.user;
+      dispatch(loginSuccess({ ...user, ...newUser }));
+    });
+  };
+
+  const onChangePhone = (event) => {
+    setPhone(event.target.value);
+    const regex = /(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/;
+    if (regex.test(event.target.value)) {
+      setMessage("");
+    } else {
+      setMessage("*Số điện thoại không hợp lệ");
+    }
+  };
 
   return (
     <Box className="create-address" p={2} m={2}>
@@ -202,11 +213,11 @@ function CreateAddress(props) {
         </Stack>
 
         <Stack direction="row">
-          <Typography className="create-address__label">
+          <Typography className="create-address__label ">
             Số nhà, tên đường
           </Typography>
           <Stack className="create-address__input">
-            <InputCustom
+            <TextField
               value={addressDetail}
               onChange={(event) => {
                 setAddressDetail(event.target.value);
@@ -214,9 +225,29 @@ function CreateAddress(props) {
               multiline
               rows={4}
               placeholder="Nhập địa chỉ"
-            ></InputCustom>
+            ></TextField>
           </Stack>
         </Stack>
+
+        {/* <Stack direction="row">
+          <Typography className="create-address__label">
+            Số điện thoại nhận hàng:
+          </Typography>
+          <Stack className="create-address__input">
+            <InputCustom
+              value={phone}
+              onChange={onChangePhone}
+              size="small"
+              placeholder="Nhập số điện thoại"
+            >
+              <Box height="25px">
+                <Typography color={"#ee0033"} fontSize="14px">
+                  {message}
+                </Typography>
+              </Box>
+            </InputCustom>
+          </Stack>
+        </Stack> */}
 
         <Stack direction="row">
           <Typography className="create-address__label">
@@ -224,17 +255,23 @@ function CreateAddress(props) {
           </Typography>
           <Stack className="create-address__input">
             <InputCustom
-              value={phone}
-              onChange={(event) => {
-                setPhone(event.target.value);
-              }}
-              size="small"
               placeholder="Nhập số điện thoại"
-            ></InputCustom>
+              value={phone}
+              onChange={onChangePhone}
+            />
           </Stack>
         </Stack>
+        <Box height="25px">
+          <Typography color={"#ee0033"} fontSize="14px">
+            {message}
+          </Typography>
+        </Box>
 
-        <Stack direction="row" justifyContent="flex-start">
+        <Stack
+          direction="row"
+          justifyContent="flex-start"
+          className="!flex !justify-center"
+        >
           {/* <Typography className="create-address__label"></Typography> */}
           <Button
             onClick={edit ? handleUpdate : handleSave}

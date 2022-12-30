@@ -1,45 +1,51 @@
-import { useState, useEffect, useCallback } from "react";
-import React, { useRef } from "react";
-import { Link } from "react-router-dom";
 import {
-  Stack,
   Box,
   Button,
-  Typography,
-  Checkbox,
+  Collapse,
+  FormControl,
   FormGroup,
   Grid,
-  Rating,
-  Tab,
-  RadioGroup,
-  Tabs,
-  Radio,
-  Slider,
-  FormControl,
-  NativeSelect,
-  Input,
   IconButton,
+  InputBase,
+  List,
+  ListItemButton,
+  ListItemText,
+  NativeSelect,
+  Slider,
+  Stack,
+  Typography,
+  Pagination,
 } from "@mui/material";
-import "./FilterProduct.scss";
-import StarIcon from "@mui/icons-material/Star";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { numWithCommas } from "../../constraints/Util";
+import React, { useEffect, useState } from "react";
 import CardProduct from "../../components/CardProduct";
-import apiProduct from "../../apis/apiProduct";
-import apiCategory from "../../apis/apiCategory";
-import { toast } from "react-toastify";
+import { numWithCommas } from "../../constraints/Util";
+import "./FilterProduct.scss";
+
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { toast } from "react-toastify";
+import apiCategory from "../../apis/apiCategory";
+import apiProduct from "../../apis/apiProduct";
+import LoadingPage from "../../components/LoadingPage";
 
 import SearchIcon from "@mui/icons-material/Search";
-import { fontSize } from "@mui/system";
 
 function FilterProduct(props) {
   const idCategory = useParams().id;
-
+  const [open, setOpen] = useState(false);
+  const [openId, setOpenId] = useState();
+  const handleOpen = (id) => {
+    if (openId !== id) {
+      setOpenId(id);
+      setOpen(true);
+    } else {
+      setOpen(!open);
+    }
+  };
   const navigate = useNavigate();
+  const handleClickCategory = (id) => {
+    navigate(`/product-category/${id}`);
+  };
 
   const [searchText, setSearchText] = useState("");
 
@@ -48,6 +54,12 @@ function FilterProduct(props) {
 
   const [value, setValue] = useState(1);
   const [filter, setFilter] = useState({});
+
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
+
+  const size = 6;
+
   const [filterPrice, setFilterPrice] = useState({
     minPrice: "",
     maxPrice: "",
@@ -60,23 +72,20 @@ function FilterProduct(props) {
     295000, 7500000,
   ]);
 
+  const [loadingData, setLoadingData] = useState(false);
 
-  let min_val = products?.reduce(function(pre, current){
-    return (pre.price < current.price) ? pre.price : current.price
+  let min_val = products?.reduce(function (pre, current) {
+    return pre.price < current.price ? pre.price : current.price;
   });
-  
-  console.log("max",typeof(min_val));
-  
+
+  console.log("max", typeof min_val);
 
   useEffect(() => {
     const getData = async () => {
+      setLoadingData(true);
       let param = {
-        page: 0,
-        size: 6,
-        min_price: 0,
-        max_price: 10000000,
       };
-
+      setPage(1);
       if (filterPrice.apply) {
         param = {
           ...param,
@@ -109,9 +118,13 @@ function FilterProduct(props) {
         .getProductsByCateId(param, idCategory)
         .then((res) => {
           setProducts(res.data.list);
+          setTotalPage(Math.ceil(res.data.list.length / size));
         })
         .catch((error) => {
           setProducts(null);
+        })
+        .finally(() => {
+          setLoadingData(false);
         });
 
       console.log("111", param);
@@ -119,7 +132,10 @@ function FilterProduct(props) {
     getData();
   }, [idCategory, filter, filterPrice.apply, value]);
 
+  console.log("t",totalPage)
+
   useEffect(() => {
+    console.log(categories);
     const getData = async () => {
       apiCategory
         .showAllCategoryHeader()
@@ -141,11 +157,13 @@ function FilterProduct(props) {
       maxPrice: newValue[1],
     });
   };
+  const onKeyDown = (e) => {
+    toast.warning(e.target.value);
+  };
 
   const onChangeSearch = (event) => {
     setSearchText(event.target.value);
   };
-
 
   const handleSubmitSearch = () => {
     // let obj = {
@@ -167,7 +185,12 @@ function FilterProduct(props) {
     });
   };
 
-  console.log("33", products);
+  const lastPostIndex = page * size;
+  const firstPostIndex = lastPostIndex - size;
+
+  const handleChangePage = (event, newValue) => {
+    setPage(newValue);
+  };
 
   return (
     <Stack className="filterProduct container" direction="row" spacing={1}>
@@ -195,8 +218,14 @@ function FilterProduct(props) {
                 position: "relative",
               }}
             >
-              <Input
-                style={{ height: "100%", flex: 1 }}
+              <InputBase
+                style={{
+                  height: "100%",
+                  flex: 1,
+                  border: "1px solid #f4ba36",
+                  paddingLeft: "10px",
+                }}
+                size="small"
                 id="input-search"
                 placeholder="Tìm kiếm ..."
                 value={searchText}
@@ -208,7 +237,7 @@ function FilterProduct(props) {
                   height: "100%",
                   width: "2rem",
                   backgroundColor: "#f4ba36",
-                  borderRadius:"0",
+                  borderRadius: "0",
                 }}
                 variant="contained"
                 onClick={() => handleSubmitSearch(searchText)}
@@ -232,19 +261,55 @@ function FilterProduct(props) {
               width: "100%",
             }}
           />
-          <FormGroup>
+          <List
+            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+            component="nav"
+          >
             {categories.map((item) => (
-              <Box
-                key={item.id}
-                onClick={() => refreshPage()}
-                sx={{ padding: "6px" }}
-              >
-                <Link to={`/product-category/${item.id}`}>
-                  <Box fontSize="14px">{item.name}</Box>
-                </Link>
-              </Box>
+              <React.Fragment>
+                <ListItemButton
+                  onClick={() => {
+                    handleOpen(item?.id);
+                  }}
+                  key={item.id}
+                  // onClick={()=>{handleClickCategory(item?.id)}}
+                  // onClick={() => refreshPage()}
+                  sx={{ padding: "6px" }}
+                >
+                  <ListItemText
+                    primary={item?.name}
+                    onClick={() => {
+                      handleClickCategory(item?.id);
+                    }}
+                  />
+                  {openId === item?.id && open ? (
+                    <ExpandLess />
+                  ) : (
+                    <ExpandMore />
+                  )}
+                </ListItemButton>
+                <Collapse
+                  in={openId === item?.id && open}
+                  timeout="auto"
+                  unmountOnExit
+                >
+                  <List component="div" disablePadding>
+                    {item?.subCategories.map((item) => (
+                      <ListItemButton
+                        sx={{ pl: 4 }}
+                        key={item?.id}
+                        onClick={() => {
+                          handleClickCategory(item?.id);
+                        }}
+                      >
+                        <ListItemText primary={item?.name} />
+                      </ListItemButton>
+                    ))}
+                  </List>
+                </Collapse>
+              </React.Fragment>
             ))}
-          </FormGroup>
+          </List>
         </Box>
         <Box className="filterProduct__form">
           <Box sx={{ width: "100%" }}>
@@ -272,7 +337,7 @@ function FilterProduct(props) {
               >
                 {filterPrice.apply ? "Huỷ" : "Lọc sản phẩm"}
               </Button>
-              <Typography sx={{ fontSize: "12px" }}>
+              <Typography sx={{ fontSize: "14px", marginTop: "10px" }}>
                 Giá: {numWithCommas(valueFilterPrice[0])} đ -{" "}
                 {numWithCommas(valueFilterPrice[1])} đ
               </Typography>
@@ -307,27 +372,6 @@ function FilterProduct(props) {
         </Box>
       </Stack>
       <Box sx={{ flex: 1 }}>
-        {/* <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            textColor="primary"
-            indicatorColor="primary"
-            aria-label="basic tabs example"
-          >
-            {tabs.map((item) => (
-              <Tab
-                key={item.id}
-                label={item.name}
-                sx={{
-                  fontSize: "12px",
-                  textTransform: "none",
-                  fontWeight: "500",
-                }}
-              />
-            ))}
-          </Tabs>
-        </Box> */}
         <Stack
           direction="row"
           justifyContent="space-between"
@@ -343,7 +387,7 @@ function FilterProduct(props) {
                 textTransform: "uppercase",
               }}
             >
-              Category
+              Danh mục
             </Typography>
           </Box>
           <Box sx={{ minWidth: 120 }}>
@@ -365,24 +409,35 @@ function FilterProduct(props) {
           </Box>
         </Stack>
         <Box>
-          {/* <Grid container spacing={2}>
-            {productFilter.map((item) => (
-              <Grid key={item.id} item xs={3}>
-                <CardProduct data={item} />
-              </Grid>
-            ))}
-          </Grid> */}
-          <Grid container spacing={2}>
-            {(value === 2
-              ? products?.sort((a, b) => b.sellAmount - a.sellAmount)
-              : products
-            )?.map((item) => (
-              <Grid key={item.id} item xs={3}>
-                <CardProduct data={item} />
-              </Grid>
-            ))}
-          </Grid>
+          {loadingData ? (
+            <LoadingPage />
+          ) : (
+            <Grid container spacing={2}>
+              {(value === 2
+                ? products?.sort((a, b) => b.sellAmount - a.sellAmount)
+                : products
+              )?.slice(firstPostIndex,lastPostIndex).map((item) => (
+                <Grid key={item.id} item xs={3}>
+                  <CardProduct data={item} />
+                </Grid>
+              ))}
+            </Grid>
+          )}
         </Box>
+        {totalPage > 1 ? (
+          <Stack spacing={2} mt="10px" >
+            <Pagination
+            className="!flex !justify-center"
+              count={totalPage}
+              page={page}
+              sx={{mb:"12px"}}
+              onChange={handleChangePage}
+              color="primary"
+            />
+          </Stack>
+        ) : (
+          <></>
+        )}
       </Box>
     </Stack>
   );
