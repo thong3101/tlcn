@@ -95,12 +95,12 @@ function CrudCategory(props) {
       apiCategory
         .insertCategory(params)
         .then((res) => {
-          toast.success("Thêm sản phẩm thành công");
+          toast.success("Thêm danh mục thành công");
           setName("");
           setParent("");
         })
         .catch((error) => {
-          toast.error("Thêm sản phẩm thất bại!");
+          toast.error("Thêm danh mục thất bại!");
         });
     }
   };
