@@ -118,8 +118,8 @@ function User() {
             {users
               ?.filter(
                 (user) =>
-                  user.fullName?.toLowerCase().includes(query) ||
-                  user.email?.toLowerCase().includes(query)
+                  user.fullName?.toLowerCase().includes(query.toLowerCase()) ||
+                  user.email?.toLowerCase().includes(query.toLowerCase())
               )
               .map((item) => (
                 <TableRow

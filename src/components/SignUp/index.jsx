@@ -55,19 +55,6 @@ function SignUp(props) {
     }
   };
 
-  // const handleCheckPhone = async () => {
-  //   let param = {
-  //     email: watch("email"),
-  //   };
-  //   await apiAuth
-  //     .postCheckPhone(param)
-  //     .then((res) => {
-  //       setInvalidPhone(false);
-  //     })
-  //     .catch((error) => {
-  //       setInvalidPhone(true);
-  //     });
-  // };
 
   const onSubmit = async () => {
     if (loading) {
@@ -83,8 +70,6 @@ function SignUp(props) {
           password: watch("pass"),
           email: watch("email"),
         };
-        // apiAuth.postRegister(param).then(setIsSuccess(true))
-        // .finally(()=>setLoading(false));
 
         apiAuth
           .postRegister(param)

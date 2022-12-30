@@ -112,22 +112,6 @@ function Payment() {
       return;
     }
 
-    // if (!addressShip) {
-    //   toast.warning("Vui lòng chọn địa chỉ giao hàng");
-    //   return;
-    // }
-
-    // const payload = {
-    //   CartItems.map((item) => {
-    //     return {
-    //       productId: item.id,
-    //       productName: item.name,
-    //       productImage: item.imageList[0].url,
-    //       quantity: item.quantity,
-    //       price: item.price,
-    //     };
-    //   }),
-    // };
 
     let payload = CartItems.map((item) => {
       return {

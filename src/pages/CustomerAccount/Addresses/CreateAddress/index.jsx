@@ -1,7 +1,11 @@
 /* eslint-disable */
 import {
-  Box, Button,
-  InputBase, Stack, TextField, Typography
+  Box,
+  Button,
+  InputBase,
+  Stack,
+  TextField,
+  Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
@@ -13,8 +17,6 @@ import "./CreateAddress.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { loginSuccess } from "../../../../slices/authSlice";
-
-
 
 import { useForm } from "react-hook-form";
 
@@ -37,10 +39,13 @@ function CreateAddress(props) {
   const dispatch = useDispatch();
   const [address, setAddress] = useState(user.address);
 
-  const [validationMsg, setValidationMsg] = useState("");
+  const [message, setMessage] = React.useState("");
 
-  const { register,handleSubmit, formState: { errors }, } = useForm();
-
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   useEffect(() => {
     const loaddata = () => {
@@ -167,6 +172,16 @@ function CreateAddress(props) {
     });
   };
 
+  const onChangePhone = (event) => {
+    setPhone(event.target.value);
+    const regex = /(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/;
+    if (regex.test(event.target.value)) {
+      setMessage("");
+    } else {
+      setMessage("*Số điện thoại không hợp lệ");
+    }
+  };
+
   return (
     <Box className="create-address" p={2} m={2}>
       <Typography variant="h6">Địa chỉ nhận hàng</Typography>
@@ -214,35 +229,43 @@ function CreateAddress(props) {
           </Stack>
         </Stack>
 
+        {/* <Stack direction="row">
+          <Typography className="create-address__label">
+            Số điện thoại nhận hàng:
+          </Typography>
+          <Stack className="create-address__input">
+            <InputCustom
+              value={phone}
+              onChange={onChangePhone}
+              size="small"
+              placeholder="Nhập số điện thoại"
+            >
+              <Box height="25px">
+                <Typography color={"#ee0033"} fontSize="14px">
+                  {message}
+                </Typography>
+              </Box>
+            </InputCustom>
+          </Stack>
+        </Stack> */}
+
         <Stack direction="row">
           <Typography className="create-address__label">
             Số điện thoại nhận hàng:
           </Typography>
           <Stack className="create-address__input">
             <InputCustom
-              // {...register("phone", {
-              //   pattern: {
-              //     value: /\d+/,
-              //     message: "Số điện thoại không hợp lệ",
-              //   },
-              //   minLength: {
-              //     value: 10,
-              //     message: "Số điện thoại phải có ít nhất 10 chữ số",
-              //   },
-              // })}
-              value={phone}
-              onChange={(event) => {
-                setPhone(event.target.value);
-              }}
-              size="small"
               placeholder="Nhập số điện thoại"
-            >
-              {/* {errors.phone && (
-                <ErrorInput message={errors.phone.message} />
-              )} */}
-            </InputCustom>
+              value={phone}
+              onChange={onChangePhone}
+            />
           </Stack>
         </Stack>
+        <Box height="25px">
+          <Typography color={"#ee0033"} fontSize="14px">
+            {message}
+          </Typography>
+        </Box>
 
         <Stack
           direction="row"
