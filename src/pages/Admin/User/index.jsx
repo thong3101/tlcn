@@ -162,26 +162,25 @@ function User() {
         sx={{ overflowY: "scroll" }}
         open={modalDelete}
         onClose={closeModalDelete}
+        className="!flex !justify-center !items-center "
       >
         <Stack
-          className="modal-info"
+          className="modal-info  !bg-white !h-36 !rounded-md"
           direction="row"
           spacing={2}
           justifyContent="center"
-          width="26rem"
+          width="24rem"
         >
-          <Stack>
+          <Stack className="!mt-5">
             <InfoOutlinedIcon color="primary" />
           </Stack>
 
           <Stack spacing={3}>
-            <Stack>
+            <Stack className="!mt-5">
               <Typography sx={{ fontWeight: "bold" }}>
-                Bạn có chắc muốn xoá ảnh đại diện ?
+                Bạn có chắc muốn xoá người dùng này?
               </Typography>
-              <Typography>
-                Hình ảnh đại diện sẽ quay về mặc định của Tiki
-              </Typography>
+            
             </Stack>
 
             <Stack direction="row" justifyContent="flex-end" spacing={1}>

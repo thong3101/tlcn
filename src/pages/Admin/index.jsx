@@ -296,7 +296,7 @@ function Admin() {
                     }}
                   >
                     {user.fullName}
-                    {/* <p>Tran Manh Thang</p> */}
+                   
                   </Typography>
                   <ExpandMoreOutlinedIcon />
                   {openAccount ? (
@@ -311,7 +311,6 @@ function Admin() {
                         <Stack sx={{ paddingLeft: "10px" }}>
                           <Typography sx={{ fontWeight: "bold" }}>
                             {user.fullName}
-                            {/* <p>Tran Manh Thang</p> */}
                           </Typography>
                         </Stack>
                       </Stack>
