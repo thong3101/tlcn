@@ -40,6 +40,7 @@ function Product() {
   React.useEffect(() => {
     const getData = async () => {
       let param = {
+        size:"100",
         sort: "",
       };
 
