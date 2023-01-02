@@ -42,7 +42,7 @@ function CardProduct({ data }) {
             component="img"
             width="100px"
             height="100px"
-            className="max-w-[240px] max-h-[240px]"
+            className="max-w-[240px] max-h-[240px] min-h-[240px]"
             image={data?.imageList[0]?.url}
             loading="lazy"
             //   sx={{ position: "absolute" }}
