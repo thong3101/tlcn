@@ -8,6 +8,7 @@ import ChangePassword from "./components/ChangePassword";
 import Cart from "./pages/Cart";
 import Payment from "./pages/Payment";
 import Admin from "./pages/Admin";
+import Seller from "./pages/Seller";
 
 
 import LoadingPage from "./components/LoadingPage"
@@ -34,6 +35,10 @@ function ConfigRoute() {
 
       <Route element={<PrivateRoute roles={["ADMIN"]} />}>
         <Route path="admin/*" element={<Admin />} />
+      </Route>
+
+      <Route element={<PrivateRoute roles={["ADMIN"]} />}>
+        <Route path="seller/*" element={<Seller />} />
       </Route>
 
 

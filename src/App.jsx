@@ -21,16 +21,17 @@ function App() {
     axiosInstance(user, dispatch, loginSuccess, logoutSuccess);
   }
   const isAdmin = window.location.href.includes("admin");
+  const isSeller = window.location.href.includes("seller");
   return (
     <div className="App">
       <BrowserRouter>
         {/* <CheckAuthentication /> */}
         <ScrollToTop>
           <ToastContainer />
-          {isAdmin ? null : <Header />}
+          {isAdmin || isSeller ? null : <Header />}
           
           <ConfigRoute />
-          {isAdmin ? null : <Footer />}
+          {isAdmin || isSeller ? null : <Footer />}
 
         </ScrollToTop>
       </BrowserRouter>
