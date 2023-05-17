@@ -6,10 +6,8 @@ import { Link, Route, Routes } from "react-router-dom";
 import { sidebar } from "../../constraints/Admin";
 import { Notifies } from "../../constraints/AdminNotify";
 
-
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
 
 import {
   Box,
@@ -40,9 +38,16 @@ import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import MenuIcon from "@mui/icons-material/Menu";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
-import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
-import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
+import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
+import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
+import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
+
+import Dashboard from "./Dashboard";
+import Product from "./Product";
+import CreateDetailProduct from "./Product/CreateDetailProduct";
+import InfringeProduct from "./Product/InfringeProduct";
+import SettingProduct from "./Product/SettingProduct";
+import Order from "./Order";
 
 import { useSelector } from "react-redux";
 
@@ -265,18 +270,7 @@ function Seller() {
             justifyContent="space-between"
             alignItems="center"
           >
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={() => setOpen(!open)}
-              edge="start"
-              sx={{
-                marginRight: 5,
-                // ...(open && { display: "none" }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
+            <Typography variant="h6">Kênh Người Bán</Typography>
 
             <Stack direction="row" spacing={3} alignItems="center">
               <SwipeableDrawer
@@ -373,7 +367,7 @@ function Seller() {
 
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
+          <IconButton>
             <img
               src="https://salt.tikicdn.com/cache/w32/ts/sellercenterFE/93/76/03/2a08fa4ae6a024a752fbba87d145bce8.png"
               alt=""
@@ -381,20 +375,25 @@ function Seller() {
           </IconButton>
 
           <Typography sx={{ ml: "1rem", fontWeight: "bold" }} variant="h6">
-            Admin Center
+            Senki
           </Typography>
         </DrawerHeader>
 
         <Divider />
 
         <List
-          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper", padding:"20px 0px" }}
+          sx={{
+            width: "100%",
+            maxWidth: 360,
+            bgcolor: "background.paper",
+            padding: "20px 0px",
+          }}
           component="nav"
           aria-labelledby="nested-list-subheader"
         >
           <ListItemButton onClick={handleClickSideBar1}>
-            <ListItemIcon sx={{minWidth:"32px"}}>
-              <Inventory2OutlinedIcon sx={{color:"black"}}/>
+            <ListItemIcon sx={{ minWidth: "32px" }}>
+              <Inventory2OutlinedIcon sx={{ color: "black" }} />
             </ListItemIcon>
             <ListItemText primary="Vận chuyển" />
             {openSideBar1 ? <ExpandLess /> : <ExpandMore />}
@@ -408,12 +407,14 @@ function Seller() {
           </Collapse>
 
           <ListItemButton onClick={handleClickSideBar2}>
-            <ListItemIcon sx={{minWidth:"32px"}}>
-              <ReceiptOutlinedIcon sx={{color:"black"}}/>
+            <ListItemIcon sx={{ minWidth: "32px" }}>
+              <ReceiptOutlinedIcon sx={{ color: "black" }} />
             </ListItemIcon>
             <ListItemText primary="Quản lý đơn hàng" />
             {openSideBar2 ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
+          
+          <Link to={'/seller/order'}>
           <Collapse in={openSideBar2} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               <ListItemButton sx={{ pl: 4 }}>
@@ -421,6 +422,8 @@ function Seller() {
               </ListItemButton>
             </List>
           </Collapse>
+          </Link>
+
           <Collapse in={openSideBar2} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               <ListItemButton sx={{ pl: 4 }}>
@@ -428,15 +431,15 @@ function Seller() {
               </ListItemButton>
             </List>
           </Collapse>
-          
 
           <ListItemButton onClick={handleClickSideBar3}>
-            <ListItemIcon sx={{minWidth:"32px"}}>
-              <LocalMallOutlinedIcon sx={{color:"black"}}/>
+            <ListItemIcon sx={{ minWidth: "32px" }}>
+              <LocalMallOutlinedIcon sx={{ color: "black" }} />
             </ListItemIcon>
             <ListItemText primary="Quản lý sản phẩm" />
             {openSideBar3 ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
+          <Link to={'/seller/product'}>
           <Collapse in={openSideBar3} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               <ListItemButton sx={{ pl: 4 }}>
@@ -444,6 +447,8 @@ function Seller() {
               </ListItemButton>
             </List>
           </Collapse>
+          </Link>
+          <Link to={'/seller/product/create'}>
           <Collapse in={openSideBar3} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               <ListItemButton sx={{ pl: 4 }}>
@@ -451,6 +456,8 @@ function Seller() {
               </ListItemButton>
             </List>
           </Collapse>
+          </Link>
+          <Link to={'/seller/product/infringe'}>
           <Collapse in={openSideBar3} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               <ListItemButton sx={{ pl: 4 }}>
@@ -458,7 +465,9 @@ function Seller() {
               </ListItemButton>
             </List>
           </Collapse>
-          
+          </Link>
+
+          <Link to={'/seller/product/setting'}>
           <Collapse in={openSideBar3} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               <ListItemButton sx={{ pl: 4 }}>
@@ -466,10 +475,11 @@ function Seller() {
               </ListItemButton>
             </List>
           </Collapse>
+          </Link>
         </List>
       </Drawer>
 
-      {/* <Box
+      <Box
         component="main"
         flexGrow={1}
         p={0}
@@ -478,6 +488,7 @@ function Seller() {
       >
         <DrawerHeader />
         <Routes>
+          <Route index element={<Dashboard />} />
           <Route path="order/*" element={<Order />} />
           <Route
             path="product/*"
@@ -485,38 +496,17 @@ function Seller() {
               <Routes>
                 <Route index element={<Product />} />
                 <Route path="create" element={<CreateDetailProduct />} />
-                <Route
+                {/* <Route
                   path="edit/:id"
                   element={<CreateDetailProduct edit={true} />}
-                />
-              </Routes>
-            }
-          />
-
-          <Route
-            path="category/*"
-            element={
-              <Routes>
-                <Route index element={<Category />} />
-                <Route path="create" element={<CreateCategory />} />
-                <Route
-                  path="edit/:id"
-                  element={<CreateCategory edit={true} />}
-                />
-              </Routes>
-            }
-          />
-
-          <Route
-            path="user/*"
-            element={
-              <Routes>
-                <Route index element={<User />} />
+                /> */}
+                <Route path="infringe" element={<InfringeProduct />} />
+                <Route path="setting" element={<SettingProduct />} />
               </Routes>
             }
           />
         </Routes>
-      </Box> */}
+      </Box>
     </Stack>
   );
 }

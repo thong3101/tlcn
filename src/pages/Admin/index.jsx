@@ -8,9 +8,22 @@ import { Notifies } from "../../constraints/AdminNotify";
 import "./Admin.scss";
 
 import {
-  Box, Button, ClickAwayListener, CssBaseline, Divider, IconButton, List, ListItem,
-  ListItemButton, ListItemIcon,
-  ListItemText, Stack, SwipeableDrawer, Toolbar, Typography
+  Box,
+  Button,
+  ClickAwayListener,
+  CssBaseline,
+  Divider,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Stack,
+  SwipeableDrawer,
+  Toolbar,
+  Typography,
+  Badge,
 } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import MuiDrawer from "@mui/material/Drawer";
@@ -23,6 +36,11 @@ import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import MenuIcon from "@mui/icons-material/Menu";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
+import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+
+
+
 // import AdminLogin from "./Login";
 import Category from "./Category";
 import CreateCategory from "./Category/CruCategory/index";
@@ -254,6 +272,18 @@ function Admin() {
             </IconButton>
 
             <Stack direction="row" spacing={3} alignItems="center">
+              <IconButton sx={{ border: "1px solid silver" }}>
+                <TextsmsOutlinedIcon sx={{ borderRadius: "50%" }} />
+              </IconButton>
+
+              <IconButton
+                onClick={() => setOpenNotify(true)}
+                sx={{ border: "1px solid silver" }}
+              >
+                <Badge color="info" badgeContent={3}>
+                  <NotificationsNoneOutlinedIcon />
+                </Badge>
+              </IconButton>
               <SwipeableDrawer
                 anchor="right"
                 open={openNotify}

@@ -14,7 +14,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  // const isAdmin = window.location.href.includes("admin");
+
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   if (user) {
