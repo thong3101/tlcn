@@ -18,7 +18,7 @@ import ForgetPassword from "../ForgetPassword";
 import { Add, Info, PermContactCalendar, VerticalAlignCenter } from "@mui/icons-material";
 import apiCategory from "../../apis/apiCategory";
 
-const privatePath = ["/my-account/", "/admin/", "/payment"];
+const privatePath = ["/my-account/", "/admin/", "/payment", "/chat"];
 
 function Header() {
   const navigate = useNavigate();

@@ -5,7 +5,9 @@ import * as React from "react";
 import { Link, Route, Routes } from "react-router-dom";
 import { sidebar } from "../../constraints/Admin";
 import { Notifies } from "../../constraints/AdminNotify";
-import "./Admin.scss";
+
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
 
 import {
   Box,
@@ -23,11 +25,11 @@ import {
   SwipeableDrawer,
   Toolbar,
   Typography,
-  Badge,
+  ListSubheader,
+  Collapse,
 } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import MuiDrawer from "@mui/material/Drawer";
-import "./Admin.scss";
 
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CloseIcon from "@mui/icons-material/Close";
@@ -36,22 +38,16 @@ import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import MenuIcon from "@mui/icons-material/Menu";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
-import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
+import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
+import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
 
-
-
-// import AdminLogin from "./Login";
-import Category from "./Category";
-import CreateCategory from "./Category/CruCategory/index";
-// import Dashboard from "./Dashboard";
-import Order from "./Order";
+import Dashboard from "./Dashboard";
 import Product from "./Product";
 import CreateDetailProduct from "./Product/CreateDetailProduct";
-// import DetailProduct from "./Product/DetailProduct";
-// import Review from "./Review";
-import User from "./User";
-// import DetailUser from "./User/DetailUser";
+import InfringeProduct from "./Product/InfringeProduct";
+import SettingProduct from "./Product/SettingProduct";
+import Order from "./Order";
 
 import { useSelector } from "react-redux";
 
@@ -123,10 +119,26 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-function Admin() {
+function Seller() {
   const [openAccount, setOpenAccount] = React.useState(false);
 
   const user = useSelector((state) => state.auth.user);
+
+  const [openSideBar1, setOpenSideBar1] = React.useState(false);
+  const [openSideBar2, setOpenSideBar2] = React.useState(false);
+  const [openSideBar3, setOpenSideBar3] = React.useState(false);
+
+  const handleClickSideBar1 = () => {
+    setOpenSideBar1(!openSideBar1);
+  };
+
+  const handleClickSideBar2 = () => {
+    setOpenSideBar2(!openSideBar2);
+  };
+
+  const handleClickSideBar3 = () => {
+    setOpenSideBar3(!openSideBar3);
+  };
 
   const handleClickAccount = () => {
     setOpenAccount((prev) => !prev);
@@ -258,32 +270,9 @@ function Admin() {
             justifyContent="space-between"
             alignItems="center"
           >
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={() => setOpen(!open)}
-              edge="start"
-              sx={{
-                marginRight: 5,
-                // ...(open && { display: "none" }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
+            <Typography variant="h6">Kênh Người Bán</Typography>
 
             <Stack direction="row" spacing={3} alignItems="center">
-              <IconButton sx={{ border: "1px solid silver" }}>
-                <TextsmsOutlinedIcon sx={{ borderRadius: "50%" }} />
-              </IconButton>
-
-              <IconButton
-                onClick={() => setOpenNotify(true)}
-                sx={{ border: "1px solid silver" }}
-              >
-                <Badge color="info" badgeContent={3}>
-                  <NotificationsNoneOutlinedIcon />
-                </Badge>
-              </IconButton>
               <SwipeableDrawer
                 anchor="right"
                 open={openNotify}
@@ -326,7 +315,6 @@ function Admin() {
                     }}
                   >
                     {user.fullName}
-                   
                   </Typography>
                   <ExpandMoreOutlinedIcon />
                   {openAccount ? (
@@ -379,7 +367,7 @@ function Admin() {
 
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
+          <IconButton>
             <img
               src="https://salt.tikicdn.com/cache/w32/ts/sellercenterFE/93/76/03/2a08fa4ae6a024a752fbba87d145bce8.png"
               alt=""
@@ -387,47 +375,107 @@ function Admin() {
           </IconButton>
 
           <Typography sx={{ ml: "1rem", fontWeight: "bold" }} variant="h6">
-            Admin Center
+            Senki
           </Typography>
         </DrawerHeader>
 
         <Divider />
 
-        <List>
-          {sidebar.map((item) => (
-            <Link to={item.link}>
-              <ListItem
-                key={item.id}
-                disablePadding
-                sx={{ display: "block" }}
-                selected={selectedTabId === item.id}
-                onClick={() => setSelectedTabId(item.id)}
-              >
-                <ListItemButton
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? "initial" : "center",
-                    px: 2.5,
-                  }}
-                >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {<item.icon />}
-                  </ListItemIcon>
+        <List
+          sx={{
+            width: "100%",
+            maxWidth: 360,
+            bgcolor: "background.paper",
+            padding: "20px 0px",
+          }}
+          component="nav"
+          aria-labelledby="nested-list-subheader"
+        >
+          <ListItemButton onClick={handleClickSideBar1}>
+            <ListItemIcon sx={{ minWidth: "32px" }}>
+              <Inventory2OutlinedIcon sx={{ color: "black" }} />
+            </ListItemIcon>
+            <ListItemText primary="Vận chuyển" />
+            {openSideBar1 ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse in={openSideBar1} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItemButton sx={{ pl: 4 }}>
+                <ListItemText primary="Quản lý vận chuyển" />
+              </ListItemButton>
+            </List>
+          </Collapse>
 
-                  <ListItemText
-                    primary={item.text}
-                    sx={{ opacity: open ? 1 : 0 }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            </Link>
-          ))}
+          <ListItemButton onClick={handleClickSideBar2}>
+            <ListItemIcon sx={{ minWidth: "32px" }}>
+              <ReceiptOutlinedIcon sx={{ color: "black" }} />
+            </ListItemIcon>
+            <ListItemText primary="Quản lý đơn hàng" />
+            {openSideBar2 ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          
+          <Link to={'/seller/order'}>
+          <Collapse in={openSideBar2} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItemButton sx={{ pl: 4 }}>
+                <ListItemText primary="Tất cả" />
+              </ListItemButton>
+            </List>
+          </Collapse>
+          </Link>
+
+          <Collapse in={openSideBar2} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItemButton sx={{ pl: 4 }}>
+                <ListItemText primary="Đơn hủy" />
+              </ListItemButton>
+            </List>
+          </Collapse>
+
+          <ListItemButton onClick={handleClickSideBar3}>
+            <ListItemIcon sx={{ minWidth: "32px" }}>
+              <LocalMallOutlinedIcon sx={{ color: "black" }} />
+            </ListItemIcon>
+            <ListItemText primary="Quản lý sản phẩm" />
+            {openSideBar3 ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Link to={'/seller/product'}>
+          <Collapse in={openSideBar3} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItemButton sx={{ pl: 4 }}>
+                <ListItemText primary="Tất cả sản phẩm" />
+              </ListItemButton>
+            </List>
+          </Collapse>
+          </Link>
+          <Link to={'/seller/product/create'}>
+          <Collapse in={openSideBar3} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItemButton sx={{ pl: 4 }}>
+                <ListItemText primary="Thêm sản phẩm" />
+              </ListItemButton>
+            </List>
+          </Collapse>
+          </Link>
+          <Link to={'/seller/product/infringe'}>
+          <Collapse in={openSideBar3} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItemButton sx={{ pl: 4 }}>
+                <ListItemText primary="Sản phẩm vi phạm" />
+              </ListItemButton>
+            </List>
+          </Collapse>
+          </Link>
+
+          <Link to={'/seller/product/setting'}>
+          <Collapse in={openSideBar3} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItemButton sx={{ pl: 4 }}>
+                <ListItemText primary="Cài đặt sản phẩm" />
+              </ListItemButton>
+            </List>
+          </Collapse>
+          </Link>
         </List>
       </Drawer>
 
@@ -440,8 +488,7 @@ function Admin() {
       >
         <DrawerHeader />
         <Routes>
-          {/* <Route index element={<Dashboard />} /> */}
-          {/* <Route path="login" element={<AdminLogin />} /> */}
+          <Route index element={<Dashboard />} />
           <Route path="order/*" element={<Order />} />
           <Route
             path="product/*"
@@ -449,43 +496,19 @@ function Admin() {
               <Routes>
                 <Route index element={<Product />} />
                 <Route path="create" element={<CreateDetailProduct />} />
-                <Route
+                {/* <Route
                   path="edit/:id"
                   element={<CreateDetailProduct edit={true} />}
-                />
+                /> */}
+                <Route path="infringe" element={<InfringeProduct />} />
+                <Route path="setting" element={<SettingProduct />} />
               </Routes>
             }
           />
-
-          <Route
-            path="category/*"
-            element={
-              <Routes>
-                <Route index element={<Category />} />
-                <Route path="create" element={<CreateCategory />} />
-                <Route
-                  path="edit/:id"
-                  element={<CreateCategory edit={true} />}
-                />
-              </Routes>
-            }
-          />
-
-          <Route
-            path="user/*"
-            element={
-              <Routes>
-                <Route index element={<User />} />
-                {/* <Route path="detail/:id" element={<DetailUser />} /> */}
-              </Routes>
-            }
-          />
-
-          {/* <Route path="review" element={<Review />} /> */}
         </Routes>
       </Box>
     </Stack>
   );
 }
 
-export default Admin;
+export default Seller;
