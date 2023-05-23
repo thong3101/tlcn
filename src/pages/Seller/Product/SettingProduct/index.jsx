@@ -1,25 +1,16 @@
-import EditIcon from "@mui/icons-material/Edit";
-import SearchIcon from "@mui/icons-material/Search";
 import {
   Box,
-  Button,
-  FormControl,
-  MenuItem,
-  Modal,
   Pagination,
-  Select,
   Stack,
+  Switch,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-  TextField,
-  Typography,
-  Switch,
+  Typography
 } from "@mui/material";
 import React from "react";
-import { Link } from "react-router-dom";
 import apiProduct from "../../../../apis/apiProduct";
 import "./SettingProduct.scss";
 

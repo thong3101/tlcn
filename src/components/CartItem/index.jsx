@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from "react";
-import "./CartItem.scss";
-import {
-  Checkbox,
-  Typography,
-  Dialog,
-  Button,
-  Box,
-  Stack,
-} from "@mui/material";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-import { numWithCommas } from "../../constraints/Util";
+import {
+  Box,
+  Button,
+  Dialog,
+  Stack,
+  Typography
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { removeItem, updateItem } from "../../slices/cartSlice";
 import { Link } from "react-router-dom";
+import { numWithCommas } from "../../constraints/Util";
+import { removeItem, updateItem } from "../../slices/cartSlice";
+import "./CartItem.scss";
 
 function CartItem(props) {
   const [data, setData] = useState(props.data);

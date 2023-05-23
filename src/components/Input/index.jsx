@@ -1,9 +1,7 @@
-import React, { useContext, useState, useEffect } from "react";
-import Img from "../../assets/img/img.png";
+import React, { useContext, useEffect, useState } from "react";
 import Attach from "../../assets/img/attach.png";
+import Img from "../../assets/img/img.png";
 // import { AuthContext } from "../context/AuthContext";
-import { ChatContext } from "../../constraints/ChatContext";
-import { useSelector } from "react-redux";
 import {
   arrayUnion,
   doc,
@@ -11,9 +9,11 @@ import {
   Timestamp,
   updateDoc,
 } from "firebase/firestore";
-import { db, storage } from "../../firebase";
-import { v4 as uuid } from "uuid";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { useSelector } from "react-redux";
+import { v4 as uuid } from "uuid";
+import { ChatContext } from "../../constraints/ChatContext";
+import { db, storage } from "../../firebase";
 
 
 const Input = () => {
@@ -24,61 +24,48 @@ const Input = () => {
   const currentUser = useSelector((state) => state.auth.user);
   const { data } = useContext(ChatContext);
 
-  const [imageUpload, setImageUpload] = React.useState(null); // image selecting state
   const [image, setImage] = React.useState(""); //url setting state
+  useEffect(()=>{
+    updateDoc(doc(db, "chats", data.chatId), {
+      messages: arrayUnion({
+        id: uuid(),
+        text,
+        senderId: currentUser.id,
+        date: Timestamp.now(),
+        img: image,
+      }),
+    });
+  },[image])
 
 
-  // useEffect(() => {
-  //   // declare the data getImage function
-  //   const getImage = async () => {
-  //     const ImageURL = await getDownloadURL(ref(storage, uuid()));
-  //     setImage(ImageURL);
-  //   }
-  //   // call the function
-  //   getImage()
-  //   console.log(image)
-  // }, [imageUpload])
 
   const handleSend = async () => {
     if (img) {
       const storageRef = ref(storage, uuid());
-
       const uploadTask = uploadBytesResumable(storageRef, img);
 
       uploadTask.on(
         'state_changed',
+        (snapshot) => {
+          // Observe state change events such as progress, pause, and resume
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          
+        }, 
         (error) => {
-          //TODO:Handle Error
-          console.log(error)
+          // Handle unsuccessful uploads
         },
         () => {
-          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-            console.log("2",downloadURL)
-            await updateDoc(doc(db, "chats", data.chatId), {
-              messages: arrayUnion({
-                id: uuid(),
-                text,
-                senderId: currentUser.id,
-                date: Timestamp.now(),
-                img: downloadURL,
-              }),
-            });
-          });
-        }
+          // Handle successful uploads on complete
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log('File available at', downloadURL);
+            setImage(downloadURL)
+           
+          })}
+       
       );
-      // uploadBytesResumable(storageRef, imageUpload).then(async (snapshot) => {
-      //   console.log("Uploaded image");
-      //   console.log("2",snapshot)
-      //   await updateDoc(doc(db, "chats", data.chatId), {
-      //     messages: arrayUnion({
-      //       id: uuid(),
-      //       text,
-      //       senderId: currentUser.id,
-      //       date: Timestamp.now(),
-      //       img: snapshot,
-      //     }),
-      //   });
-      // });
+     
     } else {
       await updateDoc(doc(db, "chats", data.chatId), {
         messages: arrayUnion({

@@ -2,12 +2,11 @@ import BookIcon from "@mui/icons-material/Book";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InfoIcon from "@mui/icons-material/Info";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import StarIcon from "@mui/icons-material/Star";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
-import { Box, Button, ButtonGroup, Typography, Rating } from "@mui/material";
+import { Box, Button, ButtonGroup, Rating, Typography } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
-import { memo, React, useEffect } from "react";
+import { React, memo } from "react";
 import "./DetailProduct.scss";
 
 import { useDispatch } from "react-redux";
@@ -25,11 +24,11 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import {
-  setDoc,
   doc,
-  updateDoc,
-  serverTimestamp,
   getDoc,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase";
 
