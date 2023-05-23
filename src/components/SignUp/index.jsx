@@ -3,6 +3,9 @@ import { useForm } from "react-hook-form";
 
 import apiAuth from "../../apis/apiAuth";
 
+import { db } from "../../firebase";
+import { doc, setDoc } from "firebase/firestore";
+
 import { ErrorAfterSubmit, ErrorInput } from "../ErrorHelper";
 
 import {
@@ -73,8 +76,17 @@ function SignUp(props) {
 
         apiAuth
           .postRegister(param)
-          .then((res) => {
+          .then(async (res) => {
             setIsSuccess(true);
+            //create user on firestore
+            await setDoc(doc(db, "users", res.data.user.id), {  
+              uid: res.data.user.id,
+              displayName: res.data.user.nickName,
+              email: res.data.user.email,
+            });
+        
+            //create empty user chats on firestore
+            await setDoc(doc(db, "userChats", res.data.user.id), {});
           })
           .catch((res) => {
             setMessage(res.response.data.message);
@@ -82,6 +94,7 @@ function SignUp(props) {
           .finally(() => setLoading(false));
       }
     }
+
   };
 
   return (

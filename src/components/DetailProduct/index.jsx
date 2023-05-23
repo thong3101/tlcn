@@ -21,6 +21,18 @@ import { toast } from "react-toastify";
 import imgDefault from "../../assets/img/img_default.jpg";
 import { numWithCommas } from "../../constraints/Util";
 
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import {
+  setDoc,
+  doc,
+  updateDoc,
+  serverTimestamp,
+  getDoc,
+} from "firebase/firestore";
+import { db } from "../../firebase";
+
 function DetailProduct({ data, rating }) {
   const list_cities = () => [
     { label: "Ho Chi Minh", year: 1994 },
@@ -29,6 +41,10 @@ function DetailProduct({ data, rating }) {
     { label: "Can Tho", year: 2008 },
     { label: "Hai Phong", year: 1957 },
   ];
+
+
+  const currentUser = useSelector((state) => state.auth.user);
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
@@ -51,7 +67,7 @@ function DetailProduct({ data, rating }) {
 
   const handleLoadImage = (img) => {
     if (img?.imageList) {
-      return img.imageList[0].url;
+      return img.imageList[0]?.url;
     }
   };
   const handlePrice = (data) => {
@@ -71,6 +87,40 @@ function DetailProduct({ data, rating }) {
       })
     );
     toast.success("Đã thêm vào giỏ hàng");
+  };
+
+  const handleMessage = async () => {
+    //check whether the group(chats in firestore) exists, if not create
+    const combinedId =
+      currentUser.id > data?.seller.id
+        ? currentUser.id + data?.seller.id
+        : data?.seller.id + currentUser.id;
+    try {
+      const res = await getDoc(doc(db, "chats", combinedId));
+
+      if (!res.exists()) {
+        //create a chat in chats collection
+        await setDoc(doc(db, "chats", combinedId), { messages: [] });
+
+        //create user chats
+        await updateDoc(doc(db, "userChats", currentUser.id), {
+          [combinedId + ".userInfo"]: {
+            uid: data?.seller.id,
+            displayName: data?.seller.nickName,
+          },
+          [combinedId + ".date"]: serverTimestamp(),
+        });
+
+        await updateDoc(doc(db, "userChats", data?.seller.id), {
+          [combinedId + ".userInfo"]: {
+            uid: currentUser.id,
+            displayName: currentUser.nickName,
+          },
+          [combinedId + ".date"]: serverTimestamp(),
+        });
+      }
+      navigate("/chat");
+    } catch (err) {}
   };
 
   return (
@@ -157,9 +207,17 @@ function DetailProduct({ data, rating }) {
             <button
               className="detailProduct__add-to-cart"
               onClick={handleClickAddItem}
-              style={{ fontWeight: 600 }}
+              style={{ fontWeight: 600, marginLeft:"20px" }}
             >
               THÊM VÀO GIỎ HÀNG
+            </button>
+
+            <button
+              className="detailProduct__add-to-cart"
+              onClick={handleMessage}
+              style={{ fontWeight: 600, marginLeft:"20px" }}
+            >
+              Nhắn tin cho người bán
             </button>
           </div>
           <div className="detailProduct__info-guide">

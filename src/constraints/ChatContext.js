@@ -23,9 +23,9 @@ import { useSelector } from "react-redux";
           return {
             user: action.payload,
             chatId:
-              currentUser.uid > action.payload.uid
-                ? currentUser.uid + action.payload.uid
-                : action.payload.uid + currentUser.uid,
+              currentUser.id > action.payload.uid
+                ? currentUser.id + action.payload.uid
+                : action.payload.uid + currentUser.id,
           };
   
         default:

@@ -9,6 +9,7 @@ import Cart from "./pages/Cart";
 import Payment from "./pages/Payment";
 import Admin from "./pages/Admin";
 import Seller from "./pages/Seller";
+import ChatArea from "./pages/ChatArea";
 
 
 import LoadingPage from "./components/LoadingPage"
@@ -31,6 +32,7 @@ function ConfigRoute() {
       <Route element={<PrivateRoute roles={["USER", "ADMIN"]} />}>
         <Route path="payment" element={<Payment />} />
         <Route path="my-account/*" element={<CustomerAccount />} />
+        <Route path="chat" element={<ChatArea/>} />
       </Route>
 
       <Route element={<PrivateRoute roles={["ADMIN"]} />}>
