@@ -10,9 +10,9 @@ const NavbarChat = () => {
 
   return (
     <div className='navbar'>
-      <span className="logo">Lama Chat</span>
+      <span className="logo">Senki Chat</span>
       <div className="user">
-        <img src={currentUser?.photoURL} alt="" />
+        <img src={currentUser?.img} alt="" />
         <span>{currentUser.nickName}</span>
         {/* <button onClick={()=>signOut(auth)}>logout</button> */}
       </div>

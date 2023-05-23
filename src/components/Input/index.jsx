@@ -1,6 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import Attach from "../../assets/img/attach.png";
 import Img from "../../assets/img/img.png";
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+
+import Button from "@mui/material/Button";
 // import { AuthContext } from "../context/AuthContext";
 import {
   arrayUnion,
@@ -9,6 +12,8 @@ import {
   Timestamp,
   updateDoc,
 } from "firebase/firestore";
+import SendIcon from '@mui/icons-material/Send';
+import IconButton from '@mui/material/IconButton';
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { useSelector } from "react-redux";
 import { v4 as uuid } from "uuid";
@@ -26,15 +31,18 @@ const Input = () => {
 
   const [image, setImage] = React.useState(""); //url setting state
   useEffect(()=>{
-    updateDoc(doc(db, "chats", data.chatId), {
-      messages: arrayUnion({
-        id: uuid(),
-        text,
-        senderId: currentUser.id,
-        date: Timestamp.now(),
-        img: image,
-      }),
-    });
+    if(image){
+      updateDoc(doc(db, "chats", data.chatId), {
+        messages: arrayUnion({
+          id: uuid(),
+          text,
+          senderId: currentUser.id,
+          date: Timestamp.now(),
+          img: image,
+        }),
+      });
+    }
+   
   },[image])
 
 
@@ -107,17 +115,20 @@ const Input = () => {
         value={text}
       />
       <div className="send">
-        <img src={Attach} alt="" />
+        <label src={Attach} alt="" htmlFor="file" >
+            <AttachFileIcon/>
+          </label>
         <input
           type="file"
           style={{ display: "none" }}
           id="file"
           onChange={(e) => setImg(e.target.files[0])}
         />
-        <label htmlFor="file">
-          <img src={Img} alt="" />
-        </label>
-        <button onClick={handleSend}>Send</button>
+     
+       <IconButton onClick={handleSend} color="primary" style={{background:'none',color:'#38bdf8  '}}>
+          <SendIcon />
+       </IconButton>
+        
       </div>
     </div>
   );

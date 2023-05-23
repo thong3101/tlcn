@@ -7,6 +7,7 @@ const Message = ({ message }) => {
   // const { currentUser } = useContext(AuthContext);
   const currentUser = useSelector((state) => state.auth.user);
   const { data } = useContext(ChatContext);
+  console.log(currentUser);
 
   const ref = useRef();
 
@@ -23,20 +24,35 @@ const Message = ({ message }) => {
         <img
           src={
             message.senderId === currentUser.id
-              ? currentUser.photoURL
+              ? currentUser.img
               : data.user.photoURL
           }
           alt=""
         />
-        <span>
+        <span style={{color:'white!important'}}>
           {message.senderId === currentUser.id
             ? currentUser.nickName
             : data.user.displayName}
         </span>
       </div>
       <div className="messageContent">
-        <p>{message.text}</p>
-        {message.img && <img src={message.img} alt="" />}
+        {message.text && (
+          <p
+            style={{
+              fontSize: "16px!important",
+              backgroundColor: "black!important",
+            }}
+          >
+            {message.text}
+          </p>
+        )}
+        {message.img && (
+          <img
+            src={message.img}
+            alt=""
+            style={{ borderRadius: "10px", maxBlockSize: "300px" }}
+          />
+        )}
       </div>
     </div>
   );
