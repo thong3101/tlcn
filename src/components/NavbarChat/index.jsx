@@ -9,10 +9,10 @@ const NavbarChat = () => {
   const currentUser = useSelector((state) => state.auth.user);
 
   return (
-    <div className='navbar'>
+    <div className='navbar' style={{borderRadius:'20px 0px 0px 0px'}} >
       <span className="logo">Senki Chat</span>
       <div className="user">
-        <img src={currentUser?.img} alt="" />
+        <img src={currentUser?.img||'https://res.cloudinary.com/dddmdgm0w/image/upload/v1663855039/cld-sample-5.jpg'} alt="" />
         <span>{currentUser.nickName}</span>
         {/* <button onClick={()=>signOut(auth)}>logout</button> */}
       </div>

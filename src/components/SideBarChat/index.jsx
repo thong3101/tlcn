@@ -5,7 +5,7 @@ import Search from "../SearchChat";
 
 const Sidebar = () => {
   return (
-    <div className="sidebar">
+    <div className="sidebar " style={{borderRadius:'20px 0px 0px 20px'}}>
       <Navbar />
       <Chats/>
     </div>

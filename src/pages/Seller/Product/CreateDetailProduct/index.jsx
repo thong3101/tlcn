@@ -42,7 +42,8 @@ function CreateDetailProduct(props) {
   useEffect(() => {
     const getData = () => {
       apiProductSeller.showCategory().then((res) => {
-        setListCategory(res.data.category);
+
+        setListCategory(res.data.category.filter((item)=>item.subCategories?.length==0));
       });
     };
     getData();
@@ -54,11 +55,11 @@ function CreateDetailProduct(props) {
 
   const onChangeImg = (e) => {
     setImg(e.target.files);
-    console.log("img",img)
-    (e.target.files).map((item) => {
-      if(item.size > 4194304){
+    (review).map((item) => {
+      if(item.size <4194304){
         toast.warning("Ảnh không quá 4MB");
-        setImg();
+        //remove file out of array
+        setImg([...img].filter((i) => i !== item));
       }
     })
    
@@ -107,6 +108,7 @@ function CreateDetailProduct(props) {
         setBrand("");
         setDescription("");
         setLoadingData(false);
+        setReview([]);
         toast.success("Thêm sản phẩm thành công");
       }
     } catch (error) {
@@ -191,7 +193,9 @@ function CreateDetailProduct(props) {
           width="700px"
           spacing={2}
           bgcolor="#fff"
+          
         >
+          <Typography variant="h5" sx={{ textAlign: "center" }}>Thêm sản phẩm</Typography>
           <Stack direction="row">
             <Typography className="cruBrand__label">Tên sản phẩm</Typography>
             <TextField
@@ -242,7 +246,7 @@ function CreateDetailProduct(props) {
                 size="small"
                 id="combo-box"
                 disablePortal
-                options={listCategory?.map((item) => item.subCategories.sort((itemSub) => itemSub)).flat()}
+                options={listCategory}
                 
                 getOptionLabel={(option) => `${option.name}`}
                 onChange={(event, newValue) => {
@@ -281,6 +285,8 @@ function CreateDetailProduct(props) {
               size="small"
               id="outlined-basic"
               variant="outlined"
+              rows={3}
+              multiline
               sx={{ flex: "1" }}
             />
           </Stack>
@@ -304,20 +310,22 @@ function CreateDetailProduct(props) {
             </FormControl>
           </Stack>
 
-          <Stack direction="row" p={2}>
+          <Stack direction="row" pt={4}>
             <Typography className="cruBrand__label">Thêm ảnh</Typography>
             <Stack>
               {/* {review?.map((item) => {
                 <img src={item.url} width="210px" height="210px" alt="" />;
               })} */}
               <ImageList
-                sx={{ width: 500, height: 200 }}
+                sx={{ width: 450, height: 200 }}
                 cols={3}
                 rowHeight={164}
+                style={{border:'2px dashed #ccc',marginBottom:'10px',borderRadius:'5px'}}
               >
                 {review?.map((item) => (
                   <ImageListItem key={item.id}>
                     <img
+                      style={{objectFit:'contain'}}
                       src={item}
                     />
                   </ImageListItem>

@@ -10,8 +10,8 @@ const Chat = () => {
   const { data } = useContext(ChatContext);
 
   return (
-    <div className="chat">
-      <div className="chatInfo">
+    <div className="chat" >
+      <div className="chatInfo" style={{borderRadius:'0px 20px 0px 0px'}}>
         <span>{data.user?.displayName}</span>
         <div className="chatIcons">
           <img src={Cam} alt="" />
@@ -19,7 +19,7 @@ const Chat = () => {
           <img src={More} alt="" />
         </div>
       </div>
-      <Messages />
+      <Messages/>
       <Input/>
     </div>
   );

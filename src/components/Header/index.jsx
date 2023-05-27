@@ -242,7 +242,8 @@ function Header() {
                           color: "white",
                         }}
                       >
-                        {user.nickName}
+                        {/* Filter nickName without suffix email */}
+                        {user?.nickName}
                       </Typography>
                     </Button>
                   </Stack>

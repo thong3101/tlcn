@@ -412,7 +412,7 @@ function FilterProduct(props) {
           {loadingData ? (
             <LoadingPage />
           ) : (
-            <Grid container spacing={2}>
+            <Grid container spacing={6} >
               {(value === 2
                 ? products?.sort((a, b) => b.sellAmount - a.sellAmount)
                 : products

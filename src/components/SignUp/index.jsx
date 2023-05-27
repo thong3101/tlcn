@@ -78,18 +78,18 @@ function SignUp(props) {
           .postRegister(param)
           .then(async (res) => {
             setIsSuccess(true);
+            console.log("a",res)
             //create user on firestore
-            await setDoc(doc(db, "users", res.data.user.id), {  
-              uid: res.data.user.id,
-              displayName: res.data.user.nickName,
-              email: res.data.user.email,
+            await setDoc(doc(db, "users", res.data.data.id), {  
+              uid: res.data.data.id,
+              displayName: res.data.data.nickName,
+              email: res.data.data.email,
             });
         
             //create empty user chats on firestore
-            await setDoc(doc(db, "userChats", res.data.user.id), {});
+            await setDoc(doc(db, "userChats", res.data.data.id), {});
           })
           .catch((res) => {
-            setMessage(res.response.data.message);
           })
           .finally(() => setLoading(false));
       }
