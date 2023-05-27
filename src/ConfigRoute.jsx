@@ -29,7 +29,7 @@ function ConfigRoute() {
       <Route path="cart" element={<Cart />} />
 
       {/* Routing customer account */}
-      <Route element={<PrivateRoute roles={["USER", "ADMIN"]} />}>
+      <Route element={<PrivateRoute roles={["USER", "ADMIN", "SELLER"]} />}>
         <Route path="payment" element={<Payment />} />
         <Route path="my-account/*" element={<CustomerAccount />} />
         <Route path="chat" element={<ChatArea/>} />
@@ -39,7 +39,7 @@ function ConfigRoute() {
         <Route path="admin/*" element={<Admin />} />
       </Route>
 
-      <Route element={<PrivateRoute roles={["ADMIN"]} />}>
+      <Route element={<PrivateRoute roles={["SELLER"]} />}>
         <Route path="seller/*" element={<Seller />} />
       </Route>
 

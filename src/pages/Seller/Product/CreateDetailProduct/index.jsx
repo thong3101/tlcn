@@ -12,8 +12,11 @@ import { productBrand } from "../../../../constraints/Product";
 import "./CreateDetailProduct.scss";
 
 import apiCategory from "../../../../apis/apiCategory";
+import apiProductSeller from "../../../../apis/apiProductSeller";
 import apiProduct from "../../../../apis/apiProduct";
 import LoadingPage from "../../../../components/LoadingPage";
+
+import { useSelector } from "react-redux";
 
 function CreateDetailProduct(props) {
   const [review, setReview] = React.useState();
@@ -34,14 +37,18 @@ function CreateDetailProduct(props) {
 
   const [loadingData, setLoadingData] = useState(false);
 
+  const currentUser = useSelector((state) => state.auth.user);
+
   useEffect(() => {
     const getData = () => {
-      apiCategory.showAllCategory().then((res) => {
+      apiProductSeller.showCategory().then((res) => {
         setListCategory(res.data.category);
       });
     };
     getData();
   }, []);
+
+  console.log("1",listCategory)
 
   // Change value of select box
 
@@ -67,6 +74,7 @@ function CreateDetailProduct(props) {
         stock: quantity,
         cate_id: category,
         brand_id: brand.toString(),
+        seller_id: currentUser.id,
       };
 
       console.log("pp", params);
@@ -75,8 +83,8 @@ function CreateDetailProduct(props) {
         toast.warning("Vui lòng nhập đầy đủ thông tin !!");
         return;
       } else {
-        const idProductInsert = await apiProduct
-          .insertProduct(params)
+        const idProductInsert = await apiProductSeller
+          .insertProductSeller(params)
           .then((res) => {
             return res.data.product_id;
           });
@@ -98,6 +106,7 @@ function CreateDetailProduct(props) {
         toast.success("Thêm sản phẩm thành công");
       }
     } catch (error) {
+      setLoadingData(false);
       toast.error("Thêm sản phẩm thất bại!");
     }
   };
@@ -112,12 +121,13 @@ function CreateDetailProduct(props) {
         stock: quantity,
         cate_id: category?.id?category.id:category,
         brand_id: brand.toString(),
+        seller_id: currentUser.id,
       };
       if (!(name && category && quantity && price && brand && description)) {
         toast.warning("Vui lòng nhập đầy đủ thông tin !!");
         return;
       } else {
-        await apiProduct.updateProduct(params, idProduct).then((res) => {
+        await apiProductSeller.updateProduct(params, idProduct).then((res) => {
           console.log("res", res);
         });
 
@@ -131,7 +141,7 @@ function CreateDetailProduct(props) {
         }
         setLoadingData(false);
         toast.success("Sửa sản phẩm thành công");
-        navigate("/admin/product");
+        navigate("/seller/product");
       }
     } catch (error) {
       setLoadingData(false);

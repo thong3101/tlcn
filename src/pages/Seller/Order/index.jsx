@@ -65,7 +65,7 @@ function OrderList() {
     setLoadingData(true);
     const getData = async () => {
       apiCart
-        .getOrdersAdmin()
+        .getOrdersSeller()
         .then((response) => {
           setOrders(response.data.orders);
           setTotalPage(Math.ceil(response.data.orders.length / size));

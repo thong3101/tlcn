@@ -32,7 +32,9 @@ export const axiosClientWithToken = axios.create({
 export const axiosClientWithFile = axios.create({
     baseURL: baseURL,
     headers: {
-        "Content-Type": "multipart/form-data"
+        "Content-Type": "multipart/form-data",
+        'Access-Control-Allow-Origin' : '*',
+        'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
     },
     withCredentials: true,
     paramsSerializer: (params) => queryString.stringify(params)

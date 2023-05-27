@@ -13,6 +13,7 @@ import {
 import React from "react";
 import apiProduct from "../../../../apis/apiProduct";
 import "./SettingProduct.scss";
+import apiProductSeller from "../../../../apis/apiProductSeller";
 
 import { toast } from "react-toastify";
 
@@ -22,8 +23,11 @@ function SettingProduct() {
   const [page, setPage] = React.useState(1);
   const [totalPage, setTotalPage] = React.useState(10);
 
+  const [searchText, setSearchText] = React.useState("");
+
   //Checked
   const [checked, setChecked] = React.useState(true);
+
 
   const handleChange = (event) => {
     setChecked(event.target.checked);
@@ -35,6 +39,54 @@ function SettingProduct() {
   };
 
   console.log(products);
+
+  React.useEffect(() => {
+    const getData = async () => {
+      let param = {
+        size:"100",
+        sort: "",
+      };
+
+      switch (price) {
+        case 1: {
+          param = { ...param, sort: "price_asc" };
+          break;
+        }
+        case 2: {
+          param = { ...param, sort: "price_desc" };
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+
+      if (searchText == "") {
+        apiProductSeller
+          .getSellerProduct(param)
+          .then((res) => {
+            setProducts(res.data.list);
+            setTotalPage(Math.ceil(res.data.list.length / size));
+          })
+          .catch((error) => {
+            setProducts(null);
+          });
+      } else {
+        apiProductSeller
+          .getSellerProduct(param, searchText)
+          .then((res) => {
+            setProducts(res.data.list);
+            setTotalPage(Math.ceil(res.data.list.length / size));
+          })
+          .catch((error) => {
+            setProducts(null);
+          });
+      }
+
+      console.log("pp", param);
+    };
+    getData();
+  }, [price, searchText]);
 
   const lastPostIndex = page * size;
   const firstPostIndex = lastPostIndex - size;

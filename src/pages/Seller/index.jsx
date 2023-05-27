@@ -493,10 +493,10 @@ function Seller() {
               <Routes>
                 <Route index element={<Product />} />
                 <Route path="create" element={<CreateDetailProduct />} />
-                {/* <Route
+                <Route
                   path="edit/:id"
                   element={<CreateDetailProduct edit={true} />}
-                /> */}
+                />
                 <Route path="infringe" element={<InfringeProduct />} />
                 <Route path="setting" element={<SettingProduct />} />
               </Routes>
