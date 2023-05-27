@@ -54,6 +54,13 @@ function CreateDetailProduct(props) {
 
   const onChangeImg = (e) => {
     setImg(e.target.files);
+    console.log("img",img)
+    (e.target.files).map((item) => {
+      if(item.size > 4194304){
+        toast.warning("Ảnh không quá 4MB");
+        setImg();
+      }
+    })
    
     if (e.target.files.length > 0) {
       setReview([...review,URL.createObjectURL(e.target.files[0])]);
