@@ -19,7 +19,7 @@ import LoadingPage from "../../../../components/LoadingPage";
 import { useSelector } from "react-redux";
 
 function CreateDetailProduct(props) {
-  const [review, setReview] = React.useState();
+  const [review, setReview] = React.useState([]);
   const [img, setImg] = React.useState();
   const [edit, setEdit] = useState(props.edit);
   const [product, setProduct] = useState();
@@ -54,14 +54,11 @@ function CreateDetailProduct(props) {
 
   const onChangeImg = (e) => {
     setImg(e.target.files);
-    console.log("img", e.target.files);
-    for (let i = 0; i < img.length; i++) {
-      formData.append(`files`, img[i]);
+   
+    if (e.target.files.length > 0) {
+      setReview([...review,URL.createObjectURL(e.target.files[0])]);
+      console.log("REVIEW",review[0])
     }
-    // if (e.target.files.length > 0) {
-    //   setReview(URL.createObjectURL(e.target.files[0]));
-
-    // }
   };
 
   const handleInsert = async () => {
@@ -314,8 +311,7 @@ function CreateDetailProduct(props) {
                 {review?.map((item) => (
                   <ImageListItem key={item.id}>
                     <img
-                      src={`${item.url}?w=164&h=164&fit=crop&auto=format`}
-                      loading="lazy"
+                      src={item}
                     />
                   </ImageListItem>
                 ))}
