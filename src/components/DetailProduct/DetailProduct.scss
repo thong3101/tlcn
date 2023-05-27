@@ -150,3 +150,37 @@
         }
     }
 }
+
+.seller {
+    padding-right: 1.5625rem;
+    display: flex;
+    max-width: 27.5rem;
+    margin-top: 10px;
+    &__img {
+        flex-shrink: 0;
+        margin-right: 1.25rem;
+        position: relative;
+        overflow: visible;
+        outline: 0;
+    }
+    &__info {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        overflow: hidden;
+        &-item1 {
+            font-weight: 400;
+            font-size: 1rem;
+            color: rgba(0,0,0,.87);
+            margin: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        &-item2 {
+            margin-top: 8px;
+            display: flex;
+        }
+    }
+}

@@ -49,6 +49,8 @@ function Payment() {
     calcPrice();
   }, [CartItems]);
 
+  console.log("222",CartItems);
+
   useEffect(() => {
     const getAddresses = () => {
       apiAddress
@@ -117,9 +119,10 @@ function Payment() {
       return {
         productId: item.id,
         productName: item.name,
-        productImage: item.imageList[0].url,
+        productImage: item.imageList[0]?.url,
         quantity: item.quantity,
         price: item.price,
+        sellerId: item.seller.id,
       };
     });
 

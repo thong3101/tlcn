@@ -18,6 +18,7 @@ import { addItem } from "../../slices/cartSlice";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import imgDefault from "../../assets/img/img_default.jpg";
+import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
 import { numWithCommas } from "../../constraints/Util";
 
 import { useSelector } from "react-redux";
@@ -41,7 +42,6 @@ function DetailProduct({ data, rating }) {
     { label: "Hai Phong", year: 1957 },
   ];
 
-
   const currentUser = useSelector((state) => state.auth.user);
   const navigate = useNavigate();
 
@@ -50,7 +50,7 @@ function DetailProduct({ data, rating }) {
 
   const [ratingProduct, setRatingProduct] = useState(0);
 
-  console.log("r", rating);
+  console.log("r", data);
 
   const handleRating = (rating) => {
     if (rating) {
@@ -81,6 +81,7 @@ function DetailProduct({ data, rating }) {
         id: data.id,
         name: data.name,
         imageList: data.imageList,
+        seller: data.seller,
         price: data.price,
         quantity,
       })
@@ -206,17 +207,9 @@ function DetailProduct({ data, rating }) {
             <button
               className="detailProduct__add-to-cart"
               onClick={handleClickAddItem}
-              style={{ fontWeight: 600, marginLeft:"20px" }}
+              style={{ fontWeight: 600, marginLeft: "20px" }}
             >
               THÊM VÀO GIỎ HÀNG
-            </button>
-
-            <button
-              className="detailProduct__add-to-cart"
-              onClick={handleMessage}
-              style={{ fontWeight: 600, marginLeft:"20px" }}
-            >
-              Nhắn tin cho người bán
             </button>
           </div>
           <div className="detailProduct__info-guide">
@@ -232,13 +225,35 @@ function DetailProduct({ data, rating }) {
               <BookIcon sx={{ fontSize: "20px", marginRight: "2px" }} />
               <p>Câu hỏi thường gặp khi mua hàng</p>
             </div>
-            <FacebookIcon
+            {/* <FacebookIcon
               sx={{
                 fontSize: "40px",
                 marginTop: "20px",
                 cursor: "pointer",
               }}
-            />
+            /> */}
+            <div className="seller">
+              <img className="seller__img" alt="" src={data?.seller.img} />
+              <div className="seller__info">
+                <div className="seller__info-item1"> Người bán : 
+                  {data?.seller.nickName}
+                </div>
+                <div className="seller__info-item2">
+                  <button
+                    className="detailProduct__add-to-cart"
+                    onClick={handleMessage}
+                    style={{
+                      fontWeight: 600,
+                      textTransform: "uppercase",
+                    }}
+                    
+                  >
+                    <ChatOutlinedIcon sx={{marginRight:"6px"}}/>
+                    Chat ngay
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div className="detailProduct__support">
@@ -293,7 +308,7 @@ function DetailProduct({ data, rating }) {
                   marginRight: "15px",
                 }}
               />
-              <p className="!mt-4" >Đặt hàng online, giao hàng COD toàn quốc</p>
+              <p className="!mt-4">Đặt hàng online, giao hàng COD toàn quốc</p>
             </div>
           </div>
         </div>

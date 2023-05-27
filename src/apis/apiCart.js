@@ -24,12 +24,12 @@ const apiCart = {
         return res.data;
     },
     saveOrderCOD: async (params) => {
-        const res = await axiosClientWithToken.post('/order/cod',params)
+        const res = await axiosClientWithToken.post('/v2/order/cod',params)
         return res.data;
     },
 
     saveOrderPayPal: async (params) => {
-        const res = await axiosClientWithToken.post('/order/paypal',params)
+        const res = await axiosClientWithToken.post('/v2/order/paypal',params)
         return res.data;
     },
     
