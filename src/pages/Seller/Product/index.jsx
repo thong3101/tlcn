@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
-import apiProduct from "../../../apis/apiProduct";
+import apiProductSeller from "../../../apis/apiProductSeller";
 import "./Product.scss";
 
 import { toast } from "react-toastify";
@@ -59,8 +59,8 @@ function Product() {
       }
 
       if (searchText == "") {
-        apiProduct
-          .getAllProduct(param)
+        apiProductSeller
+          .getSellerProduct(param)
           .then((res) => {
             setProducts(res.data.list);
             setTotalPage(Math.ceil(res.data.list.length / size));
@@ -69,8 +69,8 @@ function Product() {
             setProducts(null);
           });
       } else {
-        apiProduct
-          .getProductsSearch(param, searchText)
+        apiProductSeller
+          .getSellerProduct(param, searchText)
           .then((res) => {
             setProducts(res.data.list);
             setTotalPage(Math.ceil(res.data.list.length / size));
@@ -105,21 +105,21 @@ function Product() {
     setModalDelete(false)
   }
 
-  const handleDeleteProduct = () => {
-    const product = products.filter(item => {
-      return itemdelete.id !== item.id
-    }
-    )
-    setProducts(product);
-    closeModalDelete();
-    apiProduct.deleteProduct(itemdelete.id)
-      .then(res => {
-        toast.success("Xóa thành công")
-      })
-      .catch(error => {
-        toast.error("Xóa không thành công!")
-      })
-  }
+  // const handleDeleteProduct = () => {
+  //   const product = products.filter(item => {
+  //     return itemdelete.id !== item.id
+  //   }
+  //   )
+  //   setProducts(product);
+  //   closeModalDelete();
+  //   apiProduct.deleteProduct(itemdelete.id)
+  //     .then(res => {
+  //       toast.success("Xóa thành công")
+  //     })
+  //     .catch(error => {
+  //       toast.error("Xóa không thành công!")
+  //     })
+  // }
 
   return (
     <>
@@ -224,17 +224,17 @@ function Product() {
                     </TableCell>
                     <TableCell align="center">
                       <Stack spacing={1} justifyContent="center" py={1}>
-                        <Link to={`/admin/product/edit/${item.id}`}>
+                        <Link to={`/seller/product/edit/${item.id}`}>
                           <Button variant="contained" sx={{width:"100%"}}>Sửa</Button>
                         </Link>
 
-                        <Button
+                        {/* <Button
                           onClick={() => openModalDelete(item)}
                           variant="outlined"
                           color="error"
                         >
                           Xóa
-                        </Button>
+                        </Button> */}
                       </Stack>
                     </TableCell>
                   </TableRow>
@@ -257,7 +257,7 @@ function Product() {
           ) : (
             <></>
           )}
-          <Modal
+          {/* <Modal
             sx={{ overflowY: "scroll",justifyContent:"center" }}
             open={modalDelete}
             onClose={closeModalDelete}
@@ -288,7 +288,7 @@ function Product() {
                 </Stack>
               </Stack>
             </Stack>
-          </Modal>
+          </Modal> */}
         </Box>
       </Box>
     </>
