@@ -48,7 +48,6 @@ const Input = () => {
     if (img) {
       const storageRef = ref(storage, uuid());
       const uploadTask = uploadBytesResumable(storageRef, img);
-
       uploadTask.on(
         "state_changed",
         (snapshot) => {
@@ -65,6 +64,7 @@ const Input = () => {
           // Handle successful uploads on complete
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             console.log("File available at", downloadURL);
+            setImg(null);
             setImage(downloadURL);
           });
         }
