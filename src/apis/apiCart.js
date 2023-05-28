@@ -59,7 +59,7 @@ const apiCart = {
     },
 
     getOrdersSeller: async (params) => {
-        const res = await axiosClientWithToken.get('/seller/product/order', params)
+        const res = await axiosClientWithToken.get('/seller/order', params)
         return res.data;
     },
 
