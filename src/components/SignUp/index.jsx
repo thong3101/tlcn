@@ -88,6 +88,9 @@ function SignUp(props) {
         
             //create empty user chats on firestore
             await setDoc(doc(db, "userChats", res.data.data.id), {});
+
+            //create empty noti on firestore
+            await setDoc(doc(db, "noti", res.data.data.id), { noti: [] });
           })
           .catch((res) => {
           })

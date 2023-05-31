@@ -7,16 +7,42 @@ import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined
 
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Stack, Button, Typography, Badge, Box, Modal,Divider } from "@mui/material";
-
+import {
+  Stack,
+  Button,
+  Typography,
+  Badge,
+  Box,
+  Modal,
+  Divider,
+  IconButton,
+  InputBase,
+  SwipeableDrawer,
+} from "@mui/material";
 
 import { logoutSuccess } from "../../slices/authSlice";
 
 import Login from "../Login";
 import SignUp from "../SignUp";
 import ForgetPassword from "../ForgetPassword";
-import { Add, Info, PermContactCalendar, VerticalAlignCenter } from "@mui/icons-material";
+import {
+  Add,
+  Info,
+  PermContactCalendar,
+  VerticalAlignCenter,
+} from "@mui/icons-material";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 import apiCategory from "../../apis/apiCategory";
+
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import CloseIcon from "@mui/icons-material/Close";
+import { Notifies } from "../../constraints/AdminNotify";
+
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../../firebase";
+import moment from "moment";
 
 const privatePath = ["/my-account/", "/admin/", "/payment", "/chat"];
 
@@ -31,6 +57,7 @@ function Header() {
   const [isLoginForm, setIsLoginForm] = useState(true);
   const [isRegister, setIsRegister] = useState(false);
   const [isForgetPwd, setIsForgetPwd] = useState(false);
+  const [searchText, setSearchText] = useState("");
 
   const [categories, setCategories] = useState([]);
 
@@ -46,6 +73,124 @@ function Header() {
     if (isPrivate) {
       navigate("/");
     }
+  };
+
+  const [openNotify, setOpenNotify] = React.useState(false);
+
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    if(user){
+      const unSub = onSnapshot(doc(db, "noti", user.id), (doc) => {
+        doc.exists() && setNotifications(doc.data().noti);
+      });
+  
+      return () => {
+        unSub();
+      };
+    }
+    
+  }, [user]);
+
+  console.log("noti", notifications);
+
+  const CloseNotify = () => {
+    setOpenNotify(false);
+  };
+
+  const formNotify = () => {
+    return (
+      <Box sx={{ zIndex: "10", width: "400px", mt: "5rem" }}>
+        <Stack>
+          <Stack direction="row" justifyContent="space-between">
+            <Stack sx={{ padding: "12px" }}>
+              <Typography sx={{ fontSize: "16px", fontWeight: "600" }}>
+                Thông báo
+              </Typography>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Button
+                  size="medium"
+                  sx={{ fontWeight: "400" }}
+                  startIcon={<FormatListBulletedIcon fontSize="small" />}
+                >
+                  Tất cả
+                </Button>
+                <Divider
+                  orientation="vertical"
+                  sx={{
+                    height: "0.9rem",
+                    marginRight: "6px",
+                    marginLeft: "6px",
+                  }}
+                />
+                <Button
+                  size="medium"
+                  sx={{ fontWeight: "400" }}
+                  startIcon={<CheckCircleOutlineIcon fontSize="small" />}
+                >
+                  Chưa đọc
+                </Button>
+              </Stack>
+            </Stack>
+            <IconButton onClick={CloseNotify}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </Stack>
+          <Divider light />
+          <Stack sx={{ padding: "12px" }}>
+            {notifications.map((item) => (
+              <Stack key={item.id}>
+                <Stack direction="row" spacing={2} sx={{ padding: "12px" }}>
+                  <Stack width="56px" height="56px">
+                    <img
+                      style={{
+                        borderRadius: "8px",
+                        backgroundColor: "black",
+                        height: "100%",
+                      }}
+                      src="https://res.cloudinary.com/dddmdgm0w/image/upload/v1670075080/senki_avatar/senki_avatar/senki-high-resolution-logo-white-on-transparent-background_ouktxc.png"
+                    />
+                  </Stack>
+                  <Stack sx={{ overflow: "auto" }}>
+                    <Stack>
+                      <div>
+                        <Typography
+                          sx={{ fontSize: "14px", fontWeight: "bold" }}
+                        >
+                          {item.title}
+                        </Typography>
+                        <Typography sx={{ fontSize: "14px" }}>
+                          {item.text}
+                        </Typography>
+                      </div>
+                    </Stack>
+                    {item.date && (
+                      <Typography sx={{ fontSize: "12px" }}>
+                        {/* {item.date} */}
+                        {moment(item.date?.toDate()).fromNow()}
+                      </Typography>
+                    )}
+                  </Stack>
+                </Stack>
+                <Divider light />
+              </Stack>
+            ))}
+          </Stack>
+        </Stack>
+      </Box>
+    );
+  };
+
+  const onChangeSearch = (event) => {
+    setSearchText(event.target.value);
+  };
+
+  const handleSubmitSearch = () => {
+    navigate(`/search/${searchText}`);
   };
 
   const closeModalLogin = () => {
@@ -118,110 +263,54 @@ function Header() {
         <Link className="header__logo" to={"/"}>
           <img
             alt=""
-            style={{ width: "100%", height: "100%",objectFit:"cover" }}
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
             src="https://res.cloudinary.com/dddmdgm0w/image/upload/v1670075080/senki_avatar/senki_avatar/senki-high-resolution-logo-white-on-transparent-background_ouktxc.png"
           />
         </Link>
 
         {/* Left Element */}
-        <div className="element header__leftElement">
-          <ul className="navbar">
-            <li>
-              <Link
-                to={"product-category/d98667d1-c9a3-4f64-8c7b-4ef83d0fac48"}
-              >
-                <Typography sx={{ fontSize: "14px", paddingBottom: "6px" }} >
-                  Đàn Guitar
-                  <ArrowDropDownOutlinedIcon />
-                </Typography>
-                {/* <FontAwesomeIcon icon="fa-light fa-chevron-down" /> */}
-              </Link>
-              <ul className="subnav subnav__dropdown">
-                <li>
-                  <Link to={"product-category/da2e6e42-7321-489c-9a82-7f726c27b235"}>Đàn Guitar Classic</Link>
-                </li>
-                <li>
-                  <Link to={"product-category/ee0f24bb-6a8d-4c9e-bc3e-90313c2d6852"}>Đàn Guitar Acoustic</Link>
-                </li>
-                <li>
-                  <Link to={"product-category/7bc16cfe-1ad4-4f7a-aba2-5b067591e90f"}>Đàn Guitar EQ</Link>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <Link to={"#"}>
-                <Typography sx={{ fontSize: "14px", paddingBottom: "6px" }}>
-                  Nhạc Cụ Khác
-                  <ArrowDropDownOutlinedIcon />
-                </Typography>
-              </Link>
-              <ul className="subnav subnav__dropdown">
-                <li>
-                  <Link
-                    to={"product-category/0b4020de-ef99-4fca-83ee-92fc62e0b6d9"}
-                  >
-                    Đàn Ukulele
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to={"product-category/9b1e2a20-c19c-44e2-abab-9412343b4e1f"}
-                  >
-                    Kèn harmonica
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to={"product-category/ccefc41e-1e12-45f7-a8e5-98c8db8227f5"}
-                  >
-                    Rollup Piano
-                  </Link>
-                </li>
-              </ul>
-            </li>
 
-            <li>
-              <Link to={"product-category/ab9b9251-8f67-4250-8b36-4106841b46e8"}>
-                <Typography sx={{ fontSize: "14px", paddingBottom: "6px" }}>
-                  Đàn Piano
-                  <ArrowDropDownOutlinedIcon />
-                </Typography>
-              </Link>
-              <ul className="subnav subnav__dropdown">
-                <li>
-                  <Link to={"product-category/4ca00442-e1f8-40c0-9c0a-ac753780ad2b"}>Grand Piano</Link>
-                </li>
-                <li>
-                  <Link to={"product-category/c0bb734a-76c8-41b3-ac60-9c34d5f12201"}>Digital Piano</Link>
-                </li>
-                <li>
-                  <Link to={"product-category/37d1b49b-69b4-4866-b81c-cc3389196883"}>Silent Piano</Link>
-                </li>
-              </ul>
-            </li>
-            
-
-            <li>
-              <Link to={"product-category/75bba741-2720-4ce3-8d24-7fb6bd3a2aa0"}>
-                <Typography sx={{ fontSize: "14px", paddingBottom: "6px" }}>
-                  Phụ Kiện Guitar
-                  <ArrowDropDownOutlinedIcon />
-                </Typography>
-              </Link>
-              <ul className="subnav subnav__dropdown">
-                <li>
-                  <Link to={"product-category/fb320d77-73e1-490a-8f37-d9718448fc3c"}>Dây đàn guitar</Link>
-                </li>
-                <li>
-                  <Link to={"product-category/3fd314f0-219d-4233-99f4-f91b20c80a8b"}>Khóa đàn Guitar</Link>
-                </li>
-                <li>
-                  <Link to={"product-category/ae53d467-c176-4a94-8e27-6fd3de971ba3"}>Giá đỡ, chân đàn</Link>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
+        <Box sx={{ flex: 1, maxWidth: "760px" }} className="header__search">
+          <Stack
+            direction="row"
+            alignItems="center"
+            sx={{
+              padding: "0",
+              height: "40px",
+              flex: 1,
+              position: "relative",
+            }}
+          >
+            <InputBase
+              style={{
+                height: "100%",
+                flex: 1,
+                border: "1px solid #f4ba36",
+                backgroundColor: "#38383b",
+                paddingLeft: "10px",
+                color: "white",
+              }}
+              size="small"
+              id="input-search"
+              placeholder="Tìm kiếm ..."
+              value={searchText}
+              onChange={onChangeSearch}
+              debounceTimeout={500}
+            />
+            <IconButton
+              sx={{
+                height: "100%",
+                width: "2rem",
+                backgroundColor: "#f4ba36",
+                borderRadius: "0",
+              }}
+              variant="contained"
+              onClick={() => handleSubmitSearch(searchText)}
+            >
+              <SearchIcon />
+            </IconButton>
+          </Stack>
+        </Box>
 
         {/* Right Element */}
         <div className="element header_rightElement">
@@ -232,7 +321,7 @@ function Header() {
                   <Stack>
                     <Button
                       sx={{ color: "white", padding: "6px 0" }}
-                      endIcon={<ArrowDropDownOutlinedIcon />}
+                      // endIcon={<ArrowDropDownOutlinedIcon />}
                     >
                       <Typography
                         className="text-overflow-1-lines"
@@ -243,16 +332,15 @@ function Header() {
                         }}
                       >
                         {/* Filter nickName without suffix email */}
-                        {user?.nickName}
+                        <AccountCircle />
                       </Typography>
                     </Button>
                   </Stack>
 
-                  <Box className="header__dropdown" >
+                  <Box className="header__dropdown">
                     <Link
                       to={"/my-account/orders"}
                       style={{ padding: "8px 20px" }}
-                      
                     >
                       Đơn hàng của tôi
                     </Link>
@@ -264,14 +352,10 @@ function Header() {
                       Sản phẩm yêu thích
                     </Link>
 
-
-                    <Link
-                      to={"/my-account"}
-                      style={{ padding: "8px 20px" }}
-                    >
+                    <Link to={"/my-account"} style={{ padding: "8px 20px" }}>
                       Tài khoản của tôi
                     </Link>
-                        <Divider variant="inset" component="li" />
+                    <Divider variant="inset" component="li" />
                     <Box onClick={handleLogout} style={{ fontSize: "14px" }}>
                       Thoát tài khoản
                     </Box>
@@ -292,7 +376,12 @@ function Header() {
 
             <li>
               <Link to="/cart">
-                <Badge color="warning" badgeContent={cart.length} invisible={cart.length===0} showZero>
+                <Badge
+                  color="warning"
+                  badgeContent={cart.length}
+                  invisible={cart.length === 0}
+                  showZero
+                >
                   <ShoppingBagIcon sx={{ fontSize: "25px" }} />
                 </Badge>
               </Link>
@@ -301,19 +390,34 @@ function Header() {
             <li className="divider"></li>
 
             <li>
-              <div className="buttonSearch">
-                <Link
-                  to={"/"}
-                  className="icon"
-                  aria-label="Tìm Kiếm"
-                  data-open="#search-lightbox"
-                  data-focus="input.search-field"
-                >
-                  <SearchIcon
-                    sx={{ fontSize: "20px", color: "#ffffff", margin: "1px" }}
-                  />
-                </Link>
-              </div>
+              {user ? (
+                <>
+                  <IconButton
+                    size="large"
+                    aria-label="show 17 new notifications"
+                    color="inherit"
+                    onClick={() => setOpenNotify(true)}
+                  >
+                    <Badge
+                      badgeContent={notifications.length}
+                      invisible={notifications.length === 0}
+                      color="warning"
+                    >
+                      <NotificationsIcon sx={{ color: "white" }} />
+                    </Badge>
+                  </IconButton>
+                  <SwipeableDrawer
+                    anchor="right"
+                    open={openNotify}
+                    onClose={() => setOpenNotify(false)}
+                    onOpen={() => setOpenNotify(true)}
+                  >
+                    {formNotify()}
+                  </SwipeableDrawer>
+                </>
+              ) : (
+                <></>
+              )}
             </li>
           </ul>
         </div>

@@ -17,6 +17,17 @@ import apiAddress from "../../apis/apiAddress";
 // import apiNotify from '../../apis/apiNotify'
 import Loading from "../../components/Loading";
 
+import {
+  arrayUnion,
+  doc,
+  serverTimestamp,
+  Timestamp,
+  updateDoc,
+} from "firebase/firestore";
+
+import { db } from "../../firebase";
+import { v4 as uuid } from "uuid";
+
 function Payment() {
   const [open, setOpen] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -32,7 +43,7 @@ function Payment() {
   const coupon = useSelector((state) => state.payment.coupon);
   // const addresses = useSelector((state) => state.payment.address);
   const [addresses, setAddresses] = useState();
-  const user = useSelector((state) => state.auth.user);
+  const currentUser = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -49,7 +60,7 @@ function Payment() {
     calcPrice();
   }, [CartItems]);
 
-  console.log("222",CartItems);
+  console.log("222",payment);
 
   useEffect(() => {
     const getAddresses = () => {
@@ -130,12 +141,22 @@ function Payment() {
     if (payment == 2) {
       apiCart
         .saveOrderPayPal(payload)
-        .then((res) => {
+        .then(async (res) => {
           toast.success("Đặt hàng thành công!");
           dispatch(deleteAll());
           // navigate(res.data.link);
+
+          await updateDoc(doc(db, "noti", currentUser.id), {
+            noti: arrayUnion({
+              id: uuid(),
+              text:"Đơn hàng của đã được đặt thành công",
+              senderId: currentUser.id,
+              date: Timestamp.now(),
+            }),
+          });
           window.location.replace(res.data.link);
         })
+        
         .catch((error) => {
           toast.error("Đặt hàng không thành công. Vui lòng thử lại");
         })
@@ -145,9 +166,19 @@ function Payment() {
     } else {
       apiCart
         .saveOrderCOD(payload)
-        .then((res) => {
+        .then(async (res) => {
           toast.success("Đặt hàng thành công!");
           dispatch(deleteAll());
+          await updateDoc(doc(db, "noti", currentUser.id), {
+            noti: arrayUnion({
+              id: uuid(),
+              title:"Thông báo đơn hàng",
+              text:"Đơn hàng của đã được đặt thành công",
+              senderId: currentUser.id,
+              date: Timestamp.now(),
+            }),
+          });
+          console.log("res",res)
           navigate("/my-account/orders");
         })
         .catch((error) => {
