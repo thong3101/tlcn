@@ -48,6 +48,8 @@ function Orders() {
     getData();
   }, [page, user]);
 
+  console.log(orders)
+
   console.log("222", totalPage);
 
   const handleChange = (event, newValue) => {

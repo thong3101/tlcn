@@ -24,6 +24,11 @@ const apiProductSeller = {
     const res = await axiosClient.get("/category", params);
     return res.data;
   },
+
+  getStatics: async (year) => {
+    const res = await axiosClientWithToken.get(`/seller/static/${year}`);
+    return res.data;
+  },
 };
 
 export default apiProductSeller;

@@ -73,6 +73,7 @@ function Header() {
     if (isPrivate) {
       navigate("/");
     }
+    setNotifications([]);
   };
 
   const [openNotify, setOpenNotify] = React.useState(false);
@@ -191,6 +192,7 @@ function Header() {
 
   const handleSubmitSearch = () => {
     navigate(`/search/${searchText}`);
+    setSearchText("");
   };
 
   const closeModalLogin = () => {

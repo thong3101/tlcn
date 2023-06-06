@@ -10,13 +10,13 @@ import Payment from "./pages/Payment";
 import Admin from "./pages/Admin";
 import Seller from "./pages/Seller";
 import ChatArea from "./pages/ChatArea";
+import LoginShipper from "./pages/LoginShipper";
+import RegisterShipper from "./pages/RegisterShipper";
+import Shipper from "./pages/Shipper";
 
-
-import LoadingPage from "./components/LoadingPage"
-
+import LoadingPage from "./components/LoadingPage";
 
 import PrivateRoute from "./components/PrivateRoute";
-
 
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -24,7 +24,6 @@ import { ToastContainer } from "react-toastify";
 function ConfigRoute() {
   return (
     <Routes>
-
       <Route path="/" element={<Home />} />
       <Route path="cart" element={<Cart />} />
 
@@ -32,7 +31,7 @@ function ConfigRoute() {
       <Route element={<PrivateRoute roles={["USER", "ADMIN", "SELLER"]} />}>
         <Route path="payment" element={<Payment />} />
         <Route path="my-account/*" element={<CustomerAccount />} />
-        <Route path="chat" element={<ChatArea/>} />
+        <Route path="chat" element={<ChatArea />} />
       </Route>
 
       <Route element={<PrivateRoute roles={["ADMIN"]} />}>
@@ -43,6 +42,12 @@ function ConfigRoute() {
         <Route path="seller/*" element={<Seller />} />
       </Route>
 
+      <Route element={<PrivateRoute roles={["SHIPPER"]} />}>
+        <Route path="shipper/*" element={<Shipper />} />
+      </Route>
+
+      <Route path="shipper/login" element={<LoginShipper />} />
+      <Route path="shipper/register" element={<RegisterShipper />} />
 
       <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
       <Route path="product-detail/:id" element={<ProductDetail />} />

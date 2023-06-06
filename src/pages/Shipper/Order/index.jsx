@@ -20,7 +20,7 @@ import "./Order.scss";
 
 import SearchIcon from "@mui/icons-material/Search";
 import { styled } from "@mui/material/styles";
-import apiCart from "../../../apis/apiCart";
+
 
 import LoadingPage from "../../../components/LoadingPage";
 
@@ -29,6 +29,7 @@ import {
   numWithCommas,
   reduceUUIDDisplayLength,
 } from "../../../constraints/Util";
+import apiShipper from "../../../apis/apiShipper";
 
 const listStatus = ["Mã đơn hàng", "SKU", "Thông tin khách hàng"];
 const listOrderDate = [
@@ -64,10 +65,10 @@ function OrderList() {
   useEffect(() => {
     setLoadingData(true);
     const getData = async () => {
-      apiCart
-        .getOrdersSeller()
+      apiShipper
+        .getOrdersShipper()
         .then((response) => {
-          setOrders(response.data.order);
+          setOrders(response.data.list);
           setTotalPage(Math.ceil(response.data.length / size));
         })
         .catch(setOrders([]))
@@ -78,6 +79,7 @@ function OrderList() {
     getData();
   }, [page, selected]);
 
+  console.log(orders)
   // const handleClickTab = (i) => {
   //   if (i !== selected) setSelected(i);
   // };

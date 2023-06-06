@@ -22,16 +22,17 @@ function App() {
   }
   const isAdmin = window.location.href.includes("admin");
   const isSeller = window.location.href.includes("seller");
+  const isShipper = window.location.href.includes("shipper");
   return (
     <div className="App">
       <BrowserRouter>
         {/* <CheckAuthentication /> */}
         <ScrollToTop>
           <ToastContainer />
-          {isAdmin || isSeller ? null : <Header />}
+          {isAdmin || isSeller || isShipper ? null : <Header />}
           
           <ConfigRoute />
-          {isAdmin || isSeller ? null : <Footer />}
+          {isAdmin || isSeller || isShipper ? null : <Footer />}
 
         </ScrollToTop>
       </BrowserRouter>
