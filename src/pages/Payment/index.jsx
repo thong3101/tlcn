@@ -168,16 +168,17 @@ function Payment() {
         .saveOrderCOD(payload)
         .then(async (res) => {
           toast.success("Đặt hàng thành công!");
-          dispatch(deleteAll());
+          console.log("res",res)
           await updateDoc(doc(db, "noti", currentUser.id), {
             noti: arrayUnion({
               id: uuid(),
               title:"Thông báo đơn hàng",
-              text:"Đơn hàng của đã được đặt thành công",
+              text:"Đơn hàng của bạn đã được đặt thành công",
               senderId: currentUser.id,
               date: Timestamp.now(),
             }),
-          });
+            
+          }, { merge: true });
           console.log("res",res)
           navigate("/my-account/orders");
         })

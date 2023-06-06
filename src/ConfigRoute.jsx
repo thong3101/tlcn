@@ -43,7 +43,7 @@ function ConfigRoute() {
       </Route>
 
       <Route element={<PrivateRoute roles={["SHIPPER"]} />}>
-        <Route path="shipper/*" element={<Shipper />} />
+        <Route path="/shipper/*" element={<Shipper />} />
       </Route>
 
       <Route path="shipper/login" element={<LoginShipper />} />

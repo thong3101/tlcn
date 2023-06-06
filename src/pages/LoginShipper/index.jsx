@@ -33,7 +33,7 @@ function Login() {
   const navigate = useNavigate();
   useEffect(() => {
     if (user) {
-      navigate("/shipper    ");
+      navigate("/shipper/");
     }
   }, [user]);
 
@@ -69,10 +69,9 @@ function Login() {
     apiShipper
       .postLogin(params)
       .then((res) => {
-        let { accessToken, refreshToken, user } = res.data; 
+        let { accessToken, refreshToken, user } = res.data;
         dispatch(loginSuccess({ accessToken, refreshToken, ...user }));
         toast.success(`Đăng nhập thành công`);
-        navigate('/home');
       })
       .catch((error) => {
         console.log(error.response.data.message);
