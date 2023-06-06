@@ -81,16 +81,15 @@ function Header() {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-    if(user){
+    if (user) {
       const unSub = onSnapshot(doc(db, "noti", user.id), (doc) => {
         doc.exists() && setNotifications(doc.data().noti);
       });
-  
+
       return () => {
         unSub();
       };
     }
-    
   }, [user]);
 
   console.log("noti", notifications);
@@ -143,7 +142,7 @@ function Header() {
           </Stack>
           <Divider light />
           <Stack sx={{ padding: "12px" }}>
-            {notifications.map((item) => (
+            {notifications?.map((item) => (
               <Stack key={item.id}>
                 <Stack direction="row" spacing={2} sx={{ padding: "12px" }}>
                   <Stack width="56px" height="56px">
@@ -380,8 +379,8 @@ function Header() {
               <Link to="/cart">
                 <Badge
                   color="warning"
-                  badgeContent={cart.length}
-                  invisible={cart.length === 0}
+                  badgeContent={cart?.length}
+                  invisible={cart?.length === 0}
                   showZero
                 >
                   <ShoppingBagIcon sx={{ fontSize: "25px" }} />
@@ -401,8 +400,8 @@ function Header() {
                     onClick={() => setOpenNotify(true)}
                   >
                     <Badge
-                      badgeContent={notifications.length}
-                      invisible={notifications.length === 0}
+                      badgeContent={notifications?.length}
+                      invisible={notifications?.length === 0}
                       color="warning"
                     >
                       <NotificationsIcon sx={{ color: "white" }} />
