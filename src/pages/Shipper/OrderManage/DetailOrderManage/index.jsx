@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./DetailOrder.scss";
 import { Box, Stack, Typography, Button, Breadcrumbs } from "@mui/material";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import apiShipper from "../../../../apis/apiShipper";
 import apiCart from "../../../../apis/apiCart";
 import { toast } from "react-toastify";
@@ -30,6 +30,7 @@ function DetailOrder() {
   const [totalPrice, setTotalPrice] = useState(0);
   const currentUser = useSelector((state) => state.auth.user);
   const [loadingData, setLoadingData] = useState(false);
+  const navigate = useNavigate();
   const handleStatus = (status) => {
     switch (status) {
       case "pending":
@@ -93,7 +94,7 @@ function DetailOrder() {
           }),
         });
         toast.success("Xác nhận thành công");
-        console.log("1", res.data.data);
+        navigate('/shipper/manage');
       })
       .catch((error) => {
         toast.error("Xác nhận không thành công");

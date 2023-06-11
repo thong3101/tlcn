@@ -1,7 +1,11 @@
 import {
   Box,
-  Button, Grid, Radio,
-  RadioGroup, Stack, Typography
+  Button,
+  Grid,
+  Radio,
+  RadioGroup,
+  Stack,
+  Typography,
 } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,6 +27,8 @@ import {
   serverTimestamp,
   Timestamp,
   updateDoc,
+  getDoc,
+  setDoc,
 } from "firebase/firestore";
 
 import { db } from "../../firebase";
@@ -60,7 +66,7 @@ function Payment() {
     calcPrice();
   }, [CartItems]);
 
-  console.log("222",payment);
+  console.log("222", payment);
 
   useEffect(() => {
     const getAddresses = () => {
@@ -125,7 +131,6 @@ function Payment() {
       return;
     }
 
-
     let payload = CartItems.map((item) => {
       return {
         productId: item.id,
@@ -145,18 +150,24 @@ function Payment() {
           toast.success("Đặt hàng thành công!");
           dispatch(deleteAll());
           // navigate(res.data.link);
+          const noti = await getDoc(doc(db, "noti", currentUser.id));
+
+          if (!noti.exists()) {
+            //create empty noti on firestore
+            await setDoc(doc(db, "noti", currentUser.id), { noti: [] });
+          }
 
           await updateDoc(doc(db, "noti", currentUser.id), {
             noti: arrayUnion({
               id: uuid(),
-              text:"Đơn hàng của đã được đặt thành công",
+              text: "Đơn hàng của đã được đặt thành công",
               senderId: currentUser.id,
               date: Timestamp.now(),
             }),
           });
           window.location.replace(res.data.link);
         })
-        
+
         .catch((error) => {
           toast.error("Đặt hàng không thành công. Vui lòng thử lại");
         })
@@ -168,18 +179,36 @@ function Payment() {
         .saveOrderCOD(payload)
         .then(async (res) => {
           toast.success("Đặt hàng thành công!");
-          console.log("res",res)
+          console.log("res", res);
+          const noti = await getDoc(doc(db, "noti", currentUser.id));
+
+          if (!noti.exists()) {
+            //create empty noti on firestore
+            await setDoc(doc(db, "noti", currentUser.id), { noti: [] });
+          }
+
           await updateDoc(doc(db, "noti", currentUser.id), {
             noti: arrayUnion({
               id: uuid(),
-              title:"Thông báo đơn hàng",
-              text:"Đơn hàng của bạn đã được đặt thành công",
+              text: "Đơn hàng của đã được đặt thành công",
               senderId: currentUser.id,
               date: Timestamp.now(),
             }),
-            
-          }, { merge: true });
-          console.log("res",res)
+          });
+          await updateDoc(
+            doc(db, "noti", currentUser.id),
+            {
+              noti: arrayUnion({
+                id: uuid(),
+                title: "Thông báo đơn hàng",
+                text: "Đơn hàng của bạn đã được đặt thành công",
+                senderId: currentUser.id,
+                date: Timestamp.now(),
+              }),
+            },
+            { merge: true }
+          );
+          console.log("res", res);
           navigate("/my-account/orders");
         })
         .catch((error) => {
@@ -288,10 +317,7 @@ function Payment() {
                 </Typography>
                 {addresses === null ? (
                   <Link to="/my-account/address/create">
-                    <Button
-                      className="new"
-                      variant="outlined"
-                    >
+                    <Button className="new" variant="outlined">
                       Thêm địa chỉ mới
                     </Button>
                   </Link>

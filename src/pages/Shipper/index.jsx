@@ -48,6 +48,8 @@ import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 
 import Order from "./Order";
 import DetailOrder from "./Order/DetailOrder";
+import OrderManage from "./OrderManage";
+import DetailOrderManage from "./OrderManage/DetailOrderManage"
 
 import { useSelector } from "react-redux";
 
@@ -403,7 +405,17 @@ function Shipper() {
             <Collapse in={openSideBar2} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemText primary="Tất cả" />
+                  <ListItemText primary="Đơn hàng cần giao" />
+                </ListItemButton>
+              </List>
+            </Collapse>
+          </Link>
+
+          <Link to={"/shipper/manage"}>
+            <Collapse in={openSideBar2} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemText primary="Tất cả đơn hàng" />
                 </ListItemButton>
               </List>
             </Collapse>
@@ -428,6 +440,15 @@ function Shipper() {
               <Routes>
                 <Route index element={<Order />} />
                 <Route path="detail/:id" element={<DetailOrder />} />
+              </Routes>
+            }
+          />
+          <Route
+            path="manage/*"
+            element={
+              <Routes>
+                <Route index element={<OrderManage />} />
+                <Route path="detail/:id" element={<DetailOrderManage />} />
               </Routes>
             }
           />
