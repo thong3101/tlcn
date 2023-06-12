@@ -141,7 +141,7 @@ function OrderList() {
     getData();
   }, [page, statuss]);
 
-  console.log(statuss);
+  console.log(orders);
 
   const handleSubmitDelived = () => {
     let param = {
@@ -298,12 +298,27 @@ function OrderList() {
                 <TableCell sx={{ width: "15%", top: "64px" }} align="center">
                   Ngày đặt hàng&nbsp;
                 </TableCell>
-                <TableCell
-                  sx={{ width: "10%", top: "64px" }}
-                  className="!pl-10"
-                >
-                  Thao tác&nbsp;
-                </TableCell>
+                {statuss == 3 || statuss == 4 ? (
+                  <>
+                    <TableCell
+                      sx={{ width: "20%", top: "64px" }}
+                      className="!pl-10"
+                      align="center"
+                    >
+                      Ghi chú&nbsp;
+                    </TableCell>
+                  </>
+                ) : (
+                  <>
+                    <TableCell
+                      sx={{ width: "20%", top: "64px" }}
+                      className="!pl-10"
+                      align="center"
+                    >
+                      Thao tác&nbsp;
+                    </TableCell>
+                  </>
+                )}
               </TableRow>
             </TableHead>
 
@@ -363,6 +378,11 @@ function OrderList() {
                                 Hủy đơn
                               </Button>
                             </Stack>
+                          </>
+                        ) : row?.status == "delivered" ||
+                          row?.status == "cancel" ? (
+                          <>
+                            <TableCell align="center">{row?.note}</TableCell>
                           </>
                         ) : (
                           <>
