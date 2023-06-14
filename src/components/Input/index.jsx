@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import Attach from "../../assets/img/attach.png";
 import Img from "../../assets/img/img.png";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
+import apiChat from "../../apis/apiChat";
 
 import Button from "@mui/material/Button";
 // import { AuthContext } from "../context/AuthContext";
@@ -11,6 +12,7 @@ import {
   serverTimestamp,
   Timestamp,
   updateDoc,
+  onSnapshot,
 } from "firebase/firestore";
 import SendIcon from "@mui/icons-material/Send";
 import IconButton from "@mui/material/IconButton";
@@ -27,6 +29,7 @@ const Input = () => {
   // const { currentUser } = useContext(AuthContext);
   const currentUser = useSelector((state) => state.auth.user);
   const { data } = useContext(ChatContext);
+  const [messages, setMessages] = useState([]);
 
   const [image, setImage] = React.useState(""); //url setting state
   useEffect(() => {
@@ -43,8 +46,46 @@ const Input = () => {
     }
   }, [image]);
 
+  useEffect(() => {
+    const unSub = onSnapshot(doc(db, "chats", data.chatId), (doc) => {
+      doc.exists() && setMessages(doc.data().messages);
+    });
+
+    return () => {
+      unSub();
+    };
+  }, [data.chatId]);
+
+  // useEffect(() => {
+  //   if (data.chatId.includes("ba8f70b4-ecaa-459b-895a-daceb3c3558d")) {
+  //     let params = {
+  //       message: text,
+  //     };
+
+  //     // apiChat
+  //     //   .postChatbox(params)
+  //     //   .then((res) => {
+  //     //     console.log(res);
+  //     //   })
+  //     //   .catch((error) => {
+  //     //   })
+  //   }
+  // }, [messages]);
+
   const handleSend = async () => {
     setText("");
+    if (data.chatId.includes("ba8f70b4-ecaa-459b-895a-daceb3c3558d")) {
+      let params = {
+        message: text,
+      };
+      apiChat
+        .postChatbox(params)
+        .then((res) => {
+          console.log("res", res);
+        })
+        .catch((error) => {});
+      console.log("111");
+    }
     if (img) {
       const storageRef = ref(storage, uuid());
       const uploadTask = uploadBytesResumable(storageRef, img);
@@ -94,7 +135,6 @@ const Input = () => {
       [data.chatId + ".date"]: serverTimestamp(),
     });
 
-    setText("");
     setImg(null);
   };
 
