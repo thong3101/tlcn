@@ -74,19 +74,6 @@ const Input = () => {
 
   const handleSend = async () => {
     setText("");
-    if (data.user.uid.includes("ba8f70b4-ecaa-459b-895a-daceb3c3558d")) {
-      let params = {
-        message: text,
-      };
-      await apiChat
-        .postChatbox(params)
-        .then((res) => {
-          console.warn("res", res);
-        })
-        .catch((error) => {
-          alert(error);
-        });
-    }
     if (img) {
       const storageRef = ref(storage, uuid());
       const uploadTask = uploadBytesResumable(storageRef, img);
@@ -119,6 +106,28 @@ const Input = () => {
           date: Timestamp.now(),
         }),
       });
+    }
+
+    if (data.user.uid.includes("ba8f70b4-ecaa-459b-895a-daceb3c3558d")) {
+      let params = {
+        message: text,
+      };
+      await apiChat
+        .postChatbox(params)
+        .then((res) => {
+          console.warn("res", res);
+          updateDoc(doc(db, "chats", data.chatId), {
+            messages: arrayUnion({
+              id: uuid(),
+              text: res.message,
+              senderId: data.user.uid,
+              date: Timestamp.now(),
+            }),
+          });
+        })
+        .catch((error) => {
+          alert(error);
+        });
     }
 
     await updateDoc(doc(db, "userChats", currentUser.id), {
