@@ -74,17 +74,18 @@ const Input = () => {
 
   const handleSend = async () => {
     setText("");
-    if (data.chatId.includes("ba8f70b4-ecaa-459b-895a-daceb3c3558d")) {
+    if (data.user.uid.includes("ba8f70b4-ecaa-459b-895a-daceb3c3558d")) {
       let params = {
         message: text,
       };
-      apiChat
+      await apiChat
         .postChatbox(params)
         .then((res) => {
-          console.log("res", res);
+          console.warn("res", res);
         })
-        .catch((error) => {});
-      console.log("111");
+        .catch((error) => {
+          alert(error);
+        });
     }
     if (img) {
       const storageRef = ref(storage, uuid());
@@ -104,7 +105,6 @@ const Input = () => {
         () => {
           // Handle successful uploads on complete
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log("File available at", downloadURL);
             setImg(null);
             setImage(downloadURL);
           });
