@@ -1,22 +1,35 @@
 import { Stack, Typography } from "@mui/material";
-import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
+import React, { useCallback, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { SquareLoader } from "react-spinners";
+import { toast } from "react-toastify";
+import apiAuth from "../../apis/apiAuth";
+import { loginSuccess } from "../../slices/authSlice";
 
 function LoadingPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const callApiGetById = useCallback(async () => {
+    await apiAuth.getUserById(searchParams.get("userId")).then(res => {
+      let { accessToken, refreshToken, user } = res.data;
+      dispatch(loginSuccess({ accessToken, refreshToken, ...user }));
+      toast.success("Đăng ký người bán thành công !");
+    })
+    navigate("/seller");
+  }, [dispatch, searchParams]);
+
+
   useEffect(() => {
     if (searchParams.get("orderId")) {
       navigate(`/my-account/orders/detail/${searchParams.get("orderId")}`)
-
-
     }
-   
-  }, 
-  [searchParams]);
+    if (searchParams.get("userId")) {
+      callApiGetById();
+    }
+  },
+    [searchParams]);
   return (
     <Stack
       sx={{ position: "relative" }}

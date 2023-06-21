@@ -4,8 +4,6 @@ import jwt_decode from "jwt-decode";
 import { toast } from "react-toastify";
 import { logoutSuccess } from "../../slices/authSlice";
 import { useEffect, useState } from "react";
-import apiAuth from "../../apis/apiAuth";
-import apiMain from "../../apis/apiMain";
 
 //Component tạo một định tuyến an toàn, khi muốn truy cập các đường dẫn cần có xác thực thì phải đi qua route này
 const PrivateRoute = ({ roles }) => {
@@ -32,8 +30,6 @@ const PrivateRoute = ({ roles }) => {
           return;
         }
         const tokenDecode = jwt_decode(user?.refreshToken);
-        console.log("1",tokenDecode);
-        console.log("2",tokenDecode.roleNames.includes("SELLER"));
         let date = new Date();
         if (tokenDecode.exp < date.getTime() / 1000) {
           toast.warning(
@@ -43,11 +39,16 @@ const PrivateRoute = ({ roles }) => {
           dispatch(logoutSuccess());
           return;
         }
-        const userHasRequiredRole = roles.includes(tokenDecode.roleNames[0])
-        // const userHasRequiredRole = roles.includes(tokenDecode.roleNames[0])
-          ? true
-          : false;
-        if (!userHasRequiredRole) {
+        function checkRole(roles) {
+          const result = tokenDecode.roleNames.filter((role) => {
+            return roles.includes(role);
+          }
+          )
+          return result.length > 0 ? true : false;
+
+        }
+
+        if (checkRole(roles) === false) {
           toast.warning("Bạn không có quyền truy cập", {
             autoClose: 1000,
             pauseOnHover: false,

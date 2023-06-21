@@ -1,49 +1,41 @@
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Header.scss";
-import { Link, useNavigate, useLocation } from "react-router-dom";
 
-import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import SearchIcon from "@mui/icons-material/Search";
-import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined";
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 
-import React, { useEffect, useState, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import {
-  Stack,
-  Button,
-  Typography,
   Badge,
   Box,
-  Modal,
+  Button,
   Divider,
   IconButton,
   InputBase,
+  Modal,
+  Stack,
   SwipeableDrawer,
+  Typography,
 } from "@mui/material";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { logoutSuccess } from "../../slices/authSlice";
 
-import jwt_decode from "jwt-decode";
-import Login from "../Login";
-import SignUp from "../SignUp";
-import ForgetPassword from "../ForgetPassword";
-import {
-  Add,
-  Info,
-  PermContactCalendar,
-  VerticalAlignCenter,
-} from "@mui/icons-material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import jwt_decode from "jwt-decode";
 import apiCategory from "../../apis/apiCategory";
+import ForgetPassword from "../ForgetPassword";
+import Login from "../Login";
+import SignUp from "../SignUp";
 
-import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CloseIcon from "@mui/icons-material/Close";
-import { Notifies } from "../../constraints/AdminNotify";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 
 import { doc, onSnapshot } from "firebase/firestore";
-import { db } from "../../firebase";
 import moment from "moment";
+import { db } from "../../firebase";
 
 const privatePath = ["/my-account/", "/admin/", "/payment", "/chat"];
 
@@ -81,7 +73,7 @@ function Header() {
   const [openNotify, setOpenNotify] = React.useState(false);
 
   const [notifications, setNotifications] = useState([]);
-  const tokenDecode = jwt_decode(user?.refreshToken)
+  const tokenDecode = user? jwt_decode(user?.accessToken) : null; 
 
   useEffect(() => {
     if (user) {

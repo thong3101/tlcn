@@ -1,17 +1,17 @@
-import Home from "./pages/Home";
+import ChangePassword from "./components/ChangePassword";
+import OAuth2RedirectHandler from "./components/OAuth2RedirectHandler";
+import Admin from "./pages/Admin";
+import Cart from "./pages/Cart";
+import ChatArea from "./pages/ChatArea";
 import CustomerAccount from "./pages/CustomerAccount";
-import ProductDetail from "./pages/ProductDetail";
 import FilterProduct from "./pages/FilterProduct";
 import FilterProductSearch from "./pages/FilterProductSearch";
-import OAuth2RedirectHandler from "./components/OAuth2RedirectHandler";
-import ChangePassword from "./components/ChangePassword";
-import Cart from "./pages/Cart";
-import Payment from "./pages/Payment";
-import Admin from "./pages/Admin";
-import Seller from "./pages/Seller";
-import ChatArea from "./pages/ChatArea";
+import Home from "./pages/Home";
 import LoginShipper from "./pages/LoginShipper";
+import Payment from "./pages/Payment";
+import ProductDetail from "./pages/ProductDetail";
 import RegisterShipper from "./pages/RegisterShipper";
+import Seller from "./pages/Seller";
 import Shipper from "./pages/Shipper";
 
 import LoadingPage from "./components/LoadingPage";
@@ -20,7 +20,6 @@ import PrivateRoute from "./components/PrivateRoute";
 import RegisterSeller from "./pages/RegisterSeller";
 
 import { Route, Routes } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 
 function ConfigRoute() {
   return (

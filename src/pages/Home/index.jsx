@@ -63,7 +63,7 @@ function SlideBackGround() {
         id="slider-home"
         className="mySwiper "
       >
-        <SwiperSlide>
+        <SwiperSlide key={1}>
           <div className="bg bg1"></div>
           <div className="text-content">
             <h3 className="text-heading" style={{ textTransform: "uppercase" }}>
@@ -98,7 +98,7 @@ function SlideBackGround() {
             </p>
           </div>
         </SwiperSlide>
-        <SwiperSlide>
+        <SwiperSlide key={2}>
           <div className="bg bg2"></div>
           <div className="text-content">
             <h2
@@ -570,7 +570,7 @@ function SlideHome() {
               modules={[Pagination, Navigation]}
               className="mySwiper"
             >
-              <SwiperSlide>
+              <SwiperSlide key={10}>
                 <a
                   href="https://guitar.station.vn/3-cach-chinh-day-dan-guitar/"
                   className="card__wrap"
@@ -596,7 +596,7 @@ function SlideHome() {
                   </Card>
                 </a>
               </SwiperSlide>
-              <SwiperSlide>
+              <SwiperSlide key={11}>
                 <a
                   href="https://guitar.station.vn/3-meo-don-gian-nhat-de-hoc-hop-am-guitar/"
                   className="card__wrap"
@@ -623,7 +623,7 @@ function SlideHome() {
                   </Card>
                 </a>
               </SwiperSlide>
-              <SwiperSlide>
+              <SwiperSlide key={12}>
                 <a
                   href="https://guitar.station.vn/huong-dan-cach-chon-mot-cay-dan-guitar-acoustic-tot/"
                   className="card__wrap"
@@ -650,7 +650,7 @@ function SlideHome() {
                   </Card>
                 </a>
               </SwiperSlide>
-              <SwiperSlide>
+              <SwiperSlide key={13}>
                 <a
                   href="https://guitar.station.vn/nen-chon-mua-dan-guitar-go-nguyen-mieng-hay-go-ep/"
                   className="card__wrap"
@@ -677,7 +677,7 @@ function SlideHome() {
                   </Card>
                 </a>
               </SwiperSlide>
-              <SwiperSlide>
+              <SwiperSlide key={14}>
                 <a
                   href="https://guitar.station.vn/5-cach-tu-hoc-guitar-tai-nha-nhanh-tien-bo-nhat/"
                   className="card__wrap"

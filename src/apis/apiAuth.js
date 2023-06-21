@@ -10,7 +10,10 @@ const apiAuth = {
         const myLogin = await axiosClient.get('/auth/social', {params})
         return myLogin.data;
     },
-
+    getUserById:async(params)=>{
+        const myLogin = await axiosClient.get(`/auth/${params}`)
+        return myLogin.data;
+    },
     search: async (params) => {
         const mySearch = await axiosClient.post('', params)
         return mySearch.data;

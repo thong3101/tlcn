@@ -1,20 +1,19 @@
 import {
   Box,
+  Button,
   Pagination,
   Stack,
-  Switch,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-  Typography,
-  Button,
+  Typography
 } from "@mui/material";
 import React from "react";
 import apiProduct from "../../../../apis/apiProduct";
-import "./SettingProduct.scss";
 import apiProductSeller from "../../../../apis/apiProductSeller";
+import "./SettingProduct.scss";
 
 import { toast } from "react-toastify";
 import apiSeller from "../../../../apis/apiSeller";
@@ -27,19 +26,12 @@ function SettingProduct() {
 
   const [searchText, setSearchText] = React.useState("");
 
-  //Checked
-  const [checked, setChecked] = React.useState();
-
-  const handleChange = (event) => {
-    // setChecked(event.target.checked);
-  };
 
   const size = 4;
   const handleChangePrice = (event) => {
     setPrice(event.target.value);
   };
 
-  console.log(products);
 
   const handleEnable = async (productId) => {
     apiSeller

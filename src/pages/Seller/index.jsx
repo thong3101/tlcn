@@ -120,6 +120,7 @@ function Seller() {
   const [openAccount, setOpenAccount] = React.useState(false);
 
   const user = useSelector((state) => state.auth.user);
+  console.log(user)
 
   const [openSideBar1, setOpenSideBar1] = React.useState(false);
   const [openSideBar2, setOpenSideBar2] = React.useState(false);

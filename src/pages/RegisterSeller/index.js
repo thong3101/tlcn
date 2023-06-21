@@ -1,16 +1,11 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
+import React from "react";
 
-import "./Register.scss";
 import {
-  Stack,
-  IconButton,
   Button,
-  TextField,
-  Typography,
+  Stack
 } from "@mui/material";
 import apiSeller from "../../apis/apiSeller";
+import "./Register.scss";
 
 function Register() {
   const onSubmit = async () => {
