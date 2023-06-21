@@ -8,7 +8,8 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Typography
+  Typography,
+  Button,
 } from "@mui/material";
 import React from "react";
 import apiProduct from "../../../../apis/apiProduct";
@@ -16,6 +17,7 @@ import "./SettingProduct.scss";
 import apiProductSeller from "../../../../apis/apiProductSeller";
 
 import { toast } from "react-toastify";
+import apiSeller from "../../../../apis/apiSeller";
 
 function SettingProduct() {
   const [price, setPrice] = React.useState("");
@@ -26,11 +28,10 @@ function SettingProduct() {
   const [searchText, setSearchText] = React.useState("");
 
   //Checked
-  const [checked, setChecked] = React.useState(true);
-
+  const [checked, setChecked] = React.useState();
 
   const handleChange = (event) => {
-    setChecked(event.target.checked);
+    // setChecked(event.target.checked);
   };
 
   const size = 4;
@@ -40,10 +41,34 @@ function SettingProduct() {
 
   console.log(products);
 
+  const handleEnable = async (productId) => {
+    apiSeller
+      .EnableProduct(productId)
+      .then((res) => {
+        // navigate("/admin/product");
+        toast.success("Kích hoạt sản phẩm thành công");
+      })
+      .catch((error) => {
+        toast.error("Kích hoạt sản phẩm thất bại");
+      });
+  };
+
+  const handleDisable = async (productId) => {
+    apiSeller
+      .DisableProduct(productId)
+      .then((res) => {
+        // navigate("/admin/product");
+        toast.success("Kích hoạt sản phẩm thành công");
+      })
+      .catch((error) => {
+        toast.error("Kích hoạt sản phẩm thất bại");
+      });
+  };
+
   React.useEffect(() => {
     const getData = async () => {
       let param = {
-        size:"100",
+        size: "100",
         sort: "",
       };
 
@@ -165,12 +190,39 @@ function SettingProduct() {
                     </TableCell>
                     <TableCell align="center">
                       <Stack direction="row" spacing={1} alignItems="center">
-                        <Switch
-                          checked={checked}
-                          onChange={handleChange}
+                        {/* <Switch
+                          checked={item?.status ? true : false}
+                          onChange={(e) => {
+                            setChecked(e.target.checked);
+                          }}
                           inputProps={{ "aria-label": "controlled" }}
                         />
-                        <Typography>Kích hoạt</Typography>
+                        <Typography>Kích hoạt</Typography> */}
+                        {item?.status ? (
+                          <>
+                            <Button
+                              sx={{ width: "100px" }}
+                              variant="outlined"
+                              onClick={() => {
+                                handleDisable(item?.id);
+                              }}
+                            >
+                              Hủy
+                            </Button>
+                          </>
+                        ) : (
+                          <>
+                            <Button
+                              variant="outlined"
+                              sx={{ width: "100px" }}
+                              onClick={() => {
+                                handleEnable(item?.id);
+                              }}
+                            >
+                              Kích hoạt
+                            </Button>
+                          </>
+                        )}
                       </Stack>
                     </TableCell>
                   </TableRow>

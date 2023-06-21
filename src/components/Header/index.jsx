@@ -22,6 +22,7 @@ import {
 
 import { logoutSuccess } from "../../slices/authSlice";
 
+import jwt_decode from "jwt-decode";
 import Login from "../Login";
 import SignUp from "../SignUp";
 import ForgetPassword from "../ForgetPassword";
@@ -65,6 +66,7 @@ function Header() {
   const user = useSelector((state) => state.auth.user); //get user from store
 
   const handleLogout = () => {
+
     dispatch(logoutSuccess());
     const isPrivate =
       privatePath.findIndex((e) => location.pathname.includes(e)) >= 0
@@ -79,6 +81,7 @@ function Header() {
   const [openNotify, setOpenNotify] = React.useState(false);
 
   const [notifications, setNotifications] = useState([]);
+  const tokenDecode = jwt_decode(user?.refreshToken)
 
   useEffect(() => {
     if (user) {
@@ -356,6 +359,21 @@ function Header() {
                     <Link to={"/my-account"} style={{ padding: "8px 20px" }}>
                       Tài khoản của tôi
                     </Link>
+                    <Divider variant="inset" component="li" />
+                    {tokenDecode.roleNames.includes("SELLER") ? (
+                      <>
+                        <Link to={"/seller"} style={{ padding: "8px 20px" }}>
+                          Trang người bán
+                        </Link>
+                      </>
+                    ) : (
+                      <>
+                        <Link to={"/license"} style={{ padding: "8px 20px" }}>
+                          Đăng kí làm người bán
+                        </Link>
+                      </>
+                    )}
+
                     <Divider variant="inset" component="li" />
                     <Box onClick={handleLogout} style={{ fontSize: "14px" }}>
                       Thoát tài khoản

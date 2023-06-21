@@ -33,7 +33,7 @@ const PrivateRoute = ({ roles }) => {
         }
         const tokenDecode = jwt_decode(user?.refreshToken);
         console.log("1",tokenDecode);
-        console.log("2",tokenDecode.roleNames);
+        console.log("2",tokenDecode.roleNames.includes("SELLER"));
         let date = new Date();
         if (tokenDecode.exp < date.getTime() / 1000) {
           toast.warning(

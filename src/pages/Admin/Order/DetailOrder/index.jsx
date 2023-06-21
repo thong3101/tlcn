@@ -198,7 +198,7 @@ function DetailOrder() {
           </Stack>
         </Stack>
       )}
-      <Stack direction="row" spacing="16px" justifyContent="flex-end" p={2}>
+      {/* <Stack direction="row" spacing="16px" justifyContent="flex-end" p={2}>
         {order?.status == "processing" && (
           <>
             <Button variant="contained" onClick={handleComfirm}>
@@ -209,7 +209,7 @@ function DetailOrder() {
             </Button>
           </>
         )}
-      </Stack>
+      </Stack> */}
     </Box>
   );
 }

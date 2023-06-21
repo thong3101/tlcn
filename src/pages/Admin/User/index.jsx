@@ -1,7 +1,7 @@
 import { Button, Modal, Stack, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import apiProfile from "../../../apis/apiProfile";
-
+import { useNavigate } from "react-router-dom";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -12,12 +12,13 @@ import { toast } from "react-toastify";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 
-import {
-  formatJavaLocalDateTime
-} from "../../../constraints/Util";
+import { formatJavaLocalDateTime } from "../../../constraints/Util";
+
+import apiAdmin from "../../../apis/apiAdmin";
 
 function User() {
 
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
 
   const [query, setQuery] = useState("");
@@ -25,13 +26,37 @@ function User() {
   const [itemdelete, setItemdelete] = React.useState(null);
   const [modalDelete, setModalDelete] = React.useState(false);
   const openModalDelete = (itemdelete) => {
-    setItemdelete(itemdelete)
-    console.log(itemdelete)
-    setModalDelete(true)
-  }
+    setItemdelete(itemdelete);
+    console.log(itemdelete);
+    setModalDelete(true);
+  };
   const closeModalDelete = () => {
-    setModalDelete(false)
-  }
+    setModalDelete(false);
+  };
+
+  const handleEnable = async (userId) => {
+    apiAdmin
+      .EnableUser(userId)
+      .then((res) => {
+        // navigate("/admin/product");
+        toast.success("Kích hoạt tài khoản thành công");
+      })
+      .catch((error) => {
+        toast.error("Kích hoạt tài khoản thất bại");
+      });
+  };
+
+  const handleDisable = async (userId) => {
+    apiAdmin
+      .DisableUser(userId)
+      .then((res) => {
+        navigate("/admin/user");
+        toast.success("Hủy tài khoản thành công");
+      })
+      .catch((error) => {
+        toast.error("Hủy tài khoản thất bại");
+      });
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -49,22 +74,20 @@ function User() {
   }, []);
 
   const handleDeleteUser = () => {
-    const user = users.filter(item => {
-      return itemdelete.id !== item.id
-    }
-    )
+    const user = users.filter((item) => {
+      return itemdelete.id !== item.id;
+    });
     setUsers(user);
     closeModalDelete();
-    apiProfile.deleteUser(itemdelete.id)
-      .then(res => {
-        toast.success("Xóa thành công")
+    apiProfile
+      .deleteUser(itemdelete.id)
+      .then((res) => {
+        toast.success("Xóa thành công");
       })
-      .catch(error => {
-        toast.error("Xóa không thành công!")
-      })
-  }
-
-  
+      .catch((error) => {
+        toast.error("Xóa không thành công!");
+      });
+  };
 
   return (
     <Stack direction="row" sx={{ backgroundColor: "#fff" }} p={3}>
@@ -144,11 +167,20 @@ function User() {
                       <Button variant="contained">Xem</Button>
                     </Link> */}
                       <Button
-                        onClick={() => openModalDelete(item)}
-                        variant="outlined"
-                        color="error"
+                        width="450px"
+                        variant="contained"
+                        // onClick={product.status ? handleDisable : handleEnable}
+                        onClick={
+                          item?.active
+                            ? () => {
+                                handleDisable(item?.id);
+                              }
+                            : () => {
+                                handleEnable(item?.id);
+                              }
+                        }
                       >
-                        Xóa
+                        {item?.active ? "Hủy" : "Kích hoạt"}
                       </Button>
                     </Stack>
                   </TableCell>
@@ -180,14 +212,15 @@ function User() {
               <Typography sx={{ fontWeight: "bold" }}>
                 Bạn có chắc muốn xoá người dùng này?
               </Typography>
-            
             </Stack>
 
             <Stack direction="row" justifyContent="flex-end" spacing={1}>
               <Button onClick={closeModalDelete} variant="outlined">
                 Hủy
               </Button>
-              <Button variant="contained" onClick={handleDeleteUser} >Xóa bỏ</Button>
+              <Button variant="contained" onClick={handleDeleteUser}>
+                Xóa bỏ
+              </Button>
             </Stack>
           </Stack>
         </Stack>

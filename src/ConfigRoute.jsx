@@ -17,6 +17,7 @@ import Shipper from "./pages/Shipper";
 import LoadingPage from "./components/LoadingPage";
 
 import PrivateRoute from "./components/PrivateRoute";
+import RegisterSeller from "./pages/RegisterSeller";
 
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -32,6 +33,7 @@ function ConfigRoute() {
         <Route path="payment" element={<Payment />} />
         <Route path="my-account/*" element={<CustomerAccount />} />
         <Route path="chat" element={<ChatArea />} />
+        <Route path="license" element={<RegisterSeller />} />
       </Route>
 
       <Route element={<PrivateRoute roles={["ADMIN"]} />}>

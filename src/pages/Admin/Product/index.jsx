@@ -133,11 +133,11 @@ function Product() {
           px={2}
         >
           <Typography>Quản lý sản phẩm</Typography>
-          <Link to="/admin/product/create">
+          {/* <Link to="/admin/product/create">
             <Button variant="outlined" pr={2}>
               Tạo sản phẩm
             </Button>
-          </Link>
+          </Link> */}
         </Stack>
 
         <Box sx={{ backgroundColor: "#fff" }} p={2}>
@@ -240,16 +240,16 @@ function Product() {
                     <TableCell align="center">
                       <Stack spacing={1} justifyContent="center" py={1}>
                         <Link to={`/admin/product/edit/${item.id}`}>
-                          <Button variant="contained" sx={{width:"100%"}}>Sửa</Button>
+                          <Button variant="contained" sx={{width:"100%"}}>Xem</Button>
                         </Link>
 
-                        <Button
+                        {/* <Button
                           onClick={() => openModalDelete(item)}
                           variant="outlined"
                           color="error"
                         >
                           Xóa
-                        </Button>
+                        </Button> */}
                       </Stack>
                     </TableCell>
                   </TableRow>

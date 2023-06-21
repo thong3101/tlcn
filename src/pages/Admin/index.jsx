@@ -448,7 +448,7 @@ function Admin() {
             element={
               <Routes>
                 <Route index element={<Product />} />
-                <Route path="create" element={<CreateDetailProduct />} />
+                {/* <Route path="create" element={<CreateDetailProduct />} /> */}
                 <Route
                   path="edit/:id"
                   element={<CreateDetailProduct edit={true} />}
