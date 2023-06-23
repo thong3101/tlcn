@@ -1,20 +1,14 @@
-import React, { useContext, useEffect, useRef } from "react";
-// import { AuthContext } from "../context/AuthContext";
+import React, { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import { ChatContext } from "../../constraints/ChatContext";
 import moment from "moment";
 
 const Message = ({ message }) => {
-  // const { currentUser } = useContext(AuthContext);
   const currentUser = useSelector((state) => state.auth.user);
-  const { data } = useContext(ChatContext);
-  console.log(currentUser);
 
   const ref = useRef();
 
   useEffect(() => {
-    ref.current?.scrollIntoView({ behavior: "smooth" });
-    console.log(message)
+    ref.current?.scrollIntoView({ behavior: "smooth", block:"nearest",inline:"start"});
   }, [message]);
 
   return (
@@ -58,7 +52,6 @@ const Message = ({ message }) => {
         )}
          {message.date && (
           <span style={{ fontSize: "12px",color:'gray' }} >
-            {/* {new Date(message.date?.toDate()).toLocaleString()} */}
             {moment(message.date?.toDate()).fromNow()}
           </span>
         )}

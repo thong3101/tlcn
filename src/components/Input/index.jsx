@@ -129,7 +129,7 @@ const Input = () => {
           alert(error);
         });
     }
-
+    
     await updateDoc(doc(db, "userChats", currentUser.id), {
       [data.chatId + ".lastMessage"]: {
         text,
