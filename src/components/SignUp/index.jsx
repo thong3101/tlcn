@@ -18,6 +18,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import FormControl from "@mui/material/FormControl";
 import InputAdornment from "@mui/material/InputAdornment";
 import InputLabel from "@mui/material/InputLabel";
+import { getAnalytics, logEvent } from "firebase/analytics";
 
 import { toast } from "react-toastify";
 
@@ -29,6 +30,7 @@ function SignUp(props) {
   const [loading, setLoading] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
   const [message, setMessage] = React.useState();
+  const analytics = getAnalytics();
 
   // const client_url = "https://tiki-web.vercel.app/"
 
@@ -79,7 +81,8 @@ function SignUp(props) {
           .then(async (res) => {
             setIsSuccess(true);
             console.log("a",res)
-            //create user on firestore
+            //create user on firestore\
+
             await setDoc(doc(db, "users", res.data.data.id), {  
               uid: res.data.data.id,
               displayName: res.data.data.nickName,

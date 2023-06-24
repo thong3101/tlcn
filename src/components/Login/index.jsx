@@ -27,7 +27,8 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import CloseIcon from "@mui/icons-material/Close";
 import Loading from "../Loading";
 import { toast } from "react-toastify";
-import AccountCircle from '@mui/icons-material/AccountCircle';
+import { getAnalytics, logEvent } from "firebase/analytics";
+import AccountCircle from "@mui/icons-material/AccountCircle";
 
 function Login(props) {
   const dispatch = useDispatch();
@@ -47,6 +48,8 @@ function Login(props) {
   const [wrongPass, setWrongPass] = useState(false);
 
   const [loading, setLoading] = useState(false);
+
+  const analytics = getAnalytics();
 
   const onSubmit = (data) => {
     if (loading) {
@@ -68,6 +71,10 @@ function Login(props) {
         dispatch(loginSuccess({ accessToken, refreshToken, ...user }));
         toast.success(`Đăng nhập thành công`);
         props.closeModalLogin();
+        logEvent(analytics, "user", {
+          userId: res.data.user.id,
+          userName: res.data.user.nickName,
+        });
       })
       .catch((error) => {
         console.log(error.response.data.message);
@@ -91,9 +98,9 @@ function Login(props) {
 
         <form>
           <Stack spacing={2}>
-            <FormControl fullWidth  className="!bg-white">
-              <InputLabel htmlFor="email-outlined-input" >Email</InputLabel>
-              <OutlinedInput 
+            <FormControl fullWidth className="!bg-white">
+              <InputLabel htmlFor="email-outlined-input">Email</InputLabel>
+              <OutlinedInput
                 className="!rounded-xl"
                 focused
                 {...register("email", {
@@ -107,18 +114,21 @@ function Login(props) {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <AccountCircle/>
+                      <AccountCircle />
                     </InputAdornment>
                   ),
                 }}
                 label="Email"
-                
-                
               />
-              {errors.email && <ErrorInput message={errors.email.message} className="!text-red-500"/>}
+              {errors.email && (
+                <ErrorInput
+                  message={errors.email.message}
+                  className="!text-red-500"
+                />
+              )}
             </FormControl>
 
-            <FormControl fullWidth >
+            <FormControl fullWidth>
               <InputLabel htmlFor="pass-outlined-input">Mật khẩu</InputLabel>
 
               <OutlinedInput

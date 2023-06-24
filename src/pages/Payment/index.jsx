@@ -20,6 +20,7 @@ import { deleteAll } from "../../slices/cartSlice";
 import apiAddress from "../../apis/apiAddress";
 // import apiNotify from '../../apis/apiNotify'
 import Loading from "../../components/Loading";
+import { getAnalytics, logEvent } from "firebase/analytics";
 
 import {
   arrayUnion,
@@ -52,6 +53,7 @@ function Payment() {
   const currentUser = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const analytics = getAnalytics();
 
   const feeShip = 15000;
 
@@ -218,6 +220,10 @@ function Payment() {
           setLoading(false);
         });
     }
+
+    logEvent(analytics, "payment", {
+      userId: currentUser.id,
+    });
   };
 
   // const handleCancel = (id) => {
