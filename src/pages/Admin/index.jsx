@@ -141,7 +141,6 @@ function Admin() {
   };
   
   const handleLogout = () => {
-    alert(1)
     dispatch(logoutSuccess());
     const isPrivate =
       privatePath.findIndex((e) => location.pathname.includes(e)) >= 0
