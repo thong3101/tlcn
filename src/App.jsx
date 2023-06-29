@@ -1,17 +1,17 @@
-import Home from "./pages/Home";
-import Header from "./components/Header";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import Footer from "./components/Footer";
+import Header from "./components/Header";
 import ScrollToTop from "./components/ScrollToTop";
 
-import { BrowserRouter } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 import ConfigRoute from "./ConfigRoute";
+import { axiosInstance } from "./apis/axiosClient";
 import "./app/style/App.scss";
 import "./input.css";
-import { useDispatch, useSelector } from "react-redux";
-import { axiosInstance } from "./apis/axiosClient";
 import { loginSuccess, logoutSuccess } from "./slices/authSlice";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 function App() {
 
@@ -20,12 +20,20 @@ function App() {
   if (user) {
     axiosInstance(user, dispatch, loginSuccess, logoutSuccess);
   }
-  const isAdmin = window.location.href.includes("admin");
-  const isSeller = window.location.href.includes("seller");
-  const isShipper = window.location.href.includes("shipper");
+  const [isAdmin,setIsAdmin]=useState(false)
+  const [isSeller,setIsSeller]=useState(false)
+  const [isShipper,setIsShipper]=useState(false)
+ 
+  const history=useNavigate()
+
+  useEffect(()=>{
+    setIsAdmin(window.location.pathname.includes('/admin'))
+    setIsSeller(window.location.pathname.includes('/seller'))
+    setIsShipper(window.location.pathname.includes('/shipper'))    
+  },[history])
+  
   return (
     <div className="App">
-      <BrowserRouter>
         {/* <CheckAuthentication /> */}
         <ScrollToTop>
           <ToastContainer />
@@ -35,7 +43,6 @@ function App() {
           {isAdmin || isSeller || isShipper ? null : <Footer />}
 
         </ScrollToTop>
-      </BrowserRouter>
     </div>
   );
 }

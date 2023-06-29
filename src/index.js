@@ -2,22 +2,25 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 
-import { store,persistor } from './app/store';
+import { store, persistor } from './app/store';
 import { Provider } from "react-redux"
 import { PersistGate } from 'redux-persist/integration/react'
 import { ChatContextProvider } from './constraints/ChatContext';
 
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <Provider store={store}>
+    <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
             <ChatContextProvider>
-                <App />
+                <BrowserRouter>
+                    <App />
+                </BrowserRouter>
             </ChatContextProvider>
         </PersistGate>
-        
+
     </Provider>
 );
 
