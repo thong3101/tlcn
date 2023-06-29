@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-has-content */
-/* eslint-disable jsx-a11y/alt-text */
 import { styled } from "@mui/material/styles";
 import * as React from "react";
 import { Link, Route, Routes, useNavigate, useLocation } from "react-router-dom";
@@ -42,17 +40,12 @@ import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNone
 
 
 
-// import AdminLogin from "./Login";
 import Category from "./Category";
 import CreateCategory from "./Category/CruCategory/index";
-// import Dashboard from "./Dashboard";
 import Order from "./Order";
 import Product from "./Product";
 import CreateDetailProduct from "./Product/CreateDetailProduct";
-// import DetailProduct from "./Product/DetailProduct";
-// import Review from "./Review";
 import User from "./User";
-// import DetailUser from "./User/DetailUser";
 
 import { useSelector,useDispatch } from "react-redux";
 
@@ -84,7 +77,6 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   alignItems: "center",
   justifyContent: "flex-start",
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
@@ -124,7 +116,7 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-const privatePath = ["/my-account/", "/admin/", "/payment", "/chat"];
+const privatePath = ["/my-account/", "/admin", "/payment", "/chat"];
 
 function Admin() {
   const [openAccount, setOpenAccount] = React.useState(false);
@@ -149,6 +141,7 @@ function Admin() {
   };
   
   const handleLogout = () => {
+    alert(1)
     dispatch(logoutSuccess());
     const isPrivate =
       privatePath.findIndex((e) => location.pathname.includes(e)) >= 0

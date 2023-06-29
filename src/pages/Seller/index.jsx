@@ -120,7 +120,7 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-const privatePath = ["/my-account/", "/admin/", "/payment", "/chat"];
+const privatePath = ["/my-account/", "/admin/", "/payment", "/chat","/seller"];
 
 function Seller() {
   const navigate = useNavigate();
