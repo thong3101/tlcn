@@ -234,7 +234,7 @@ function OrderList() {
           }}
         >
           <Typography sx={{ fontSize: "16px", fontWeight: "bold" }}>
-            Sắp xếp giá bán:
+            Trạng thái đơn hàng:
           </Typography>
           <Select
             value={statuss}

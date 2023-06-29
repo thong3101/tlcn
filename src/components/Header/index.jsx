@@ -79,6 +79,7 @@ function Header() {
     if (user) {
       const unSub = onSnapshot(doc(db, "noti", user.id), (doc) => {
         doc.exists() && setNotifications(doc.data().noti);
+        console.log("noti", doc.data().noti);
       });
 
       return () => {
@@ -87,7 +88,7 @@ function Header() {
     }
   }, [user]);
 
-  console.log("noti", notifications);
+  
 
   const CloseNotify = () => {
     setOpenNotify(false);
@@ -165,7 +166,6 @@ function Header() {
                     </Stack>
                     {item.date && (
                       <Typography sx={{ fontSize: "12px" }}>
-                        {/* {item.date} */}
                         {moment(item.date?.toDate()).fromNow()}
                       </Typography>
                     )}

@@ -2,11 +2,19 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { styled } from "@mui/material/styles";
 import * as React from "react";
-import { Link, Route, Routes } from "react-router-dom";
+import {
+  Link,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import { Notifies } from "../../constraints/AdminNotify";
 
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+
+import { logoutSuccess } from "../../slices/authSlice";
 
 import {
   Box,
@@ -49,9 +57,9 @@ import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import Order from "./Order";
 import DetailOrder from "./Order/DetailOrder";
 import OrderManage from "./OrderManage";
-import DetailOrderManage from "./OrderManage/DetailOrderManage"
+import DetailOrderManage from "./OrderManage/DetailOrderManage";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 const drawerWidth = 240;
 
@@ -122,6 +130,10 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 function Shipper() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useDispatch();
+
   const [openAccount, setOpenAccount] = React.useState(false);
 
   const user = useSelector((state) => state.auth.user);
@@ -154,6 +166,11 @@ function Shipper() {
 
   const CloseNotify = () => {
     setOpenNotify(false);
+  };
+
+  const handleLogout = () => {
+    dispatch(logoutSuccess());
+    navigate("login");
   };
 
   const formNotify = () => {
@@ -347,15 +364,9 @@ function Shipper() {
                           variant="text"
                           startIcon={<PersonOutlineIcon />}
                           sx={{ color: "#333" }}
+                          onClick={handleLogout}
                         >
-                          Hồ sơ nhà bán
-                        </Button>
-                        <Button
-                          variant="text"
-                          startIcon={<DriveFileRenameOutlineOutlinedIcon />}
-                          sx={{ color: "#333" }}
-                        >
-                          Thay đổi mật khẩu
+                          Đăng xuất
                         </Button>
                       </ListItem>
                     </Stack>

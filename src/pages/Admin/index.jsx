@@ -2,10 +2,11 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { styled } from "@mui/material/styles";
 import * as React from "react";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import { sidebar } from "../../constraints/Admin";
 import { Notifies } from "../../constraints/AdminNotify";
 import "./Admin.scss";
+import { logoutSuccess } from "../../slices/authSlice";
 
 import {
   Box,
@@ -53,7 +54,7 @@ import CreateDetailProduct from "./Product/CreateDetailProduct";
 import User from "./User";
 // import DetailUser from "./User/DetailUser";
 
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 
 const drawerWidth = 240;
 
@@ -123,10 +124,15 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
+const privatePath = ["/my-account/", "/admin/", "/payment", "/chat"];
+
 function Admin() {
   const [openAccount, setOpenAccount] = React.useState(false);
 
   const user = useSelector((state) => state.auth.user);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useDispatch();
 
   const handleClickAccount = () => {
     setOpenAccount((prev) => !prev);
@@ -140,6 +146,17 @@ function Admin() {
 
   const CloseNotify = () => {
     setOpenNotify(false);
+  };
+  
+  const handleLogout = () => {
+    dispatch(logoutSuccess());
+    const isPrivate =
+      privatePath.findIndex((e) => location.pathname.includes(e)) >= 0
+        ? true
+        : false;
+    if (isPrivate) {
+      navigate("/");
+    }
   };
 
   const formNotify = () => {
@@ -357,15 +374,9 @@ function Admin() {
                           variant="text"
                           startIcon={<PersonOutlineIcon />}
                           sx={{ color: "#333" }}
+                          onClick={handleLogout}
                         >
-                          Hồ sơ nhà bán
-                        </Button>
-                        <Button
-                          variant="text"
-                          startIcon={<DriveFileRenameOutlineOutlinedIcon />}
-                          sx={{ color: "#333" }}
-                        >
-                          Thay đổi mật khẩu
+                          Đăng xuất
                         </Button>
                       </ListItem>
                     </Stack>

@@ -17,6 +17,11 @@ const apiSeller = {
         const res = await axiosClientWithToken.get(`/license`,params);
         return res.data;
     },
+
+    getOrdersById: async (id,params) => {
+        const res = await axiosClientWithToken.get(`/seller/order/${id}`,params)
+        return res.data;
+    },
 }
 
 export default apiSeller;

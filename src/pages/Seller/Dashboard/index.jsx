@@ -181,8 +181,8 @@ function Dashboard() {
   return (
     <Box>
       <Stack spacing={6} pl="2rem" mt="2rem">
-        <Typography variant="h6">Danh sách cần làm</Typography>
-        <Stack
+        {/* <Typography variant="h6">Danh sách cần làm</Typography> */}
+        {/* <Stack
           direction="row"
           spacing={4}
           divider={<Divider orientation="vertical" flexItem />}
@@ -203,8 +203,8 @@ function Dashboard() {
               </Stack>
             );
           })}
-        </Stack>
-        <Stack
+        </Stack> */}
+        {/* <Stack
           direction="row"
           spacing={4}
           divider={<Divider orientation="vertical" flexItem />}
@@ -230,8 +230,8 @@ function Dashboard() {
               </Typography>
             </Stack>
           </Stack>
-        </Stack>
-        <Divider />
+        </Stack> */}
+        {/* <Divider /> */}
         <Typography variant="h6">Phân tích bán hàng</Typography>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={["DatePicker"]}>

@@ -2,11 +2,15 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { styled } from "@mui/material/styles";
 import * as React from "react";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import { Notifies } from "../../constraints/AdminNotify";
+
+import { logoutSuccess } from "../../slices/authSlice";
 
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+
+import DetailOrder from "./Order/DetailOrder";
 
 import {
   Box,
@@ -46,7 +50,7 @@ import CreateDetailProduct from "./Product/CreateDetailProduct";
 import InfringeProduct from "./Product/InfringeProduct";
 import SettingProduct from "./Product/SettingProduct";
 
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 
 const drawerWidth = 240;
 
@@ -116,7 +120,13 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
+const privatePath = ["/my-account/", "/admin/", "/payment", "/chat"];
+
 function Seller() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useDispatch();
+
   const [openAccount, setOpenAccount] = React.useState(false);
 
   const user = useSelector((state) => state.auth.user);
@@ -150,6 +160,17 @@ function Seller() {
 
   const CloseNotify = () => {
     setOpenNotify(false);
+  };
+
+  const handleLogout = () => {
+    dispatch(logoutSuccess());
+    const isPrivate =
+      privatePath.findIndex((e) => location.pathname.includes(e)) >= 0
+        ? true
+        : false;
+    if (isPrivate) {
+      navigate("/");
+    }
   };
 
   const formNotify = () => {
@@ -343,16 +364,11 @@ function Seller() {
                           variant="text"
                           startIcon={<PersonOutlineIcon />}
                           sx={{ color: "#333" }}
+                          onClick={handleLogout}
                         >
-                          Hồ sơ nhà bán
+                          Đăng xuất
                         </Button>
-                        <Button
-                          variant="text"
-                          startIcon={<DriveFileRenameOutlineOutlinedIcon />}
-                          sx={{ color: "#333" }}
-                        >
-                          Thay đổi mật khẩu
-                        </Button>
+                        
                       </ListItem>
                     </Stack>
                   ) : null}
@@ -389,7 +405,7 @@ function Seller() {
           component="nav"
           aria-labelledby="nested-list-subheader"
         >
-          <ListItemButton onClick={handleClickSideBar1}>
+          {/* <ListItemButton onClick={handleClickSideBar1}>
             <ListItemIcon sx={{ minWidth: "32px" }}>
               <Inventory2OutlinedIcon sx={{ color: "black" }} />
             </ListItemIcon>
@@ -402,7 +418,7 @@ function Seller() {
                 <ListItemText primary="Quản lý vận chuyển" />
               </ListItemButton>
             </List>
-          </Collapse>
+          </Collapse> */}
 
           <ListItemButton onClick={handleClickSideBar2}>
             <ListItemIcon sx={{ minWidth: "32px" }}>
@@ -487,7 +503,15 @@ function Seller() {
         <DrawerHeader />
         <Routes>
           <Route index element={<Dashboard />} />
-          <Route path="order/*" element={<Order />} />
+          <Route
+            path="order/*"
+            element={
+              <Routes>
+                <Route index element={<Order />} />
+                <Route path="detail/:id" element={<DetailOrder />} />
+              </Routes>
+            }
+          />
           <Route
             path="product/*"
             element={

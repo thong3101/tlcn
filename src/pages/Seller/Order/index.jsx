@@ -67,7 +67,7 @@ function OrderList() {
       apiCart
         .getOrdersSeller()
         .then((response) => {
-          setOrders(response.data.order);
+          setOrders(response.data);
           setTotalPage(Math.ceil(response.data.length / size));
         })
         .catch(setOrders([]))
