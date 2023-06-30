@@ -13,6 +13,7 @@ import {
 import { db } from "../../firebase";
 
 import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
+import { toast } from "react-toastify";
 
 const { Stack } = require("@mui/system");
 
@@ -24,6 +25,10 @@ function Header() {
 
   const handleMessage = async () => {
     //check whether the group(chats in firestore) exists, if not create
+    if(!currentUser) {
+      toast.error("Vui lòng đăng nhập để chat");
+      return ;
+    }
     const combinedId = currentUser.id + "ba8f70b4-ecaa-459b-895a-daceb3c3558d";
     try {
       const res = await getDoc(doc(db, "chats", combinedId));

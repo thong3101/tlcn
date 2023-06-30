@@ -35,7 +35,9 @@ import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 
 import { doc, onSnapshot } from "firebase/firestore";
 import moment from "moment";
+
 import { db } from "../../firebase";
+import { formatJavaLocalDate, formatJavaLocalDateTime } from "../../constraints/Util";
 
 const privatePath = ["/my-account/", "/admin/", "/payment", "/chat"];
 
@@ -226,6 +228,8 @@ function Header() {
     setIsRegister(false);
     setIsLoginForm(false);
   }, []);
+  const today=new Date();
+  const isExpire=moment(formatJavaLocalDate(user?.sellExpireDate)).isAfter(today);
 
   useEffect(() => {
     const getData = async () => {
@@ -352,7 +356,7 @@ function Header() {
                       Tài khoản của tôi
                     </Link>
                     <Divider variant="inset" component="li" />
-                    {tokenDecode.roleNames.includes("SELLER") ? (
+                    {tokenDecode.roleNames.includes("SELLER") && isExpire ? (
                       <>
                         <Link to={"/seller"} style={{ padding: "8px 20px" }}>
                           Trang người bán

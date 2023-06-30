@@ -152,7 +152,13 @@ function Login(props) {
                       {isShowPass ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
+                
                 }
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSubmit(onSubmit)();
+                  }
+                }}
               />
               {errors.pass && <ErrorInput message={errors.pass.message} />}
             </FormControl>

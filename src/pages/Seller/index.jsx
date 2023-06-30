@@ -2,14 +2,14 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { styled } from "@mui/material/styles";
 import * as React from "react";
-import { Link, Route, Routes, useNavigate, useLocation } from "react-router-dom";
+import { Link, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { Notifies } from "../../constraints/AdminNotify";
 
 import { logoutSuccess } from "../../slices/authSlice";
 
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-
+import { formatJavaLocalDate, formatJavaLocalDateVN } from "../../constraints/Util";
 import DetailOrder from "./Order/DetailOrder";
 
 import {
@@ -35,10 +35,8 @@ import MuiDrawer from "@mui/material/Drawer";
 
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CloseIcon from "@mui/icons-material/Close";
-import DriveFileRenameOutlineOutlinedIcon from "@mui/icons-material/DriveFileRenameOutlineOutlined";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
-import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
@@ -50,7 +48,10 @@ import CreateDetailProduct from "./Product/CreateDetailProduct";
 import InfringeProduct from "./Product/InfringeProduct";
 import SettingProduct from "./Product/SettingProduct";
 
-import { useSelector,useDispatch } from "react-redux";
+import moment from "moment";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const drawerWidth = 240;
 
@@ -120,17 +121,26 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-const privatePath = ["/my-account/", "/admin/", "/payment", "/chat","/seller"];
+const privatePath = ["/my-account/", "/admin/", "/payment", "/chat", "/seller"];
 
 function Seller() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-
   const [openAccount, setOpenAccount] = React.useState(false);
 
   const user = useSelector((state) => state.auth.user);
-  console.log(user)
+
+  useEffect(() => {
+    const today = new Date();
+    const isExpire = moment(formatJavaLocalDate(user?.sellExpireDate)).isAfter(today);
+    console.log(user?.sellExpireDate)
+    if (!isExpire || !user?.sellExpireDate) {
+      toast.error("Vui lòng đăng ký bán hàng để truy cập vào trang này")
+      navigate("../")
+    }
+  }, [user])
+
 
   const [openSideBar1, setOpenSideBar1] = React.useState(false);
   const [openSideBar2, setOpenSideBar2] = React.useState(false);
@@ -289,8 +299,11 @@ function Seller() {
             justifyContent="space-between"
             alignItems="center"
           >
-            <Typography variant="h6">Kênh Người Bán</Typography>
-
+            <Typography variant="h6">Kênh Người Bán
+              <p>
+                Thời hạn bán hàng: {formatJavaLocalDateVN(user?.sellExpireDate)}
+              </p>
+            </Typography>
             <Stack direction="row" spacing={3} alignItems="center">
               <SwipeableDrawer
                 anchor="right"
@@ -368,7 +381,7 @@ function Seller() {
                         >
                           Đăng xuất
                         </Button>
-                        
+
                       </ListItem>
                     </Stack>
                   ) : null}
@@ -381,7 +394,10 @@ function Seller() {
 
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
-          <IconButton>
+          <IconButton onClick={(e)=>{
+            e.preventDefault();
+            navigate('../')
+          }}>
             <img
               src="https://salt.tikicdn.com/cache/w32/ts/sellercenterFE/93/76/03/2a08fa4ae6a024a752fbba87d145bce8.png"
               alt=""
@@ -427,15 +443,15 @@ function Seller() {
             <ListItemText primary="Quản lý đơn hàng" />
             {openSideBar2 ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
-          
+
           <Link to={'/seller/order'}>
-          <Collapse in={openSideBar2} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItemButton sx={{ pl: 4 }}>
-                <ListItemText primary="Tất cả" />
-              </ListItemButton>
-            </List>
-          </Collapse>
+            <Collapse in={openSideBar2} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemText primary="Tất cả" />
+                </ListItemButton>
+              </List>
+            </Collapse>
           </Link>
 
           <Collapse in={openSideBar2} timeout="auto" unmountOnExit>
@@ -454,41 +470,41 @@ function Seller() {
             {openSideBar3 ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
           <Link to={'/seller/product'}>
-          <Collapse in={openSideBar3} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItemButton sx={{ pl: 4 }}>
-                <ListItemText primary="Tất cả sản phẩm" />
-              </ListItemButton>
-            </List>
-          </Collapse>
+            <Collapse in={openSideBar3} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemText primary="Tất cả sản phẩm" />
+                </ListItemButton>
+              </List>
+            </Collapse>
           </Link>
           <Link to={'/seller/product/create'}>
-          <Collapse in={openSideBar3} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItemButton sx={{ pl: 4 }}>
-                <ListItemText primary="Thêm sản phẩm" />
-              </ListItemButton>
-            </List>
-          </Collapse>
+            <Collapse in={openSideBar3} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemText primary="Thêm sản phẩm" />
+                </ListItemButton>
+              </List>
+            </Collapse>
           </Link>
           <Link to={'/seller/product/infringe'}>
-          <Collapse in={openSideBar3} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItemButton sx={{ pl: 4 }}>
-                <ListItemText primary="Sản phẩm vi phạm" />
-              </ListItemButton>
-            </List>
-          </Collapse>
+            <Collapse in={openSideBar3} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemText primary="Sản phẩm vi phạm" />
+                </ListItemButton>
+              </List>
+            </Collapse>
           </Link>
 
           <Link to={'/seller/product/setting'}>
-          <Collapse in={openSideBar3} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItemButton sx={{ pl: 4 }}>
-                <ListItemText primary="Cài đặt sản phẩm" />
-              </ListItemButton>
-            </List>
-          </Collapse>
+            <Collapse in={openSideBar3} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemText primary="Cài đặt sản phẩm" />
+                </ListItemButton>
+              </List>
+            </Collapse>
           </Link>
         </List>
       </Drawer>

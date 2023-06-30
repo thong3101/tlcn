@@ -29,12 +29,14 @@ function OrderItem(props) {
     <Box className="orderItem">
       <Stack direction="row" className="orderItem__heading">
         {state?.icon && (
-          <>
+          <React.Fragment>
             <state.icon />{" "}
             <Typography>
               Ngày đặt hàng: {formatJavaLocalDateTime(order?.createdAt)}
             </Typography>
-          </>
+          
+         
+          </React.Fragment>
         )}
 
         <Typography component="span" variant="h3" fontWeight={500} color="#888">

@@ -96,7 +96,7 @@ function OrderList() {
     console.log(status);
     if (status) {
       switch (status) {
-        case "cancel":
+        case "cancelled":
           return "!text-red-600 !bg-red-100";
         case "pending":
           return "!text-yellow-600 !bg-yellow-100";

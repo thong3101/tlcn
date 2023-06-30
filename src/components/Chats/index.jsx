@@ -1,9 +1,10 @@
 import { doc, onSnapshot } from "firebase/firestore";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 // import { AuthContext } from "../context/AuthContext";
 import { useSelector } from "react-redux";
 import { ChatContext } from "../../constraints/ChatContext";
 import { db } from "../../firebase";
+import { useNavigate } from "react-router-dom";
 
 const Chats = () => {
   const [chats, setChats] = useState([]);
@@ -11,20 +12,20 @@ const Chats = () => {
   // const { currentUser } = useContext(AuthContext);
   const currentUser = useSelector((state) => state.auth.user);
   const { dispatch } = useContext(ChatContext);
+  const history=useNavigate()
+  const getChats=useCallback(()=>{
+    const unsub = onSnapshot(doc(db, "userChats", currentUser.id), (doc) => {
+      setChats(doc.data());
+    });
 
-  useEffect(() => {
-    const getChats = () => {
-      const unsub = onSnapshot(doc(db, "userChats", currentUser.id), (doc) => {
-        setChats(doc.data());
-      });
-
-      return () => {
-        unsub();
-      };
+    return () => {
+      unsub();
     };
-
+  },[currentUser.id])
+  useEffect(() => {
+    // getChats();
     currentUser.id && getChats();
-  }, [currentUser.id]);
+  }, [currentUser.id,history]);
 
   const handleSelect = (u) => {
     dispatch({ type: "CHANGE_USER", payload: u });
@@ -32,7 +33,7 @@ const Chats = () => {
 
   return (
     <div className="chats " >
-      {Object.entries(chats)?.sort((a,b)=>b[1].date - a[1].date).map((chat) => (
+      {chats && Object.entries(chats)?.sort((a,b)=>b[1].date - a[1].date).map((chat) => (
         <div
           className="userChat"
           key={chat[0]}

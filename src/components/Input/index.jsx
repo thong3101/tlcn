@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState , useCallback} from "react";
 import Attach from "../../assets/img/attach.png";
 import Img from "../../assets/img/img.png";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
@@ -33,6 +33,7 @@ const Input = () => {
 
   const [image, setImage] = React.useState(""); //url setting state
   useEffect(() => {
+    
     if (image) {
       updateDoc(doc(db, "chats", data.chatId), {
         messages: arrayUnion({
@@ -72,7 +73,7 @@ const Input = () => {
   //   }
   // }, [messages]);
 
-  const handleSend = async () => {
+  const handleSend = useCallback(async () => {
     setText("");
     if (img) {
       const storageRef = ref(storage, uuid());
@@ -145,7 +146,7 @@ const Input = () => {
     });
 
     setImg(null);
-  };
+  },[text, img, data, currentUser]);
 
   return (
     <div
@@ -177,7 +178,9 @@ const Input = () => {
           type="file"
           style={{ display: "none" }}
           id="file"
-          onChange={(e) => setImg(e.target.files[0])}
+          onChange={async (e) => {
+             setImg(e.target.files[0]);
+          }}
         />
 
         <IconButton
