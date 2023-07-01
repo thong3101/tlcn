@@ -19,10 +19,10 @@ function OrderItem(props) {
       setPaying(false);
     }, 2000);
     apiCart
-    .makePaymentPaypal(order?.id)
-    .then((res) => {
-      window.open(res.data.link);
-    });
+      .makePaymentPaypal(order?.id)
+      .then((res) => {
+        window.open(res.data.link);
+      });
   };
 
   return (
@@ -34,8 +34,9 @@ function OrderItem(props) {
             <Typography>
               Ngày đặt hàng: {formatJavaLocalDateTime(order?.createdAt)}
             </Typography>
-          
-         
+
+
+
           </React.Fragment>
         )}
 

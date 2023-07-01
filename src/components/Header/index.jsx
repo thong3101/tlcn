@@ -295,6 +295,11 @@ function Header() {
               placeholder="Tìm kiếm ..."
               value={searchText}
               onChange={onChangeSearch}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSubmitSearch();
+                }
+              }}
               debounceTimeout={500}
             />
             <IconButton

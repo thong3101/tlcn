@@ -89,6 +89,7 @@ function DetailOrder() {
           noti: arrayUnion({
             id: uuid(),
             text: "Đơn hàng của bạn đang được giao",
+            title: `Đơn hàng ${id}`,
             senderId: currentUser.id,
             date: Timestamp.now(),
           }),

@@ -28,6 +28,10 @@ function LoadingPage() {
     if (searchParams.get("userId")) {
       callApiGetById();
     }
+    if(searchParams.length<1){
+      navigate(`/my-account/orders`)  
+    }
+   
   },
     [searchParams]);
   return (
