@@ -45,6 +45,14 @@ function Header() {
           },
           [combinedId + ".date"]: serverTimestamp(),
         });
+
+        await updateDoc(doc(db, "userChats", "ba8f70b4-ecaa-459b-895a-daceb3c3558d"), {
+          [combinedId + ".userInfo"]: {
+            uid: currentUser.id,
+            displayName: currentUser.nickName,
+          },
+          [combinedId + ".date"]: serverTimestamp(),
+        });
       }
       navigate("/chat");
     } catch (err) {}
