@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState , useCallback} from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import Attach from "../../assets/img/attach.png";
 import Img from "../../assets/img/img.png";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
@@ -33,7 +33,6 @@ const Input = () => {
 
   const [image, setImage] = React.useState(""); //url setting state
   useEffect(() => {
-    
     if (image) {
       updateDoc(doc(db, "chats", data.chatId), {
         messages: arrayUnion({
@@ -116,7 +115,6 @@ const Input = () => {
       await apiChat
         .postChatbox(params)
         .then((res) => {
-          console.warn("res", res);
           updateDoc(doc(db, "chats", data.chatId), {
             messages: arrayUnion({
               id: uuid(),
@@ -125,28 +123,41 @@ const Input = () => {
               date: Timestamp.now(),
             }),
           });
+          updateDoc(doc(db, "userChats", currentUser.id), {
+            [data.chatId + ".lastMessage"]: {
+              text:res.message,
+            },
+            [data.chatId + ".date"]: serverTimestamp(),
+          });
+
+          updateDoc(doc(db, "userChats", data.user.uid), {
+            [data.chatId + ".lastMessage"]: {
+              text:res.message,
+            },
+            [data.chatId + ".date"]: serverTimestamp(),
+          });
         })
         .catch((error) => {
           alert(error);
         });
-    }
-    
-    await updateDoc(doc(db, "userChats", currentUser.id), {
-      [data.chatId + ".lastMessage"]: {
-        text,
-      },
-      [data.chatId + ".date"]: serverTimestamp(),
-    });
+    } else {
+      await updateDoc(doc(db, "userChats", currentUser.id), {
+        [data.chatId + ".lastMessage"]: {
+          text,
+        },
+        [data.chatId + ".date"]: serverTimestamp(),
+      });
 
-    await updateDoc(doc(db, "userChats", data.user.uid), {
-      [data.chatId + ".lastMessage"]: {
-        text,
-      },
-      [data.chatId + ".date"]: serverTimestamp(),
-    });
+      await updateDoc(doc(db, "userChats", data.user.uid), {
+        [data.chatId + ".lastMessage"]: {
+          text,
+        },
+        [data.chatId + ".date"]: serverTimestamp(),
+      });
+    }
 
     setImg(null);
-  },[text, img, data, currentUser]);
+  }, [text, img, data, currentUser]);
 
   return (
     <div
@@ -179,7 +190,7 @@ const Input = () => {
           style={{ display: "none" }}
           id="file"
           onChange={async (e) => {
-             setImg(e.target.files[0]);
+            setImg(e.target.files[0]);
           }}
         />
 

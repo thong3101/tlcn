@@ -20,6 +20,8 @@ const Messages = () => {
 
   }, [data.chatId]);
 
+  console.log("@@",data.chatId)
+
   return (
     <div className="messages ">
       {messages?.map((m) => (
