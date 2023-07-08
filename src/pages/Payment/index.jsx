@@ -181,22 +181,13 @@ function Payment() {
         .saveOrderCOD(payload)
         .then(async (res) => {
           toast.success("Đặt hàng thành công!");
-          console.log("res", res);
+          dispatch(deleteAll());
           const noti = await getDoc(doc(db, "noti", currentUser.id));
 
           if (!noti.exists()) {
             //create empty noti on firestore
             await setDoc(doc(db, "noti", currentUser.id), { noti: [] });
           }
-
-          await updateDoc(doc(db, "noti", currentUser.id), {
-            noti: arrayUnion({
-              id: uuid(),
-              text: "Đơn hàng của đã được đặt thành công",
-              senderId: currentUser.id,
-              date: Timestamp.now(),
-            }),
-          });
           await updateDoc(
             doc(db, "noti", currentUser.id),
             {

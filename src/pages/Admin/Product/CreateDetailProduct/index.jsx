@@ -85,10 +85,10 @@ function CreateDetailProduct(props) {
       .DisableProduct(productId)
       .then((res) => {
         navigate("/admin/product");
-        toast.success("Kích hoạt sản phẩm thành công");
+        toast.success("Hủy sản phẩm thành công");
       })
       .catch((error) => {
-        toast.error("Kích hoạt sản phẩm thất bại");
+        toast.error("Hủy sản phẩm thất bại");
       });
   };
 
