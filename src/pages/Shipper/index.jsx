@@ -61,6 +61,8 @@ import DetailOrderManage from "./OrderManage/DetailOrderManage";
 
 import { useSelector, useDispatch } from "react-redux";
 
+
+import {toast} from "react-toastify"
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -131,12 +133,18 @@ const Drawer = styled(MuiDrawer, {
 
 function Shipper() {
   const navigate = useNavigate();
-  const location = useLocation();
   const dispatch = useDispatch();
 
   const [openAccount, setOpenAccount] = React.useState(false);
 
   const user = useSelector((state) => state.auth.user);
+  React.useEffect(() => {
+    if(user?.address===null){
+      toast.error("Vui lòng cập nhật địa chỉ giao hàng")
+      navigate("/my-account/address");
+    }
+  }, [user?.address]);
+
 
   const [openSideBar1, setOpenSideBar1] = React.useState(false);
   const [openSideBar2, setOpenSideBar2] = React.useState(false);
@@ -172,6 +180,7 @@ function Shipper() {
     dispatch(logoutSuccess());
     navigate("login");
   };
+ 
 
   const formNotify = () => {
     return (

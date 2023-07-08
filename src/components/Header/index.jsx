@@ -80,7 +80,8 @@ function Header() {
   useEffect(() => {
     if (user) {
       const unSub = onSnapshot(doc(db, "noti", user.id), (doc) => {
-        doc.exists() && setNotifications(doc.data().noti);
+        doc.exists() && setNotifications(doc.data().noti.sort((a, b) => b.date - a.date));
+
         console.log("noti", doc.data().noti);
       });
 

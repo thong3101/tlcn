@@ -394,7 +394,7 @@ function Seller() {
 
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
-          <IconButton onClick={(e)=>{
+          <IconButton onClick={(e) => {
             e.preventDefault();
             navigate('../')
           }}>
@@ -487,16 +487,6 @@ function Seller() {
               </List>
             </Collapse>
           </Link>
-          <Link to={'/seller/product/infringe'}>
-            <Collapse in={openSideBar3} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemText primary="Sản phẩm vi phạm" />
-                </ListItemButton>
-              </List>
-            </Collapse>
-          </Link>
-
           <Link to={'/seller/product/setting'}>
             <Collapse in={openSideBar3} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>

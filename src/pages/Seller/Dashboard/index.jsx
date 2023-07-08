@@ -67,7 +67,6 @@ export const options = {
 function Dashboard() {
   const [statics, setStatics] = useState([]);
   const [year, setYear] = useState();
-  console.log(year);
 
   useEffect(() => {
     // setLoadingData(true);

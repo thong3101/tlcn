@@ -366,7 +366,7 @@ function OrderList() {
                                   handleOpenDelived(row?.id);
                                 }}
                               >
-                                Đã nhận đơn
+                                Đã giao
                               </Button>
                               <Button
                                 sx={{ width: "100px" }}
