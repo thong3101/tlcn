@@ -1,7 +1,7 @@
 import { Stack, Typography } from "@mui/material";
 import React, { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { SquareLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import apiAuth from "../../apis/apiAuth";
@@ -11,6 +11,7 @@ function LoadingPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location=useLocation();
   const callApiGetById = useCallback(async () => {
     await apiAuth.getUserById(searchParams.get("userId")).then(res => {
       let { accessToken, refreshToken, user } = res.data;
@@ -22,6 +23,11 @@ function LoadingPage() {
 
 
   useEffect(() => {
+    if(location.pathname.includes("paypal")){
+      toast("Thanh toán thành công !")
+      navigate("/home");
+    }
+    else
     if (searchParams.get("orderId")) {
       navigate(`/my-account/orders/detail/${searchParams.get("orderId")}`)
     }
@@ -29,10 +35,7 @@ function LoadingPage() {
       if (searchParams.get("userId")) {
         callApiGetById();
       }
-      else {
-        navigate(`/my-account/orders`)
-
-      }
+   
 
   },
     [searchParams]);
