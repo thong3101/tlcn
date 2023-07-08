@@ -25,13 +25,15 @@ function LoadingPage() {
     if (searchParams.get("orderId")) {
       navigate(`/my-account/orders/detail/${searchParams.get("orderId")}`)
     }
-    if (searchParams.get("userId")) {
-      callApiGetById();
-    }
-    if(searchParams.length<1){
-      navigate(`/my-account/orders`)  
-    }
-   
+    else
+      if (searchParams.get("userId")) {
+        callApiGetById();
+      }
+      else {
+        navigate(`/my-account/orders`)
+
+      }
+
   },
     [searchParams]);
   return (
