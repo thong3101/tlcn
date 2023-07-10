@@ -72,7 +72,7 @@ function Dashboard() {
     // setLoadingData(true);
     const getData = async () => {
       apiProductSeller
-        .getStatics(2023)
+        .getStatics(year?.$y)
         .then((response) => {
           setStatics(response.data);
         })
@@ -82,7 +82,7 @@ function Dashboard() {
       // });
     };
     getData();
-  }, []);
+  }, [year]);
 
   console.log("st", statics);
 

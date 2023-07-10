@@ -2,15 +2,26 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { styled } from "@mui/material/styles";
 import * as React from "react";
-import { Link, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import {
+  Link,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import { Notifies } from "../../constraints/AdminNotify";
 
 import { logoutSuccess } from "../../slices/authSlice";
 
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { formatJavaLocalDate, formatJavaLocalDateVN } from "../../constraints/Util";
+import {
+  formatJavaLocalDate,
+  formatJavaLocalDateVN,
+} from "../../constraints/Util";
 import DetailOrder from "./Order/DetailOrder";
+
+import LeaderboardOutlinedIcon from "@mui/icons-material/LeaderboardOutlined";
 
 import {
   Box,
@@ -28,7 +39,7 @@ import {
   Stack,
   SwipeableDrawer,
   Toolbar,
-  Typography
+  Typography,
 } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import MuiDrawer from "@mui/material/Drawer";
@@ -133,14 +144,15 @@ function Seller() {
 
   useEffect(() => {
     const today = new Date();
-    const isExpire = moment(formatJavaLocalDate(user?.sellExpireDate)).isAfter(today);
-    console.log(user?.sellExpireDate)
+    const isExpire = moment(formatJavaLocalDate(user?.sellExpireDate)).isAfter(
+      today
+    );
+    console.log(user?.sellExpireDate);
     if (!isExpire || !user?.sellExpireDate) {
-      toast.error("Vui lòng đăng ký bán hàng để truy cập vào trang này")
-      navigate("../")
+      toast.error("Vui lòng đăng ký bán hàng để truy cập vào trang này");
+      navigate("../");
     }
-  }, [user])
-
+  }, [user]);
 
   const [openSideBar1, setOpenSideBar1] = React.useState(false);
   const [openSideBar2, setOpenSideBar2] = React.useState(false);
@@ -299,7 +311,8 @@ function Seller() {
             justifyContent="space-between"
             alignItems="center"
           >
-            <Typography variant="h6">Kênh Người Bán
+            <Typography variant="h6">
+              Kênh Người Bán
               <p>
                 Thời hạn bán hàng: {formatJavaLocalDateVN(user?.sellExpireDate)}
               </p>
@@ -381,7 +394,6 @@ function Seller() {
                         >
                           Đăng xuất
                         </Button>
-
                       </ListItem>
                     </Stack>
                   ) : null}
@@ -394,10 +406,12 @@ function Seller() {
 
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
-          <IconButton onClick={(e) => {
-            e.preventDefault();
-            navigate('../')
-          }}>
+          <IconButton
+            onClick={(e) => {
+              e.preventDefault();
+              navigate("../");
+            }}
+          >
             <img
               src="https://salt.tikicdn.com/cache/w32/ts/sellercenterFE/93/76/03/2a08fa4ae6a024a752fbba87d145bce8.png"
               alt=""
@@ -421,20 +435,14 @@ function Seller() {
           component="nav"
           aria-labelledby="nested-list-subheader"
         >
-          {/* <ListItemButton onClick={handleClickSideBar1}>
-            <ListItemIcon sx={{ minWidth: "32px" }}>
-              <Inventory2OutlinedIcon sx={{ color: "black" }} />
-            </ListItemIcon>
-            <ListItemText primary="Vận chuyển" />
-            {openSideBar1 ? <ExpandLess /> : <ExpandMore />}
-          </ListItemButton>
-          <Collapse in={openSideBar1} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItemButton sx={{ pl: 4 }}>
-                <ListItemText primary="Quản lý vận chuyển" />
-              </ListItemButton>
-            </List>
-          </Collapse> */}
+          <Link to={"/seller"}>
+            <ListItemButton>
+              <ListItemIcon sx={{ minWidth: "32px" }}>
+                <LeaderboardOutlinedIcon sx={{ color: "black" }} />
+              </ListItemIcon>
+              <ListItemText primary="Trang chủ" />
+            </ListItemButton>
+          </Link>
 
           <ListItemButton onClick={handleClickSideBar2}>
             <ListItemIcon sx={{ minWidth: "32px" }}>
@@ -444,7 +452,7 @@ function Seller() {
             {openSideBar2 ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
 
-          <Link to={'/seller/order'}>
+          <Link to={"/seller/order"}>
             <Collapse in={openSideBar2} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 <ListItemButton sx={{ pl: 4 }}>
@@ -469,7 +477,7 @@ function Seller() {
             <ListItemText primary="Quản lý sản phẩm" />
             {openSideBar3 ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
-          <Link to={'/seller/product'}>
+          <Link to={"/seller/product"}>
             <Collapse in={openSideBar3} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 <ListItemButton sx={{ pl: 4 }}>
@@ -478,7 +486,7 @@ function Seller() {
               </List>
             </Collapse>
           </Link>
-          <Link to={'/seller/product/create'}>
+          <Link to={"/seller/product/create"}>
             <Collapse in={openSideBar3} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 <ListItemButton sx={{ pl: 4 }}>
@@ -487,7 +495,7 @@ function Seller() {
               </List>
             </Collapse>
           </Link>
-          <Link to={'/seller/product/setting'}>
+          <Link to={"/seller/product/setting"}>
             <Collapse in={openSideBar3} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 <ListItemButton sx={{ pl: 4 }}>

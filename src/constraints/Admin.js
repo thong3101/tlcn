@@ -16,7 +16,7 @@ export const sidebar = [
         id: 1,
         text: 'Trang chủ',
         icon: LeaderboardOutlinedIcon,
-        link: '/'
+        link: '/admin'
     },
     {
         id: 2,
