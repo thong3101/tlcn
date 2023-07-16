@@ -6,7 +6,6 @@ function OverView() {
         <div>
             <p>
                 {"Chào"}
-                <strong>ex</strong>
             </p>
         </div>
     )
