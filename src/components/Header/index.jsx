@@ -38,6 +38,7 @@ import moment from "moment";
 
 import { db } from "../../firebase";
 import { formatJavaLocalDate, formatJavaLocalDateTime } from "../../constraints/Util";
+import { toast } from "react-toastify";
 
 const privatePath = ["/my-account/", "/admin/", "/payment", "/chat"];
 
@@ -188,6 +189,10 @@ function Header() {
   };
 
   const handleSubmitSearch = () => {
+    if(searchText.trim()===""||searchText.trim()===undefined){
+      toast.error("Vui lòng nhập từ khóa tìm kiếm !");
+      return;
+    }
     navigate(`/search/${searchText}`);
     setSearchText("");
   };
