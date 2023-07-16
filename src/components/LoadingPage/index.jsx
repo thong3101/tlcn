@@ -25,18 +25,16 @@ function LoadingPage() {
   useEffect(() => {
     if(location.pathname.includes("paypal")){
       toast("Thanh toán thành công !")
+      if (searchParams.get("userId")) {
+        callApiGetById();
+      }
       navigate("/home");
+     
     }
     else
     if (searchParams.get("orderId")) {
       navigate(`/my-account/orders/detail/${searchParams.get("orderId")}`)
     }
-    else
-      if (searchParams.get("userId")) {
-        callApiGetById();
-      }
-   
-
   },
     [searchParams]);
   return (
