@@ -39,9 +39,11 @@ function SettingProduct() {
       .then((res) => {
         // navigate("/admin/product");
         toast.success("Kích hoạt sản phẩm thành công");
+        window.location.reload();
       })
       .catch((error) => {
         toast.error("Kích hoạt sản phẩm thất bại");
+        window.location.reload();
       });
   };
 
