@@ -39,11 +39,9 @@ function SettingProduct() {
       .then((res) => {
         // navigate("/admin/product");
         toast.success("Kích hoạt sản phẩm thành công");
-        window.location.reload();
       })
       .catch((error) => {
         toast.error("Kích hoạt sản phẩm thất bại");
-        window.location.reload();
       });
   };
 
@@ -105,7 +103,7 @@ function SettingProduct() {
       console.log("pp", param);
     };
     getData();
-  }, [price, searchText]);
+  }, [price, searchText,handleDisable,handleEnable]);
 
   const lastPostIndex = page * size;
   const firstPostIndex = lastPostIndex - size;

@@ -71,7 +71,7 @@ function User() {
         });
     };
     getData();
-  }, []);
+  }, [handleEnable,handleDisable]);
 
   const handleDeleteUser = () => {
     const user = users.filter((item) => {

@@ -81,7 +81,11 @@ function Login(props) {
         if (error.response.data.message === "No account found") {
           setIsNoAccount(true);
           setWrongPass(false);
-        } else {
+        } else
+        if(error.response.data.message.includes("suspended")){
+          toast.warning("Tài khoản của bạn đã bị tạm khóa");
+        } 
+        else {
           setIsNoAccount(false);
           setWrongPass(true);
         }
@@ -168,7 +172,7 @@ function Login(props) {
             )}
 
             {wrongPass && (
-              <ErrorAfterSubmit message="Mật khẩu không chính xác hoặc tài khoản bị tạm khoá" />
+              <ErrorAfterSubmit message="Mật khẩu không chính xác" />
             )}
 
             <Button

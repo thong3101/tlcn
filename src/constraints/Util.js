@@ -64,3 +64,7 @@ export const convertDate = (date) => {
     return Number(new Date(`${month}-${day}-${year} ${hour}:${minute}:${second}`));
   }
 };
+//VND TO USD
+export const convertCurrencyToUSD = (currency) => {
+  return currency*1.0 / 23000;
+}
