@@ -104,13 +104,13 @@ function CreateDetailProduct(props) {
           const product = res.data.product;
           console.log("p", product);
           if (product) {
-            setName(product.name);
-            setPrice(product.price);
-            setCategory(product.productCategory);
-            setQuantity(product.stock);
-            setDescription(product.description);
-            setBrand(product.brand.id);
-            setReview(product.imageList);
+            setName(product?.name);
+            setPrice(product?.price);
+            setCategory(product?.productCategory);
+            setQuantity(product?.stock);
+            setDescription(product?.description);
+            setBrand(product.brand?.id);
+            setReview(product?.imageList);
             setProduct(product);
           }
         });
@@ -282,7 +282,7 @@ function CreateDetailProduct(props) {
               variant="contained"
               // onClick={product.status ? handleDisable : handleEnable}
               onClick={
-                product.status
+                product?.status
                   ? () => {
                       handleDisable(idProduct);
                     }
@@ -291,7 +291,7 @@ function CreateDetailProduct(props) {
                     }
               }
             >
-              {product.status ? "Hủy" : "Kích hoạt"}
+              {product?.status ? "Hủy" : "Kích hoạt"}
             </Button>
           </Stack>
         </Stack>
