@@ -4,12 +4,12 @@ import { axiosClient, axiosClientWithToken } from "./axiosClient";
 
 const apiAdmin = {
     EnableProduct: async (id, params) => {
-        const res = await axiosClientWithToken.patch(`/admin/prodcut/enable/${id}`,params);
+        const res = await axiosClientWithToken.patch(`/admin/product/enable/${id}`,params);
         return res.data;
     },
 
     DisableProduct: async (id, params) => {
-        const res = await axiosClientWithToken.patch(`/admin/prodcut/disable/${id}`,params);
+        const res = await axiosClientWithToken.patch(`/admin/product/disable/${id}`,params);
         return res.data;
     },
 

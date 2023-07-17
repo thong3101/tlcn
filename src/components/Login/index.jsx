@@ -168,7 +168,7 @@ function Login(props) {
             )}
 
             {wrongPass && (
-              <ErrorAfterSubmit message="Mật khẩu đăng nhập không chính xác" />
+              <ErrorAfterSubmit message="Mật khẩu không chính xác hoặc tài khoản bị tạm khoá" />
             )}
 
             <Button

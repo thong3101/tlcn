@@ -218,9 +218,11 @@ function Product() {
                     </TableCell>
                     <TableCell>
                       <Stack>
-                        <Typography sx={{ color: "#1890ff" }}>
+                        {item?.status ? <Typography sx={{ color: "#1890ff"}}>
                           {item?.name}
-                        </Typography>
+                        </Typography>: <Typography sx={{ color: "#1890ff",textDecoration:"line-through"}}>
+                          {item?.name}
+                        </Typography> }
                       </Stack>
                     </TableCell>
                     <TableCell>
