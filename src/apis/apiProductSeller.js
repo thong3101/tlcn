@@ -10,6 +10,11 @@ const apiProductSeller = {
     return res.data;
   },
 
+  getSellerProductSearch: async (params) => {
+    const res = await axiosClientWithToken.get(`/seller/product/search`, { params });
+    return res.data;
+  },
+
   insertProductSeller: async (params) => {
     const res = await axiosClientWithToken.post(`/seller/product`, params);
     return res.data;

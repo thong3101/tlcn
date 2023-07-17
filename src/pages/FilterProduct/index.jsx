@@ -74,11 +74,11 @@ function FilterProduct(props) {
 
   const [loadingData, setLoadingData] = useState(false);
 
-  let min_val = products?.reduce(function (pre, current) {
-    return pre.price < current.price ? pre.price : current.price;
-  });
+  // let min_val = products?.reduce(function (pre, current) {
+  //   return pre.price < current.price ? pre.price : current.price;
+  // });
 
-  console.log("max", typeof min_val);
+  // console.log("max", min_val);
 
   useEffect(() => {
     const getData = async () => {
@@ -117,8 +117,8 @@ function FilterProduct(props) {
       apiProduct
         .getProductsByCateId(param, idCategory)
         .then((res) => {
-          setProducts(res.data.list);
-          setTotalPage(Math.ceil(res.data.list.length / size));
+          setProducts(res.data.list.filter((item)=> item.status==true));
+          setTotalPage(Math.ceil(res.data.list.filter((item)=> item.status==true).length / size));
         })
         .catch((error) => {
           setProducts(null);

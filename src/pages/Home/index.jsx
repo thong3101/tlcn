@@ -180,7 +180,7 @@ function SlideHome() {
     const getData = async () => {
       const response = await apiMain.getProducts(params);
       if (response) {
-        setProducts(response.data.list);
+        setProducts(response.data.list.filter((item)=> item.status==true));
       }
     };
     getData();

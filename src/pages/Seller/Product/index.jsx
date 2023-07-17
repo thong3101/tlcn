@@ -42,6 +42,7 @@ function Product() {
       let param = {
         size:"100",
         sort: "",
+        key:searchText,
       };
 
       switch (price) {
@@ -70,7 +71,7 @@ function Product() {
           });
       } else {
         apiProductSeller
-          .getSellerProduct(param, searchText)
+          .getSellerProductSearch(param)
           .then((res) => {
             setProducts(res.data.list);
             setTotalPage(Math.ceil(res.data.list.length / size));

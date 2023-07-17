@@ -2,7 +2,7 @@ import {
   Box,
   Button, Collapse, FormControl, FormGroup,
   Grid, IconButton, Input, List, ListItemButton,
-  ListItemText, NativeSelect, Slider, Stack, Typography
+  ListItemText, NativeSelect, Slider, Stack, Typography,Pagination,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -31,6 +31,15 @@ function FilterProduct(props) {
 
   const [open, setOpen] = useState(false);
   const [openId, setOpenId] = useState();
+
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
+
+  const size = 6;
+
+  const handleChangePage = (event, newValue) => {
+    setPage(newValue);
+  };
 
   const [value, setValue] = useState(1);
   const [filter, setFilter] = useState({});
@@ -102,7 +111,8 @@ function FilterProduct(props) {
       apiProduct
         .getProductsSearch(param, search)
         .then((res) => {
-          setProducts(res.data.list);
+          setProducts(res.data.list.filter((item)=> item.status==true));
+          setTotalPage(Math.ceil(res.data.list.filter((item)=> item.status==true).length / size));
         })
         .catch((error) => {
           setProducts(null);
@@ -401,6 +411,20 @@ function FilterProduct(props) {
             </Grid>
           )}
         </Box>
+        {totalPage > 1 ? (
+          <Stack spacing={2} mt="10px" >
+            <Pagination
+            className="!flex !justify-center"
+              count={totalPage}
+              page={page}
+              sx={{mb:"12px"}}
+              onChange={handleChangePage}
+              color="primary"
+            />
+          </Stack>
+        ) : (
+          <></>
+        )}
       </Box>
     </Stack>
   );
