@@ -36,6 +36,7 @@ function ProductDetail() {
 
 
   const [products, setProducts] = useState([]);
+  const [statics, setStatics] = useState([]);
 
   useEffect(() => {
     let params = {
@@ -57,6 +58,7 @@ function ProductDetail() {
         .getProductsById(id)
         .then((res) => {
           setProduct(res.data.product);
+          setStatics(res.data.static);
         })
         .catch((error) => {
           setProduct([]);
@@ -114,7 +116,7 @@ function ProductDetail() {
 
   return (
     <Box className="container" style={{ backgroundColor: "#fff" }}>
-      <DetailProduct data={product} rating={listComment} />
+      <DetailProduct data={product} rating={listComment} statics={statics} />
 
       <Box
         sx={{

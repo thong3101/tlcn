@@ -18,7 +18,7 @@ import { addItem } from "../../slices/cartSlice";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import imgDefault from "../../assets/img/img_default.jpg";
-import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
+import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import { numWithCommas } from "../../constraints/Util";
 
 import { useSelector } from "react-redux";
@@ -33,7 +33,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebase";
 
-function DetailProduct({ data, rating }) {
+function DetailProduct({ data, rating, statics }) {
   const list_cities = () => [
     { label: "Ho Chi Minh", year: 1994 },
     { label: "Ha Noi", year: 1972 },
@@ -50,7 +50,7 @@ function DetailProduct({ data, rating }) {
 
   const [ratingProduct, setRatingProduct] = useState(0);
 
-  console.log("r", data);
+  console.log("r", statics);
 
   const handleRating = (rating) => {
     if (rating) {
@@ -122,6 +122,15 @@ function DetailProduct({ data, rating }) {
       navigate("/chat");
     } catch (err) {}
   };
+
+  function sumArray(mang) {
+    let sum = 0;
+    mang.map(function (value) {
+      sum += value.totalOrder;
+    });
+
+    return sum;
+  }
 
   return (
     <Box className="detailProduct">
@@ -235,8 +244,13 @@ function DetailProduct({ data, rating }) {
             <div className="seller">
               <img className="seller__img" alt="" src={data?.seller.img} />
               <div className="seller__info">
-                <div className="seller__info-item1"> Người bán : 
-                  {data?.seller.nickName}
+                <div className="seller__info-item1">
+                  {" "}
+                  Người bán : {data?.seller.nickName}
+                </div>
+                <div className="seller__info-item1">
+                  {" "}
+                  Đã bán được : {sumArray(statics)} sản phẩm
                 </div>
                 <div className="seller__info-item2">
                   <button
@@ -246,9 +260,8 @@ function DetailProduct({ data, rating }) {
                       fontWeight: 600,
                       textTransform: "uppercase",
                     }}
-                    
                   >
-                    <ChatOutlinedIcon sx={{marginRight:"6px"}}/>
+                    <ChatOutlinedIcon sx={{ marginRight: "6px" }} />
                     Chat ngay
                   </button>
                 </div>
