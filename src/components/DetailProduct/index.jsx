@@ -243,14 +243,14 @@ function DetailProduct({ data, rating, statics }) {
             /> */}
             <div className="seller">
               <img className="seller__img" alt="" src={data?.seller.img} />
-              <div className="seller__info">
+              <div className="seller__info" >
                 <div className="seller__info-item1">
                   {" "}
                   Người bán : {data?.seller.nickName}
                 </div>
                 <div className="seller__info-item1">
                   {" "}
-                  Đã bán được : {sumArray(statics)} sản phẩm
+                  Đã bán được: {sumArray(statics)} đơn hàng
                 </div>
                 <div className="seller__info-item2">
                   <button
